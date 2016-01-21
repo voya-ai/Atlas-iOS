@@ -23,6 +23,7 @@
 #import "ATLMediaAttachment.h"
 
 @class ATLMessageInputToolbar;
+@class ATLGifPickerViewController;
 
 extern NSString *const ATLMessageInputToolbarDidChangeHeightNotification;
 extern NSString *const ATLMessageInputToolbarAccessibilityLabel;
@@ -139,6 +140,17 @@ extern NSString *const ATLMessageInputToolbarAccessibilityLabel;
  @default YES
  */
 @property(nonatomic) BOOL displaysRightAccessoryImage;
+
+/**
+ @abstract Flag that maintains the state of the GIF picker.
+ @default NO
+ */
+@property (nonatomic) BOOL gifsEnabled;
+
+/**
+ @abstract Controller interface for displaying and selecting GIFs
+ */
+@property (nonatomic) ATLGifPickerViewController *gifPicker;
 
 /**
  @abstract An automatically resizing message composition field.

@@ -21,10 +21,12 @@
 #import "ATLConstants.h"
 #import "ATLMediaAttachment.h"
 #import "ATLMessagingUtilities.h"
+#import "ATLUIImageHelper.h"
+#import "ATLGifPickerViewController.h"
 
 NSString *const ATLMessageInputToolbarDidChangeHeightNotification = @"ATLMessageInputToolbarDidChangeHeightNotification";
 
-@interface ATLMessageInputToolbar () <UITextViewDelegate>
+@interface ATLMessageInputToolbar () <UITextViewDelegate, ATLGifPickerDelegate>
 
 @property (nonatomic) NSArray *mediaAttachments;
 @property (nonatomic, copy) NSAttributedString *attributedStringForMessageParts;
@@ -42,6 +44,7 @@ NSString *const ATLMessageInputToolbarTextInputView = @"Message Input Toolbar Te
 NSString *const ATLMessageInputToolbarCameraButton  = @"Message Input Toolbar Camera Button";
 NSString *const ATLMessageInputToolbarLocationButton  = @"Message Input Toolbar Location Button";
 NSString *const ATLMessageInputToolbarSendButton  = @"Message Input Toolbar Send Button";
+NSString *const ATLMessageInputToolbarGIFButton = @"Message Input Toolbar GIF Button";
 
 // Compose View Margin Constants
 static CGFloat const ATLLeftButtonHorizontalMargin = 6.0f;
@@ -98,7 +101,12 @@ static CGFloat const ATLButtonHeight = 28.0f;
         self.rightAccessoryButtonTitle = @"Send";
         [self addSubview:self.rightAccessoryButton];
         [self configureRightAccessoryButtonState];
-        
+      
+        self.gifPicker = [ATLGifPickerViewController new];
+        [self.gifPicker.view setHidden:YES];
+        [self.gifPicker setGifPickerDelegate:self];
+        [self addSubview:self.gifPicker.view];
+      
         // Calling sizeThatFits: or contentSize on the displayed UITextView causes the cursor's position to momentarily appear out of place and prevent scrolling to the selected range. So we use another text view for height calculations.
         self.dummyTextView = [[ATLMessageComposeTextView alloc] init];
         self.maxNumberOfLines = 8;
@@ -155,8 +163,11 @@ static CGFloat const ATLButtonHeight = 28.0f;
     self.dummyTextView.attributedText = self.textInputView.attributedText;
     CGSize fittedTextViewSize = [self.dummyTextView sizeThatFits:CGSizeMake(CGRectGetWidth(textViewFrame), MAXFLOAT)];
     textViewFrame.size.height = ceil(MIN(fittedTextViewSize.height, self.textViewMaxHeight));
+  
+    textViewFrame.origin.y = CGRectGetHeight(frame) - self.verticalMargin - textViewFrame.size.height;
 
-    frame.size.height = CGRectGetHeight(textViewFrame) + self.verticalMargin * 2;
+    //TODO move height value into configurable property or variable
+    frame.size.height = _gifsEnabled ? 120 : CGRectGetHeight(textViewFrame) + self.verticalMargin * 2;
     frame.origin.y -= frame.size.height - CGRectGetHeight(self.frame);
  
     // Only calculate button centerY once to anchor it to bottom of bar.
@@ -166,11 +177,24 @@ static CGFloat const ATLButtonHeight = 28.0f;
     leftButtonFrame.origin.y = frame.size.height - leftButtonFrame.size.height - self.buttonCenterY;
     rightButtonFrame.origin.y = frame.size.height - rightButtonFrame.size.height - self.buttonCenterY;
     
-    BOOL heightChanged = CGRectGetHeight(textViewFrame) != CGRectGetHeight(self.textInputView.frame);
+    BOOL heightChanged = CGRectGetHeight(frame) != CGRectGetHeight(self.frame);
 
     self.leftAccessoryButton.frame = leftButtonFrame;
     self.rightAccessoryButton.frame = rightButtonFrame;
     self.textInputView.frame = textViewFrame;
+    
+    //position the gif picker if necessary
+    if(_gifsEnabled)
+    {
+        [_gifPicker.view setHidden:NO];
+        CGRect gifPickerFrame = CGRectMake(ATLLeftButtonHorizontalMargin,
+                                           self.verticalMargin,
+                                           self.frame.size.width - self.verticalMargin * 2,
+                                           self.frame.size.height - textViewFrame.size.height - self.verticalMargin * 3);
+        [_gifPicker.view setFrame:gifPickerFrame];
+    }
+    else
+        [_gifPicker.view setHidden:YES];
 
     // Setting one's own frame like this is a no-no but seems to be the lesser of evils when working around the layout issues mentioned above.
     self.frame = frame;
@@ -182,6 +206,29 @@ static CGFloat const ATLButtonHeight = 28.0f;
 
 - (void)paste:(id)sender
 {
+  NSData *gifData = [[UIPasteboard generalPasteboard] dataForPasteboardType:@"com.compuserve.gif"];
+  if(gifData) {
+      //GIF approach #1: Works, but requires the GIF data to be saved to a file
+      /*
+    //temporary -- save the GIF clipboard data to a local file URL
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+    NSURL *baseURL = [NSURL fileURLWithPath:basePath isDirectory:YES];
+    NSURL *outputDirURL = [NSURL URLWithString:@"com.layer.atlas" relativeToURL:baseURL];
+    NSURL *outputURL = [NSURL URLWithString:@"clipboard_gif.gif" relativeToURL:outputDirURL];
+    [[NSFileManager defaultManager] createDirectoryAtURL:outputDirURL withIntermediateDirectories:YES attributes:nil error:nil];
+    [[NSFileManager defaultManager] removeItemAtURL:outputURL error:nil];
+    
+    [gifData writeToURL:outputURL atomically:YES];
+    ATLMediaAttachment *mediaAttachment = [ATLMediaAttachment mediaAttachmentWithFileURL:outputURL thumbnailSize:ATLDefaultGIFThumbnailSize];
+    [self insertMediaAttachment:mediaAttachment withEndLineBreak:YES];
+       */
+      
+      //GIF approach #2: Does not work
+      UIImage *image = ATLAnimatedImageWithAnimatedGIFData(gifData);
+      ATLMediaAttachment *mediaAttachment = [ATLMediaAttachment mediaAttachmentWithGIF:image metadata:nil thumbnailSize:ATLDefaultGIFThumbnailSize];
+      [self insertMediaAttachment:mediaAttachment withEndLineBreak:YES];
+  }
     NSData *imageData = [[UIPasteboard generalPasteboard] dataForPasteboardType:ATLPasteboardImageKey];
     if (imageData) {
         UIImage *image = [UIImage imageWithData:imageData];
@@ -272,7 +319,16 @@ static CGFloat const ATLButtonHeight = 28.0f;
 
 - (void)leftAccessoryButtonTapped
 {
-    [self.inputToolBarDelegate messageInputToolbar:self didTapLeftAccessoryButton:self.leftAccessoryButton];
+    if(self.textInputView.text.length)
+    {
+        _gifsEnabled = !_gifsEnabled;
+        [self layoutIfNeeded];
+        
+        if(_gifsEnabled)
+            [_gifPicker newRequesterForQuery:_textInputView.text];
+    }
+    else
+        [self.inputToolBarDelegate messageInputToolbar:self didTapLeftAccessoryButton:self.leftAccessoryButton];
 }
 
 - (void)rightAccessoryButtonTapped
@@ -297,8 +353,14 @@ static CGFloat const ATLButtonHeight = 28.0f;
         [self configureRightAccessoryButtonState];
     }
     
+    if(self.leftAccessoryButton.imageView) {
+        [self configureLeftAccessoryButtonState];
+    }
+    
     if (textView.text.length > 0 && [self.inputToolBarDelegate respondsToSelector:@selector(messageInputToolbarDidType:)]) {
         [self.inputToolBarDelegate messageInputToolbarDidType:self];
+        if(_gifsEnabled)
+            [_gifPicker newRequesterForQuery:textView.text];
     } else if (textView.text.length == 0 && [self.inputToolBarDelegate respondsToSelector:@selector(messageInputToolbarDidEndTyping:)]) {
         [self.inputToolBarDelegate messageInputToolbarDidEndTyping:self];
     }
@@ -337,6 +399,15 @@ static CGFloat const ATLButtonHeight = 28.0f;
     return YES;
 }
 
+#pragma mark - <ATLGifPickerDelegate> methods
+-(void)gifSelectedWithImage:(UIImage *)image
+{
+    ATLMediaAttachment *mediaAttachment = [ATLMediaAttachment mediaAttachmentWithGIF:image
+                                                                              metadata:nil
+                                                                         thumbnailSize:ATLDefaultThumbnailSize];
+    [self insertMediaAttachment:mediaAttachment withEndLineBreak:YES];
+}
+
 #pragma mark - Helpers
 
 - (NSArray *)mediaAttachmentsFromAttributedString:(NSAttributedString *)attributedString
@@ -368,6 +439,37 @@ static CGFloat const ATLButtonHeight = 28.0f;
 }
 
 #pragma mark - Send Button Enablement
+
+- (void)configureLeftAccessoryButtonState
+{
+    if(self.textInputView.text.length) {
+        [self configureLeftAccessoryButtonForGIF];
+    } else {
+        [self configureLeftAccessoryButtonForCamera];
+    }
+}
+
+-(void)configureLeftAccessoryButtonForCamera
+{
+    self.leftAccessoryButton.accessibilityLabel = ATLMessageInputToolbarCameraButton;
+    [self.leftAccessoryButton setImage:self.leftAccessoryImage forState:UIControlStateNormal];
+    [self.leftAccessoryButton setTitle:nil forState:UIControlStateNormal];
+    [self.leftAccessoryButton addTarget:self action:@selector(leftAccessoryButtonTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:self.leftAccessoryButton];
+}
+
+-(void)configureLeftAccessoryButtonForGIF
+{
+    self.leftAccessoryButton.accessibilityLabel = ATLMessageInputToolbarGIFButton;
+    [self.leftAccessoryButton setImage:nil forState:UIControlStateNormal];
+    self.leftAccessoryButton.contentEdgeInsets = UIEdgeInsetsZero;
+    self.leftAccessoryButton.titleLabel.font = self.rightAccessoryButtonFont;
+    //TODO localize value if necessary
+    [self.leftAccessoryButton setTitle:@"GIF" forState:UIControlStateNormal];
+    [self.leftAccessoryButton setTitleColor:self.rightAccessoryButtonActiveColor forState:UIControlStateNormal];
+    [self.leftAccessoryButton setTitleColor:self.rightAccessoryButtonDisabledColor forState:UIControlStateDisabled];
+    [self.leftAccessoryButton setEnabled:YES];
+}
 
 - (void)configureRightAccessoryButtonState
 {
