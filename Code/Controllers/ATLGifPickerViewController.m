@@ -25,6 +25,18 @@ static NSString *const GIF_CELL_REUSE_IDENTIFIER = @"gifCellReuseID";
 
 @implementation ATLGifPickerViewController
 
+#pragma mark - Initializers
++ (NSCache *)sharedGIFCache
+{
+    static NSCache *_gifImageCache;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _gifImageCache = [NSCache new];
+    });
+    return _gifImageCache;
+}
+
+#pragma mark - <UIViewController> overrides
 -(void)viewDidLoad
 {
     [self.view setBackgroundColor:[UIColor clearColor]];
@@ -108,7 +120,7 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath
     [cell configureCell];
     
     RFObject *gif = gifList[indexPath.row];
-    [self beginDownloadForGIFatURL:[gif getSmallGifUrl] andIndexPath:indexPath];
+    [self beginDownloadForGIFatURL:[gif getSmallGifUrl] andIndexPath:indexPath andGIFCell:cell];
     
     return cell;
 }
@@ -138,12 +150,41 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 }
 
 #pragma mark - Functionality
--(void)beginDownloadForGIFatURL:(NSString *)string andIndexPath:(NSIndexPath *)path
+-(void)beginDownloadForGIFatURL:(NSString *)string
+                   andIndexPath:(NSIndexPath *)path
+                     andGIFCell:(ATLGIFCollectionViewCell *)cell
 {
-    NSURLSessionDownloadTask *task = [gifDownloadSession downloadTaskWithURL:[NSURL URLWithString:string]];
-    [task resume];
+    NSData *gifData = [[ATLGifPickerViewController sharedGIFCache] objectForKey:string];
+
+    if(gifData)
+        [self updateCellWithRemoteGIFURL:string withGIFData:gifData andCell:cell];
+    else
+    {
+        NSURLSessionDownloadTask *task = [gifDownloadSession downloadTaskWithURL:[NSURL URLWithString:string]];
+        [task resume];
+        
+        downloadIndexMapping[string] = path;
+    }
+}
+
+-(void)updateCellWithRemoteGIFURL:(NSString *)downloadUrl
+                      withGIFData:(NSData *)gifData
+                          andCell:(ATLGIFCollectionViewCell *)gifCell
+{
+    ATLGIFCollectionViewCell *targetCell = gifCell;
+    if(!gifCell)
+    {
+        targetCell = (ATLGIFCollectionViewCell *)[_gifPickerCollectionView cellForItemAtIndexPath:downloadIndexMapping[downloadUrl]];
+        if(!targetCell)
+            return;
+    }
     
-    downloadIndexMapping[string] = path;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [targetCell updateWithGIFData:gifData];
+    });
+    
+    //remove the index path <-> url mapping for this URL
+    downloadIndexMapping[downloadUrl] = nil;
 }
 
 #pragma mark - <NSURLSessionDownloadDelegate> methods
@@ -156,15 +197,9 @@ didFinishDownloadingToURL:(NSURL *)location
     
     NSError *error;
     NSData *gifData = [NSData dataWithContentsOfURL:location options:0 error:&error];
-    ATLGIFCollectionViewCell *cell = (ATLGIFCollectionViewCell *)[_gifPickerCollectionView cellForItemAtIndexPath:downloadIndexMapping[downloadUrl]];
-    if(!cell)
-        return;
+    [self updateCellWithRemoteGIFURL:downloadUrl withGIFData:gifData andCell:nil];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [cell updateWithGIFData:gifData];
-    });
-    
-    //remove the index path <-> url mapping for this URL
-    downloadIndexMapping[downloadUrl] = nil;
+    //place the image data in the cache
+    [[ATLGifPickerViewController sharedGIFCache] setObject:gifData forKey:downloadUrl];
 }
 @end
