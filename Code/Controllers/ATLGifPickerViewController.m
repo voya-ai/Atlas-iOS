@@ -9,6 +9,7 @@
 #import "ATLGifPickerViewController.h"
 #import "RFStreamRequester.h"
 #import "ATLGIFCollectionViewCell.h"
+#import "LocalDiskDataCache.h"
 
 static NSString *const GIF_CELL_REUSE_IDENTIFIER = @"gifCellReuseID";
 
@@ -18,6 +19,7 @@ static NSString *const GIF_CELL_REUSE_IDENTIFIER = @"gifCellReuseID";
     NSMutableArray *gifList;
     NSMutableDictionary *downloadIndexMapping;
     NSURLSession *gifDownloadSession;
+    dispatch_semaphore_t gifSendLock;
 }
 @property (nonatomic, retain) UICollectionView *gifPickerCollectionView;
 
@@ -26,14 +28,20 @@ static NSString *const GIF_CELL_REUSE_IDENTIFIER = @"gifCellReuseID";
 @implementation ATLGifPickerViewController
 
 #pragma mark - Initializers
-+ (NSCache *)sharedGIFCache
+-(instancetype)init
 {
-    static NSCache *_gifImageCache;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _gifImageCache = [NSCache new];
-    });
-    return _gifImageCache;
+  self = [super init];
+  if(self)
+  {
+    gifSendLock = dispatch_semaphore_create(1);
+  }
+  
+  return self;
+}
+
+-(void)dealloc
+{
+    [gifDownloadSession invalidateAndCancel];
 }
 
 #pragma mark - <UIViewController> overrides
@@ -100,9 +108,8 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
 - (void)collectionView:(UICollectionView *)collectionView
 didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    ATLGIFCollectionViewCell *cell = (ATLGIFCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    UIImage *gifImage = [cell getCurrentlyRenderedImage];
-    [_gifPickerDelegate gifSelectedWithImage:gifImage];
+    RFObject *gif = gifList[indexPath.row];
+    [_gifPickerDelegate gifSelectedAtURL:[gif getSmallGifUrl]];
 }
 
 #pragma mark - <UICollectionViewDataSource> methods
@@ -154,10 +161,12 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath
                    andIndexPath:(NSIndexPath *)path
                      andGIFCell:(ATLGIFCollectionViewCell *)cell
 {
-    NSData *gifData = [[ATLGifPickerViewController sharedGIFCache] objectForKey:string];
+    NSData *gifData = [[LocalDiskDataCache defaultCache] lookupObjectAtKey:string];
 
     if(gifData)
+    {
         [self updateCellWithRemoteGIFURL:string withGIFData:gifData andCell:cell];
+    }
     else
     {
         NSURLSessionDownloadTask *task = [gifDownloadSession downloadTaskWithURL:[NSURL URLWithString:string]];
@@ -187,6 +196,12 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath
     downloadIndexMapping[downloadUrl] = nil;
 }
 
+-(void)clearAllCells
+{
+  [gifList removeAllObjects];
+  [_gifPickerCollectionView reloadData];
+}
+
 #pragma mark - <NSURLSessionDownloadDelegate> methods
 -(void)URLSession:(NSURLSession *)session
      downloadTask:(NSURLSessionDownloadTask *)downloadTask
@@ -196,10 +211,11 @@ didFinishDownloadingToURL:(NSURL *)location
     NSString *downloadUrl = downloadTask.originalRequest.URL.absoluteString;
     
     NSError *error;
+    [[LocalDiskDataCache defaultCache] transferObjectAtFileLocation:location
+                                                     toCacheWithKey:downloadUrl
+                                                  withFileExtension:@"gif"];
+    
     NSData *gifData = [NSData dataWithContentsOfURL:location options:0 error:&error];
     [self updateCellWithRemoteGIFURL:downloadUrl withGIFData:gifData andCell:nil];
-    
-    //place the image data in the cache
-    [[ATLGifPickerViewController sharedGIFCache] setObject:gifData forKey:downloadUrl];
 }
 @end

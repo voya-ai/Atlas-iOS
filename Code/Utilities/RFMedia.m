@@ -20,7 +20,7 @@
     _duration = [dataDict[@"duration"] floatValue];
     
     NSArray *dimensionsArray = dataDict[@"dims"];
-    if(dimensionsArray.count > 1)
+    if([dimensionsArray isKindOfClass:[NSArray class]] && dimensionsArray.count > 1)
       _dimensions = CGSizeMake([dimensionsArray[0] integerValue], [dimensionsArray[1] integerValue]);
     else
       _dimensions = CGSizeZero;

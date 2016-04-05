@@ -18,9 +18,9 @@
 
 /**
  @abstract Tells the delegate that the user tapped on an available GIF.
- @param The UIImage/GIF that the user selected.
+ @param The URL of the GIF that the user selected
  */
--(void)gifSelectedWithImage:(UIImage *)image;
+-(void)gifSelectedAtURL:(NSString *)url;
 
 @end
 
@@ -34,6 +34,11 @@
  @param The search string to use in the query.
  */
 -(void)newRequesterForQuery:(NSString *)query;
+
+/**
+ @abstract Clears all of the cells and also clears the data source for the collection view.
+ */
+-(void)clearAllCells;
 
 /**
  @abstract Access to the receiver's delegate.

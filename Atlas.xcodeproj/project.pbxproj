@@ -168,6 +168,8 @@
 		E623AC131C50A88200CCA0B1 /* RFRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = E623AB6A1C48736C00CCA0B1 /* RFRequester.m */; };
 		E623AC141C50A88800CCA0B1 /* RFStreamRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = E623AB6C1C48736C00CCA0B1 /* RFStreamRequester.m */; };
 		E623AC151C50A88F00CCA0B1 /* RFTag.m in Sources */ = {isa = PBXBuildFile; fileRef = E623AB7E1C48745600CCA0B1 /* RFTag.m */; };
+		E6BE133E1C991BAC00530090 /* LocalDiskDataCache.m in Sources */ = {isa = PBXBuildFile; fileRef = E6BE133B1C991B1500530090 /* LocalDiskDataCache.m */; };
+		E6D509701C9B79740086D322 /* LocalDiskDataCache.h in Headers */ = {isa = PBXBuildFile; fileRef = E6BE133A1C991B1500530090 /* LocalDiskDataCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F1C3223527B633B143AA0C99 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DE31FA9B1906CEA04D0C891 /* Pods.framework */; };
 /* End PBXBuildFile section */
 
@@ -373,6 +375,8 @@
 		E623AB811C4874CF00CCA0B1 /* GlobalDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalDefines.h; sourceTree = "<group>"; };
 		E623AB891C48883100CCA0B1 /* ATLGIFCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATLGIFCollectionViewCell.h; sourceTree = "<group>"; };
 		E623AB8A1C48883100CCA0B1 /* ATLGIFCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATLGIFCollectionViewCell.m; sourceTree = "<group>"; };
+		E6BE133A1C991B1500530090 /* LocalDiskDataCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalDiskDataCache.h; sourceTree = "<group>"; };
+		E6BE133B1C991B1500530090 /* LocalDiskDataCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalDiskDataCache.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -515,6 +519,8 @@
 				253C29D81C3C9E0000ED1549 /* ATLUIImageHelper.h */,
 				253C29D91C3C9E0000ED1549 /* ATLUIImageHelper.m */,
 				E623AB811C4874CF00CCA0B1 /* GlobalDefines.h */,
+				E6BE133A1C991B1500530090 /* LocalDiskDataCache.h */,
+				E6BE133B1C991B1500530090 /* LocalDiskDataCache.m */,
 				E623AB711C4873BD00CCA0B1 /* RFMedia.h */,
 				E623AB721C4873BD00CCA0B1 /* RFMedia.m */,
 				E623AB731C4873BD00CCA0B1 /* RFObject.h */,
@@ -835,6 +841,7 @@
 				253C2A481C3C9E0000ED1549 /* ATLMessageComposeTextView.h in Headers */,
 				253C2A1B1C3C9E0000ED1549 /* ATLAvatarItem.h in Headers */,
 				253C2A0F1C3C9E0000ED1549 /* ATLParticipantTableViewController.h in Headers */,
+				E6D509701C9B79740086D322 /* LocalDiskDataCache.h in Headers */,
 				253C2A1C1C3C9E0000ED1549 /* ATLConversationPresenting.h in Headers */,
 				253C2A1D1C3C9E0000ED1549 /* ATLMessagePresenting.h in Headers */,
 				253C2A341C3C9E0000ED1549 /* ATLAvatarImageView.h in Headers */,
@@ -1000,6 +1007,7 @@
 					};
 					D6F57E291A8BE4AF00B62BD9 = {
 						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = TD2N2YXSU3;
 					};
 					D6F57E411A8BE4AF00B62BD9 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -1299,6 +1307,7 @@
 				E623AC111C50A86D00CCA0B1 /* RFMedia.m in Sources */,
 				E623AC141C50A88800CCA0B1 /* RFStreamRequester.m in Sources */,
 				253C2A181C3C9E0000ED1549 /* ATLMediaAttachment.m in Sources */,
+				E6BE133E1C991BAC00530090 /* LocalDiskDataCache.m in Sources */,
 				253C2A4B1C3C9E0000ED1549 /* ATLMessageInputToolbar.m in Sources */,
 				253C2A551C3C9E0000ED1549 /* ATLProgressView.m in Sources */,
 				253C2A291C3C9E0000ED1549 /* ATLMessagingUtilities.m in Sources */,
@@ -1725,7 +1734,7 @@
 					"-framework",
 					"\"UIKit\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.layer.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.layer.Programmatic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 			};
@@ -1789,7 +1798,7 @@
 					"-framework",
 					"\"UIKit\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.layer.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.layer.Programmatic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;

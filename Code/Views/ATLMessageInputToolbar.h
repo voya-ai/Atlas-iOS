@@ -51,6 +51,11 @@ extern NSString *const ATLMessageInputToolbarAccessibilityLabel;
 @optional
 
 /**
+ @abstract Notifies the receiver that an attachment needs to be sent out
+ */
+- (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didRequestAttachmentSend:(ATLMediaAttachment *)attachment;
+
+/**
  @abstract Notifies the receiver that typing has occurred.
  */
 - (void)messageInputToolbarDidType:(ATLMessageInputToolbar *)messageInputToolbar;
@@ -85,6 +90,12 @@ extern NSString *const ATLMessageInputToolbarAccessibilityLabel;
  property.
  */
 - (void)insertMediaAttachment:(ATLMediaAttachment *)mediaAttachment withEndLineBreak:(BOOL)endLineBreak;
+
+/**
+ @abstract Displays the GIF picker.
+ @discussion Functions properly regardless of the current state of the GIF Picker.
+ */
+-(void)showGifPicker;
 
 //-----------------------------
 // UI Customization

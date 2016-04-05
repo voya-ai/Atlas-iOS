@@ -24,10 +24,4 @@
  */
 -(void)updateWithGIFData:(NSData *)data;
 
-/**
- @abstract Gets the UIImage that is currently displayed inside of the cell's UIImageView.
- @return The UIImage representation of the GIF.
- */
--(UIImage *)getCurrentlyRenderedImage;
-
 @end

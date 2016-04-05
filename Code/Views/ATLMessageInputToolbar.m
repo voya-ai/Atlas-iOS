@@ -23,6 +23,7 @@
 #import "ATLMessagingUtilities.h"
 #import "ATLUIImageHelper.h"
 #import "ATLGifPickerViewController.h"
+#import "LocalDiskDataCache.h"
 
 NSString *const ATLMessageInputToolbarDidChangeHeightNotification = @"ATLMessageInputToolbarDidChangeHeightNotification";
 
@@ -106,6 +107,14 @@ static CGFloat const ATLButtonHeight = 28.0f;
         [self.gifPicker.view setHidden:YES];
         [self.gifPicker setGifPickerDelegate:self];
         [self addSubview:self.gifPicker.view];
+      
+      UISwipeGestureRecognizer *upSwipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(showGifPicker)];
+      [upSwipeGesture setDirection:UISwipeGestureRecognizerDirectionUp];
+      [self addGestureRecognizer:upSwipeGesture];
+      
+      UISwipeGestureRecognizer *downSwipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(hideGifPicker)];
+      [downSwipeGesture setDirection:UISwipeGestureRecognizerDirectionDown];
+      [self addGestureRecognizer:downSwipeGesture];
       
         // Calling sizeThatFits: or contentSize on the displayed UITextView causes the cursor's position to momentarily appear out of place and prevent scrolling to the selected range. So we use another text view for height calculations.
         self.dummyTextView = [[ATLMessageComposeTextView alloc] init];
@@ -209,7 +218,6 @@ static CGFloat const ATLButtonHeight = 28.0f;
   NSData *gifData = [[UIPasteboard generalPasteboard] dataForPasteboardType:@"com.compuserve.gif"];
   if(gifData) {
       //GIF approach #1: Works, but requires the GIF data to be saved to a file
-      /*
     //temporary -- save the GIF clipboard data to a local file URL
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
@@ -222,9 +230,9 @@ static CGFloat const ATLButtonHeight = 28.0f;
     [gifData writeToURL:outputURL atomically:YES];
     ATLMediaAttachment *mediaAttachment = [ATLMediaAttachment mediaAttachmentWithFileURL:outputURL thumbnailSize:ATLDefaultGIFThumbnailSize];
     [self insertMediaAttachment:mediaAttachment withEndLineBreak:YES];
-       */
       
       //GIF approach #2: Does not work
+    /*
       UIImage *image = ATLAnimatedImageWithAnimatedGIFData(gifData);
       ATLMediaAttachment *mediaAttachment = [ATLMediaAttachment mediaAttachmentWithGIF:image metadata:nil thumbnailSize:ATLDefaultGIFThumbnailSize];
       [self insertMediaAttachment:mediaAttachment withEndLineBreak:YES];
@@ -236,6 +244,7 @@ static CGFloat const ATLButtonHeight = 28.0f;
                                                                                   metadata:nil
                                                                              thumbnailSize:ATLDefaultThumbnailSize];
         [self insertMediaAttachment:mediaAttachment withEndLineBreak:YES];
+     */
     }
 }
 
@@ -315,6 +324,32 @@ static CGFloat const ATLButtonHeight = 28.0f;
     [self.rightAccessoryButton.titleLabel setFont:rightAccessoryButtonFont];
 }
 
+-(void)showGifPicker
+{
+  if(_gifsEnabled)
+    return;
+  
+  _gifsEnabled = YES;
+  [self setNeedsUpdateConstraints];
+  [UIView animateWithDuration:.3f animations:^{
+    [self layoutIfNeeded];
+  }];
+  
+  [_gifPicker newRequesterForQuery:_textInputView.text];
+}
+
+-(void)hideGifPicker
+{
+  _gifsEnabled = NO;
+  
+  [_gifPicker clearAllCells];
+  
+  [self setNeedsUpdateConstraints];
+  [UIView animateWithDuration:.3f animations:^{
+    [self layoutIfNeeded];
+  }];
+}
+
 #pragma mark - Actions
 
 - (void)leftAccessoryButtonTapped
@@ -359,11 +394,12 @@ static CGFloat const ATLButtonHeight = 28.0f;
     
     if (textView.text.length > 0 && [self.inputToolBarDelegate respondsToSelector:@selector(messageInputToolbarDidType:)]) {
         [self.inputToolBarDelegate messageInputToolbarDidType:self];
-        if(_gifsEnabled)
-            [_gifPicker newRequesterForQuery:textView.text];
     } else if (textView.text.length == 0 && [self.inputToolBarDelegate respondsToSelector:@selector(messageInputToolbarDidEndTyping:)]) {
         [self.inputToolBarDelegate messageInputToolbarDidEndTyping:self];
     }
+  
+  if(_gifsEnabled)
+    [_gifPicker newRequesterForQuery:textView.text];
 
     [self setNeedsLayout];
     
@@ -400,12 +436,12 @@ static CGFloat const ATLButtonHeight = 28.0f;
 }
 
 #pragma mark - <ATLGifPickerDelegate> methods
--(void)gifSelectedWithImage:(UIImage *)image
+-(void)gifSelectedAtURL:(NSString *)url
 {
-    ATLMediaAttachment *mediaAttachment = [ATLMediaAttachment mediaAttachmentWithGIF:image
-                                                                              metadata:nil
-                                                                         thumbnailSize:ATLDefaultThumbnailSize];
-    [self insertMediaAttachment:mediaAttachment withEndLineBreak:YES];
+    NSURL *outputURL = [[LocalDiskDataCache defaultCache] fileLocationForDataStoredAtKey:url];
+    ATLMediaAttachment *mediaAttachment = [ATLMediaAttachment mediaAttachmentWithFileURL:outputURL thumbnailSize:ATLDefaultGIFThumbnailSize];
+    if([self.inputToolBarDelegate respondsToSelector:@selector(messageInputToolbar:didRequestAttachmentSend:)])
+        [self.inputToolBarDelegate messageInputToolbar:self didRequestAttachmentSend:mediaAttachment];
 }
 
 #pragma mark - Helpers
