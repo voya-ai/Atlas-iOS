@@ -19,10 +19,34 @@
 //
 #import "ATLConversationDataSource.h"
 
+/**
+ @abstract Extracts the LYRConversation instance used as a property comparison value from an LYRPredicate, if exists.
+ @param predicate The predicate which to search for an LYRConversation instance.
+ @return The first LYRConversation instance found in the predicate.
+ */
+LYRConversation *LYRConversationDataSourceConversationFromPredicate(LYRPredicate *predicate)
+{
+    LYRConversation *conversation;
+    if ([predicate isKindOfClass:[LYRCompoundPredicate class]]) {
+        for (LYRPredicate *subPredicate in [(LYRCompoundPredicate *)predicate subpredicates]) {
+            conversation = LYRConversationDataSourceConversationFromPredicate(subPredicate);
+            if (conversation) {
+                return conversation;
+            }
+        }
+    } else {
+        if ([predicate.property isEqualToString:@"conversation"]) {
+            conversation = predicate.value;
+        }
+    }
+    return conversation;
+}
+
 @interface ATLConversationDataSource ()
 
 @property (nonatomic, readwrite) LYRQueryController *queryController;
 @property (nonatomic, readwrite) BOOL expandingPaginationWindow;
+@property (nonatomic, readwrite) LYRConversation *conversation;
 
 @end
 
@@ -30,6 +54,8 @@
 
 NSInteger const ATLNumberOfSectionsBeforeFirstMessageSection = 1;
 NSInteger const ATLQueryControllerPaginationWindow = 30;
+NSInteger messageCountBeforeSync;
+BOOL shouldSynchronizeRemoteMessages;
 
 + (instancetype)dataSourceWithLayerClient:(LYRClient *)layerClient query:(LYRQuery *)query
 {
@@ -40,7 +66,9 @@ NSInteger const ATLQueryControllerPaginationWindow = 30;
 {
     self = [super init];
     if (self) {
-        NSUInteger numberOfMessagesAvailable = [layerClient countForQuery:query error:nil];
+        // Setting 0 for pagination causes messages in a new conversation to not display
+        // A minimum of 1 ensures all messages display correctly
+        NSUInteger numberOfMessagesAvailable = MAX(1, [layerClient countForQuery:query error:nil]);
         NSUInteger numberOfMessagesToDisplay = MIN(numberOfMessagesAvailable, ATLQueryControllerPaginationWindow);
     
         NSError *error = nil;
@@ -52,8 +80,13 @@ NSInteger const ATLQueryControllerPaginationWindow = 30;
         _queryController.updatableProperties = [NSSet setWithObjects:@"parts.transferStatus", @"recipientStatusByUserID", @"sentAt", nil];
         _queryController.paginationWindow = -numberOfMessagesToDisplay;
         
+        self.conversation = LYRConversationDataSourceConversationFromPredicate(query.predicate);
+        
         BOOL success = [_queryController execute:&error];
         if (!success) NSLog(@"LayerKit failed to execute query with error: %@", error);
+        
+        messageCountBeforeSync = _queryController.count;
+        shouldSynchronizeRemoteMessages = NO;
     }
     return self;
 }
@@ -66,20 +99,73 @@ NSInteger const ATLQueryControllerPaginationWindow = 30;
         return;
     }
     
-    BOOL moreMessagesAvailable = self.queryController.totalNumberOfObjects > ABS(self.queryController.paginationWindow);
-    if (!moreMessagesAvailable) {
+    if (![self moreMessagesAvailable]) {
         self.expandingPaginationWindow = NO;
         return;
     }
-    
+
+    int messagesAvailableLocally = (int)[self messagesAvailableLocally] - (int)ATLQueryControllerPaginationWindow;
+    if (messagesAvailableLocally <= 0) {
+        [self requestToSynchronizeMoreMessages:ABS(messagesAvailableLocally)];
+    } else {
+        [self finishExpandingPaginationWindow];
+    }
+}
+
+- (void)finishExpandingPaginationWindow
+{
     NSUInteger numberOfMessagesToDisplay = MIN(-self.queryController.paginationWindow + ATLQueryControllerPaginationWindow, self.queryController.totalNumberOfObjects);
     self.queryController.paginationWindow = -numberOfMessagesToDisplay;
     self.expandingPaginationWindow = NO;
 }
 
+- (void)requestToSynchronizeMoreMessages:(NSUInteger)numberOfMessagesToSynchronize
+{
+    NSError *error;
+    __weak typeof(self) weakSelf = self;
+    __block __weak id observer = [[NSNotificationCenter defaultCenter] addObserverForName:LYRConversationDidFinishSynchronizingNotification object:self.conversation queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+        if (observer) {
+            [[NSNotificationCenter defaultCenter] removeObserver:observer];
+        }
+        if (self.queryController.count <= messageCountBeforeSync) {
+            shouldSynchronizeRemoteMessages = NO;
+        } else {
+            shouldSynchronizeRemoteMessages = YES;
+        }
+        [weakSelf finishExpandingPaginationWindow];
+    }];
+    messageCountBeforeSync = self.queryController.count;
+    BOOL success = [self.conversation synchronizeMoreMessages:numberOfMessagesToSynchronize error:&error];
+    if (!success) {
+        if (observer) {
+            [[NSNotificationCenter defaultCenter] removeObserver:observer];
+        }
+        [weakSelf finishExpandingPaginationWindow];
+        return;
+    }
+}
+
 - (BOOL)moreMessagesAvailable
 {
-    return self.queryController.totalNumberOfObjects > ABS(self.queryController.count);
+    return [self messagesAvailableLocally] != 0 || [self messagesAvailableRemotely] != 0;
+}
+
+- (NSUInteger)messagesAvailableLocally
+{
+    return self.queryController.totalNumberOfObjects - ABS(self.queryController.count);
+}
+
+- (NSUInteger)messagesAvailableRemotely
+{
+    /*  Remote messages may exist in the conversation but are unavailable to the current user.
+        For example, they're marked as Deleted for that user.
+        `shouldSynchronizeRemoteMessages` is determined within `requestToSynchronizeMoreMessages`
+     */
+    if (!shouldSynchronizeRemoteMessages) {
+        return 0;
+    }
+    
+    return (NSUInteger)MAX((NSInteger)0, (NSInteger)self.conversation.totalNumberOfMessages - (NSInteger)ABS(self.queryController.count));
 }
 
 - (NSIndexPath *)queryControllerIndexPathForCollectionViewIndexPath:(NSIndexPath *)collectionViewIndexPath

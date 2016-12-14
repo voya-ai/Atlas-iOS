@@ -20,7 +20,7 @@
 
 #import <Foundation/Foundation.h>
 #import "ATLParticipantPresenting.h"
-
+NS_ASSUME_NONNULL_BEGIN
 @interface ATLParticipantTableDataSet : NSObject
 
 /**
@@ -29,12 +29,31 @@
  @param sortType The type of sorting to use.
  @return A new data set initialized with the given set of participants.
  */
-+ (instancetype)dataSetWithParticipants:(NSSet *)participants sortType:(ATLParticipantPickerSortType)sortType;
++ (instancetype)dataSetWithParticipants:(NSSet <id<ATLParticipant>>*)participants sortType:(ATLParticipantPickerSortType)sortType;
+
+/**
+ @abstract Adds a given participant to the data set, if it is not already a member. The data set responds by recalculating its section information.
+ @param participant The participant to add to the data set.
+ */
+- (void)addParticipant:(id<ATLParticipant>)participant;
+
+/**
+ @abstract Removes a given participant from the data set. The data set responds by recalculating its section information.
+ @param participant The participant to remove from the data set.
+ */
+- (void)removeParticipant:(id<ATLParticipant>)participant;
+
+/**
+ @abstract Notifies the data set that a property of an exiting participant in the set has changed. The data set responds by recalculating its section information if the property change affects the sort order of the data set.
+ @param participant The participant that has been modified.
+ @param participant The name of the property of the participant that has changed.
+ */
+- (void)particpant:(id<ATLParticipant>)participant updatedProperty:(NSString *)property;
 
 /**
  @abstract An array containing a string for each section.
  */
-@property (nonatomic, readonly) NSArray *sectionTitles;
+@property (nonatomic, readonly) NSArray <NSString*> *sectionTitles;
 
 /**
  @abstract The number of sections of participants in the data set.
@@ -49,11 +68,12 @@
 /**
  @abstract The index path for the supplied participant.
  */
-- (NSIndexPath *)indexPathForParticipant:(id<ATLParticipant>)participant;
+- (nullable NSIndexPath *)indexPathForParticipant:(id<ATLParticipant>)participant;
 
 /**
  @abstract The participant at the supplied index path.
  */
-- (id<ATLParticipant>)participantAtIndexPath:(NSIndexPath *)indexPath;
+- (nullable id<ATLParticipant>)participantAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
+NS_ASSUME_NONNULL_END

@@ -25,6 +25,7 @@
 @class ATLMessageInputToolbar;
 @class ATLGifPickerViewController;
 
+NS_ASSUME_NONNULL_BEGIN
 extern NSString *const ATLMessageInputToolbarDidChangeHeightNotification;
 extern NSString *const ATLMessageInputToolbarAccessibilityLabel;
 
@@ -105,7 +106,7 @@ extern NSString *const ATLMessageInputToolbarAccessibilityLabel;
  @abstract The left accessory button for the view. 
  @discussion By default, the button displays a camera icon. If set to `nil` the `textInputView` will expand to the left edge of the toolbar.
  */
-@property (nonatomic) UIButton *leftAccessoryButton;
+@property (nonatomic) UIButton * _Nullable leftAccessoryButton;
  
 /**
  @abstract The right accessory button for the view.
@@ -191,7 +192,7 @@ extern NSString *const ATLMessageInputToolbarAccessibilityLabel;
  @abstract An array of all media attachments displayed in the text view.
  @discussion Any existing media attachments will be removed when the right accessory button is tapped.
  */
-@property (nonatomic, readonly) NSArray *mediaAttachments;
+@property (nonatomic, readonly, nullable) NSArray <ATLMediaAttachment*> *mediaAttachments;
 
 //-------------------
 // Layout Accessories
@@ -205,3 +206,4 @@ extern NSString *const ATLMessageInputToolbarAccessibilityLabel;
 @property (nonatomic, weak) UIViewController *containerViewController;
 
 @end
+NS_ASSUME_NONNULL_END

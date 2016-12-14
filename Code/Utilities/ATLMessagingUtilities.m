@@ -45,6 +45,27 @@ NSString *const ATLImagePreviewHeightKey = @"height";
 NSString *const ATLLocationLatitudeKey = @"lat";
 NSString *const ATLLocationLongitudeKey = @"lon";
 
+NSString *const ATLUserNotificationInlineReplyActionIdentifier = @"layer:///actions/inline-reply";
+NSString *const ATLUserNotificationDefaultActionsCategoryIdentifier = @"layer:///categories/default";
+
+#pragma mark - Push Support
+
+UIMutableUserNotificationCategory *ATLDefaultUserNotificationCategory()
+{
+    UIMutableUserNotificationAction *replyAction = [UIMutableUserNotificationAction new];
+    replyAction.identifier = ATLUserNotificationInlineReplyActionIdentifier;
+    replyAction.title = @"Reply";
+    replyAction.activationMode = UIUserNotificationActivationModeBackground;
+    replyAction.authenticationRequired = NO;
+    replyAction.behavior = UIUserNotificationActionBehaviorTextInput;
+    
+    UIMutableUserNotificationCategory *category = [UIMutableUserNotificationCategory new];
+    category.identifier = ATLUserNotificationDefaultActionsCategoryIdentifier;
+    [category setActions:@[ replyAction ] forContext:UIUserNotificationActionContextDefault];
+    
+    return category;
+}
+
 #pragma mark - Max Cell Dimensions
 
 CGFloat ATLMaxCellWidth()
@@ -138,6 +159,19 @@ CGFloat ATLDegreeToRadians(CGFloat degrees)
     return ((M_PI * degrees)/ 180);
 }
 
+#pragma mark - Conversation Helpers
+
+LYRIdentity *ATLIdentityFromSet(NSString *userID, NSSet *participants)
+{
+    for (LYRIdentity *identity in participants) {
+        if ([identity.userID isEqualToString:userID]) {
+            return identity;
+        }
+    }
+    return nil;
+}
+
+
 #pragma mark - Private Message Part Helpers
 
 CGSize  ATLSizeFromOriginalSizeWithConstraint(CGSize originalSize, CGFloat constraint)
@@ -159,9 +193,12 @@ LYRMessage *ATLMessageForParts(LYRClient *layerClient, NSArray *messageParts, NS
     LYRPushNotificationConfiguration *defaultConfiguration = [LYRPushNotificationConfiguration new];
     defaultConfiguration.alert = pushText;
     defaultConfiguration.sound = pushSound;
-    NSDictionary *options = @{ LYRMessageOptionsPushNotificationConfigurationKey: defaultConfiguration };
+    defaultConfiguration.category = ATLUserNotificationDefaultActionsCategoryIdentifier;
+    
+    LYRMessageOptions *messageOptions = [LYRMessageOptions new];
+    messageOptions.pushNotificationConfiguration = defaultConfiguration;
     NSError *error;
-    LYRMessage *message = [layerClient newMessageWithParts:messageParts options:options error:&error];
+    LYRMessage *message = [layerClient newMessageWithParts:messageParts options:messageOptions error:&error];
     if (error) {
         return nil;
     }
@@ -175,6 +212,10 @@ NSArray *ATLMessagePartsWithMediaAttachment(ATLMediaAttachment *mediaAttachment)
     NSMutableArray *messageParts = [NSMutableArray array];
     if (!mediaAttachment.mediaInputStream) {
         @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Cannot create an LYRMessagePart with `nil` mediaInputStream." userInfo:nil];
+    }
+    
+    if ([mediaAttachment.mediaMIMEType isEqualToString:ATLMIMETypeTextPlain]) {
+        return @[[LYRMessagePart messagePartWithText:mediaAttachment.textRepresentation]];
     }
     
     // Create the message part for the main media (should be on index zero).
@@ -304,12 +345,19 @@ NSArray *ATLTextCheckingResultsForText(NSString *text, NSTextCheckingType linkTy
 
 NSBundle *ATLResourcesBundle(void)
 {
+    // CocoaPods resource bundle
     NSBundle *bundlePath = [NSBundle bundleWithIdentifier:@"org.cocoapods.Atlas"];
     NSString *path = [bundlePath pathForResource:@"AtlasResource" ofType:@"bundle"];
     NSBundle *resourcesBundle = [NSBundle bundleWithPath:path];
     if (resourcesBundle) {
         return resourcesBundle;
     }
+    // Carthage resources
+    NSBundle *atlasBundle = [NSBundle bundleWithIdentifier:@"com.layer.Atlas"];
+    if (atlasBundle) {
+        return atlasBundle;
+    }
+    
     NSString *resourcesBundlePath = [[NSBundle mainBundle] pathForResource:@"AtlasResource" ofType:@"bundle"];
     if (resourcesBundlePath) {
         return [NSBundle bundleWithPath:resourcesBundlePath];

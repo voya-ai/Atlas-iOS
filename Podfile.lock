@@ -1,27 +1,21 @@
 PODS:
-  - Atlas (1.0.16):
-    - LayerKit (>= 0.17.1)
-  - Crashlytics (3.6.0):
-    - Fabric (~> 1.6.3)
+  - Atlas (1.0.30):
+    - LayerKit (>= 0.23.0)
   - Expecta (1.0.5)
-  - Fabric (1.6.4)
-  - KIF (3.3.1):
-    - KIF/Core (= 3.3.1)
-  - KIF/Core (3.3.1)
+  - KIF (3.5.1):
+    - KIF/Core (= 3.5.1)
+  - KIF/Core (3.5.1)
   - KIFViewControllerActions (1.0.1):
     - KIF (>= 2.0.0)
-  - LayerKit (0.17.6)
+  - LayerKit (0.23.3)
   - LYRCountDownLatch (0.9.0)
-  - OCMock (3.2)
+  - OCMock (3.3.1)
 
 DEPENDENCIES:
   - Atlas (from `.`)
-  - Crashlytics
   - Expecta
-  - Fabric
   - KIF
   - KIFViewControllerActions (from `https://github.com/blakewatters/KIFViewControllerActions.git`)
-  - LayerKit
   - LYRCountDownLatch (from `https://github.com/layerhq/LYRCountDownLatch.git`)
   - OCMock
 
@@ -35,21 +29,21 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   KIFViewControllerActions:
-    :commit: c3691ae0014d642f1d1228c12350ee8a0369e30b
+    :commit: 181b4f56bc36274288f6b6d3ab3969d749345290
     :git: https://github.com/blakewatters/KIFViewControllerActions.git
   LYRCountDownLatch:
     :commit: 02119f855ad14e7fc0dae32bbbf17c735a281cfe
     :git: https://github.com/layerhq/LYRCountDownLatch.git
 
 SPEC CHECKSUMS:
-  Atlas: d9ae5e5f6cd4012555f21cdbab8d2a373d5f2b3d
-  Crashlytics: e4e8d02914f2608fbc7bf42b1a7af838b0db67a2
+  Atlas: 82ea2777b9bed19bc3704fd8b265af0301786d8c
   Expecta: e1c022fcd33910b6be89c291d2775b3fe27a89fe
-  Fabric: ed41fd62173c6bdea24ab02c9d7707161eabb750
-  KIF: ff9f0e585503871bcd096937cc760081d770c5e2
-  KIFViewControllerActions: fc3a8e1352a6609624bda1fe6cfad410d0e88552
-  LayerKit: 8fb2a7997ae354f5b00854dd6a3104c622477276
+  KIF: 082eb65279e51c3092923802849eb796a04982ab
+  KIFViewControllerActions: 8d2f9ec9f185fa70ca9f54a297de544afe71ea55
+  LayerKit: 128b3b0c036422458d621f81f36e6b42d372feba
   LYRCountDownLatch: 9b440b42a19ddbf4e75bdd4b43726baa1527606a
-  OCMock: 28def049ef47f996b515a8eeea958be7ccab2dbb
+  OCMock: f3f61e6eaa16038c30caa5798c5e49d3307b6f22
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: 31c94cbd9f9d85fc7e9aae02109733cba464cd83
+
+COCOAPODS: 1.1.1

@@ -61,6 +61,8 @@ NSData *MediaAttachmentDataFromInputStream(NSInputStream *inputStream)
 
 @end
 
+NSString *const LYRConversationOptionsMetadataKey = @"metadata";
+
 @implementation LYRConversationMock
 
 + (instancetype)newConversationWithParticipants:(NSSet *)participants options:(NSDictionary *)options
@@ -119,7 +121,7 @@ NSData *MediaAttachmentDataFromInputStream(NSInputStream *inputStream)
         message.parts = parts;
     }
     NSMutableDictionary *recipientStatus = [NSMutableDictionary new];
-    [self.participants enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+    [_participants enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
         [recipientStatus setValue:[NSNumber numberWithInteger:LYRRecipientStatusRead] forKey:obj];
     }];
     
@@ -132,7 +134,7 @@ NSData *MediaAttachmentDataFromInputStream(NSInputStream *inputStream)
 - (BOOL)addParticipants:(NSSet *)participants error:(NSError **)error
 {
     NSAssert(participants.count, @"Cannot send add null participants to a conversation");
-    NSMutableSet *participantsCopy = [self.participants mutableCopy];
+    NSMutableSet *participantsCopy = [_participants mutableCopy];
     [participantsCopy unionSet:participants];
     self.participants = participantsCopy;
     [[LYRMockContentStore sharedStore] broadcastChanges];
@@ -142,11 +144,22 @@ NSData *MediaAttachmentDataFromInputStream(NSInputStream *inputStream)
 - (BOOL)removeParticipants:(NSSet *)participants error:(NSError **)error
 {
     NSAssert(participants.count, @"Cannot send add null participants to a conversation");
-    NSMutableSet *participantsCopy = [self.participants mutableCopy];
+    NSMutableSet *participantsCopy = [_participants mutableCopy];
     [participantsCopy minusSet:participants];
     self.participants = participantsCopy;
     [[LYRMockContentStore sharedStore] broadcastChanges];
     return YES;
+}
+
+- (NSSet *)participants
+{
+    NSMutableSet *identities = [NSMutableSet new];
+    for (NSString *userID in _participants) {
+        LYRIdentityMock *identityMock = [LYRIdentityMock new];
+        identityMock.userID = userID;
+        [identities addObject:identityMock];
+    }
+    return identities;
 }
 
 #pragma mark - Metadata
@@ -171,7 +184,7 @@ NSData *MediaAttachmentDataFromInputStream(NSInputStream *inputStream)
 
 #pragma mark - Typing Indicator
 
-- (void)sendTypingIndicator:(LYRTypingIndicator)typingIndicator
+- (void)sendTypingIndicator:(LYRTypingIndicator *)typingIndicator
 {
     //
 }
