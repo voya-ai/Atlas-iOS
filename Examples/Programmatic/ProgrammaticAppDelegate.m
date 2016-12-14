@@ -10,6 +10,9 @@
 #import "ATLSampleConversationListViewController.h"
 #import "LayerKitMock.h"
 #import <Atlas/Atlas.h>
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
+
 @import LayerKit; 
 
 static BOOL ATLIsRunningTests()
@@ -24,7 +27,9 @@ static BOOL ATLIsRunningTests()
 @implementation ProgrammaticAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{    
+{
+    [Fabric with:@[[Crashlytics class]]];
+
     ATLUserMock *mockUser = [ATLUserMock userWithMockUserName:ATLMockUserNameBlake];
     LYRClientMock *layerClient = [LYRClientMock layerClientMockWithAuthenticatedUserID:mockUser.userID];
     

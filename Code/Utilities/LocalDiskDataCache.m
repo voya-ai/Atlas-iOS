@@ -67,7 +67,7 @@ static NSUInteger const CACHE_SIZE_MAX = 30;
 
 - (NSURL *)cacheDirectoryURL
 {
-    NSArray *filePaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSLocalDomainMask, YES);
+    NSArray *filePaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     if(filePaths.count > 0)
         return [NSURL URLWithString:[NSString stringWithFormat:@"file://%@", filePaths[0]]];
     else
@@ -107,7 +107,12 @@ static NSUInteger const CACHE_SIZE_MAX = 30;
     if(extension)
         transferLocationURL = [transferLocationURL URLByAppendingPathExtension:extension];
     NSError *fileTransferError;
-    if([[NSFileManager defaultManager] copyItemAtURL:fileLocation toURL:transferLocationURL error:&fileTransferError])
+    NSFileManager *fileMan = [NSFileManager defaultManager];
+    
+    if(![fileMan fileExistsAtPath:[transferLocationURL absoluteString]])
+        [fileMan createFileAtPath:[transferLocationURL absoluteString] contents:nil attributes:nil];
+    
+    if([fileMan copyItemAtURL:fileLocation toURL:transferLocationURL error:&fileTransferError])
     {
         if(fileTransferError)
             return;
