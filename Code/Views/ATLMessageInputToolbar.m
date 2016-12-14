@@ -494,8 +494,6 @@ static CGFloat const ATLButtonHeight = 28.0f;
             if ([messagePart.MIMEType isEqualToString:ATLMIMETypeTextPlain]) {
                 return [[NSString alloc] initWithData:messagePart.data encoding:NSUTF8StringEncoding];
             }
-            
-            return lastSentMessage;
         }
     }
     
