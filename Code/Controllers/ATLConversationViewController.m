@@ -638,7 +638,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 - (void)messageInputToolbarDidEndTyping:(ATLMessageInputToolbar *)messageInputToolbar
 {
     if (!self.conversation) return;
-    [self.conversation sendTypingIndicator:LYRTypingIndicatorActionFinish];
+    //[self.conversation sendTypingIndicator:LYRTypingIndicatorActionFinish];
 }
 
 -(LYRMessage *)messageInputToolbarDidRequestLastMessage:(ATLMessageInputToolbar *)messageInputToolbar
