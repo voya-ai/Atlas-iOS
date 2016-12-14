@@ -641,6 +641,12 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     [self.conversation sendTypingIndicator:LYRTypingIndicatorActionFinish];
 }
 
+-(LYRMessage *)messageInputToolbarDidRequestLastMessage:(ATLMessageInputToolbar *)messageInputToolbar
+{
+  if (!self.conversation) return nil;
+  return self.conversation.lastMessage;
+}
+
 #pragma mark - Message Sending
 
 - (NSOrderedSet *)defaultMessagesForMediaAttachments:(NSArray *)mediaAttachments

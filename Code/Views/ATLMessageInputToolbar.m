@@ -338,7 +338,7 @@ static CGFloat const ATLButtonHeight = 28.0f;
     [self layoutIfNeeded];
   }];
   
-  [_gifPicker newRequesterForQuery:_textInputView.text];
+  [_gifPicker newRequesterForQuery:[self getGIFSearchText]];
 }
 
 -(void)hideGifPicker
@@ -365,7 +365,9 @@ static CGFloat const ATLButtonHeight = 28.0f;
         [self layoutIfNeeded];
         
         if(_gifsEnabled)
-            [_gifPicker newRequesterForQuery:_textInputView.text];
+        {
+          [_gifPicker newRequesterForQuery:[self getGIFSearchText]];
+        }
     }
     else
         [self.inputToolBarDelegate messageInputToolbar:self didTapLeftAccessoryButton:self.leftAccessoryButton];
@@ -404,7 +406,7 @@ static CGFloat const ATLButtonHeight = 28.0f;
     }
   
   if(_gifsEnabled)
-    [_gifPicker newRequesterForQuery:textView.text];
+    [_gifPicker newRequesterForQuery:[self getGIFSearchText]];
 
     [self setNeedsLayout];
     
@@ -475,6 +477,29 @@ static CGFloat const ATLButtonHeight = 28.0f;
     // This is a workaround to accept the current auto correction suggestion while not resigning as first responder. From: http://stackoverflow.com/a/27865136
     [self.textInputView.inputDelegate selectionWillChange:self.textInputView];
     [self.textInputView.inputDelegate selectionDidChange:self.textInputView];
+}
+
+- (NSString *)getGIFSearchText
+{
+    NSString *currentlyTypedText = _textInputView.text;
+    if (currentlyTypedText.length > 0) {
+        return currentlyTypedText;
+    }
+    
+    if ([_inputToolBarDelegate respondsToSelector:@selector(messageInputToolbarDidRequestLastMessage:)]) {
+        LYRMessage *lastSentMessage = [_inputToolBarDelegate messageInputToolbarDidRequestLastMessage:self];
+        if (lastSentMessage != nil && lastSentMessage.parts.count > 0) {
+            
+            LYRMessagePart *messagePart = [lastSentMessage.parts firstObject];
+            if ([messagePart.MIMEType isEqualToString:ATLMIMETypeTextPlain]) {
+                return [[NSString alloc] initWithData:messagePart.data encoding:NSUTF8StringEncoding];
+            }
+            
+            return lastSentMessage;
+        }
+    }
+    
+    return @"";
 }
 
 #pragma mark - Send Button Enablement

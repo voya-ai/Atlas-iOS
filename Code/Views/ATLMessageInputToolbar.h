@@ -22,6 +22,8 @@
 #import "ATLMessageComposeTextView.h"
 #import "ATLMediaAttachment.h"
 
+@import LayerKit;
+
 @class ATLMessageInputToolbar;
 @class ATLGifPickerViewController;
 
@@ -65,6 +67,11 @@ extern NSString *const ATLMessageInputToolbarAccessibilityLabel;
  @abstract Notifies the receiver that typing has ended.
  */
 - (void)messageInputToolbarDidEndTyping:(ATLMessageInputToolbar *)messageInputToolbar;
+
+/**
+ @abstract Requests the last LYRMessage sent in the current conversation from the receiver.
+ */
+- (LYRMessage *)messageInputToolbarDidRequestLastMessage:(ATLMessageInputToolbar *)messageInputToolbar;
 
 @end
 
