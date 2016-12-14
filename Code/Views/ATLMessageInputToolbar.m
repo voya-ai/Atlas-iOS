@@ -499,6 +499,7 @@ static CGFloat const ATLButtonHeight = 28.0f;
     [self.leftAccessoryButton setImage:nil forState:UIControlStateNormal];
     self.leftAccessoryButton.contentEdgeInsets = UIEdgeInsetsZero;
     self.leftAccessoryButton.titleLabel.font = self.rightAccessoryButtonFont;
+  
     //TODO localize value if necessary
     [self.leftAccessoryButton setTitle:@"GIF" forState:UIControlStateNormal];
     [self.leftAccessoryButton setTitleColor:self.rightAccessoryButtonActiveColor forState:UIControlStateNormal];

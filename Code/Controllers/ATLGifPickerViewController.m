@@ -70,7 +70,15 @@ static NSString *const GIF_CELL_REUSE_IDENTIFIER = @"gifCellReuseID";
     [_gifPickerCollectionView setDataSource:self];
     [_gifPickerCollectionView setBackgroundColor:[UIColor clearColor]];
     [_gifPickerCollectionView setShowsHorizontalScrollIndicator:NO];
+    [_gifPickerCollectionView setPrefetchingEnabled:false];
     [self.view addSubview:_gifPickerCollectionView];
+}
+
+-(void)viewDidLayoutSubviews
+{
+  [super viewDidLayoutSubviews];
+  
+  _gifPickerCollectionView.frame = self.view.bounds;
 }
 
 #pragma mark - <UICollectionViewDelegateFlowLayout> methods
