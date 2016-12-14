@@ -218,6 +218,7 @@ static CGFloat const ATLButtonHeight = 28.0f;
 {
   NSData *gifData = [[UIPasteboard generalPasteboard] dataForPasteboardType:@"com.compuserve.gif"];
   if(gifData) {
+    
       //GIF approach #1: Works, but requires the GIF data to be saved to a file
     //temporary -- save the GIF clipboard data to a local file URL
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
@@ -332,6 +333,7 @@ static CGFloat const ATLButtonHeight = 28.0f;
   
   _gifsEnabled = YES;
   [self setNeedsUpdateConstraints];
+  [self setNeedsLayout];
   [UIView animateWithDuration:.3f animations:^{
     [self layoutIfNeeded];
   }];
@@ -346,6 +348,7 @@ static CGFloat const ATLButtonHeight = 28.0f;
   [_gifPicker clearAllCells];
   
   [self setNeedsUpdateConstraints];
+  [self setNeedsLayout];
   [UIView animateWithDuration:.3f animations:^{
     [self layoutIfNeeded];
   }];
@@ -358,6 +361,7 @@ static CGFloat const ATLButtonHeight = 28.0f;
     if(self.textInputView.text.length)
     {
         _gifsEnabled = !_gifsEnabled;
+        [self setNeedsLayout];
         [self layoutIfNeeded];
         
         if(_gifsEnabled)
