@@ -1054,7 +1054,6 @@
 				D6F57E281A8BE4AF00B62BD9 /* Resources */,
 				F4A445D314319BCAB2ADA9CE /* [CP] Embed Pods Frameworks */,
 				08CE458C0777E0BAD1AB2CCD /* [CP] Copy Pods Resources */,
-				E6D7877B1E01F5F3006D15AD /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1456,19 +1455,6 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-test-StoryboardTests/Pods-test-StoryboardTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
-		};
-		E6D7877B1E01F5F3006D15AD /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "./Fabric.framework/run c1b292c6936dfe70b5f261725b0af11d63990c97 c20c0f583d9ea373ff6d3e46c13fc4e32d6c38d6770916dab20db60ca6bf3844";
 		};
 		EB4412495A7D3F167A23153E /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
