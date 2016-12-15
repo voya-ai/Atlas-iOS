@@ -231,8 +231,6 @@
 		E623AC151C50A88F00CCA0B1 /* RFTag.m in Sources */ = {isa = PBXBuildFile; fileRef = E623AB7E1C48745600CCA0B1 /* RFTag.m */; };
 		E6BE133E1C991BAC00530090 /* LocalDiskDataCache.m in Sources */ = {isa = PBXBuildFile; fileRef = E6BE133B1C991B1500530090 /* LocalDiskDataCache.m */; };
 		E6D509701C9B79740086D322 /* LocalDiskDataCache.h in Headers */ = {isa = PBXBuildFile; fileRef = E6BE133A1C991B1500530090 /* LocalDiskDataCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E6D7877E1E01F613006D15AD /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6D7877C1E01F613006D15AD /* Fabric.framework */; };
-		E6D7877F1E01F613006D15AD /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6D7877D1E01F613006D15AD /* Crashlytics.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -466,8 +464,6 @@
 		E623AB8A1C48883100CCA0B1 /* ATLGIFCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATLGIFCollectionViewCell.m; sourceTree = "<group>"; };
 		E6BE133A1C991B1500530090 /* LocalDiskDataCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalDiskDataCache.h; sourceTree = "<group>"; };
 		E6BE133B1C991B1500530090 /* LocalDiskDataCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalDiskDataCache.m; sourceTree = "<group>"; };
-		E6D7877C1E01F613006D15AD /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
-		E6D7877D1E01F613006D15AD /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		E994C194C8CEC4ECECA9506A /* Pods-test-ProgrammaticTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-test-ProgrammaticTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-test-ProgrammaticTests/Pods-test-ProgrammaticTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -493,8 +489,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D9D282D2BB1B4AD3789CDAFE /* Pods_Programmatic.framework in Frameworks */,
-				E6D7877F1E01F613006D15AD /* Crashlytics.framework in Frameworks */,
-				E6D7877E1E01F613006D15AD /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -685,8 +679,6 @@
 		412524007C3A7505AC34F33C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				E6D7877C1E01F613006D15AD /* Fabric.framework */,
-				E6D7877D1E01F613006D15AD /* Crashlytics.framework */,
 				95A744001D22A9D600BED68D /* LayerKit.framework */,
 				250C5EF21C7656610084EB18 /* LayerKit.framework */,
 				5DE31FA9B1906CEA04D0C891 /* Pods.framework */,
