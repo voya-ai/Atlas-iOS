@@ -623,10 +623,10 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 
 -(void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didRequestAttachmentSend:(ATLMediaAttachment *)attachment
 {
-  NSOrderedSet *messages = [self messagesForMediaAttachments:@[attachment]];
-  for (LYRMessage *message in messages) {
-    [self sendMessage:message];
-  }
+    NSOrderedSet *messages = [self messagesForMediaAttachments:@[attachment]];
+    for (LYRMessage *message in messages) {
+        [self sendMessage:message];
+    }
 }
 
 - (void)messageInputToolbarDidType:(ATLMessageInputToolbar *)messageInputToolbar
@@ -638,13 +638,13 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 - (void)messageInputToolbarDidEndTyping:(ATLMessageInputToolbar *)messageInputToolbar
 {
     if (!self.conversation) return;
-    //[self.conversation sendTypingIndicator:LYRTypingIndicatorActionFinish];
+    [self.conversation sendTypingIndicator:LYRTypingIndicatorActionFinish];
 }
 
 -(LYRMessage *)messageInputToolbarDidRequestLastMessage:(ATLMessageInputToolbar *)messageInputToolbar
 {
-  if (!self.conversation) return nil;
-  return self.conversation.lastMessage;
+    if (!self.conversation) return nil;
+    return self.conversation.lastMessage;
 }
 
 #pragma mark - Message Sending
@@ -746,10 +746,10 @@ static NSInteger const ATLPhotoActionSheet = 1000;
             case 2:
                 [self displayImagePickerWithSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
                 break;
-            
-          case 3:
-            [self.messageInputToolbar showGifPicker];
-            
+                
+            case 3:
+                [self.messageInputToolbar showGifPicker];
+                
             default:
                 break;
         }
@@ -830,7 +830,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     if (!self.conversation) return;
     if (!notification.object) return;
     if (![notification.object isEqual:self.conversation]) return;
-
+    
     LYRTypingIndicator *typingIndicator = notification.userInfo[LYRTypingIndicatorObjectUserInfoKey];
     if (typingIndicator.action == LYRTypingIndicatorActionBegin) {
         [self.typingParticipantIDs addObject:typingIndicator.sender.userID];

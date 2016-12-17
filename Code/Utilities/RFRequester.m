@@ -1,6 +1,6 @@
 //
 //  RFRequester.m
-//  GifKeyboardSDK
+//  Atlas
 //
 //  Created by Jeff on 4/22/15.
 //  Copyright (c) 2015 Jeff. All rights reserved.
@@ -12,75 +12,75 @@
 
 -(instancetype)init
 {
-  self = [super init];
-  if(self)
-  {
-    genericParameters = [NSMutableDictionary new];
-    mode = APIModeBest;
-  }
-  return self;
+    self = [super init];
+    if(self)
+    {
+        genericParameters = [NSMutableDictionary new];
+        mode = APIModeBest;
+    }
+    return self;
 }
 
 -(void)setMode:(APIMode)newMode
 {
-  mode = newMode;
+    mode = newMode;
 }
 
 -(NSString *)getModeParameterString
 {
-  switch (mode) {
-    case APIModeBest:
-      return @"best";
-      break;
-    case APIModeText:
-      return @"text";
-      break;
-    case APIModeFeatured:
-      return @"featured";
-      break;
-    default:
-      return @"text";
-      break;
-  }
+    switch (mode) {
+        case APIModeBest:
+            return @"best";
+            break;
+        case APIModeText:
+            return @"text";
+            break;
+        case APIModeFeatured:
+            return @"featured";
+            break;
+        default:
+            return @"text";
+            break;
+    }
 }
 
 -(BOOL)canFetchMore
 {
-  //Default implementation. Override in subclass.
-  return NO;
+    //Default implementation. Override in subclass.
+    return NO;
 }
 
 -(BOOL)shouldFetchExtra
 {
-  //Default implementation. Override in subclass.
-  return NO;
+    //Default implementation. Override in subclass.
+    return NO;
 }
 
 -(NSString *)getStreamID
 {
-  return streamID;
+    return streamID;
 }
 
 -(void)addGenericParameters:(NSDictionary *)generics
 {
-  [genericParameters addEntriesFromDictionary:generics];
+    [genericParameters addEntriesFromDictionary:generics];
 }
 
 -(void)fetch:(RFRequesterCallback)callback
 {
-  //Default implementation. Override in subclass.
-  NSAssert(YES, @"This method should only be called from a subclass override.");
+    //Default implementation. Override in subclass.
+    NSAssert(YES, @"This method should only be called from a subclass override.");
 }
 
 -(void)cancelRequest
 {
-  //Default implementation. Override in subclass.
-  NSAssert(YES, @"This method should only be called from a subclass override.");
+    //Default implementation. Override in subclass.
+    NSAssert(YES, @"This method should only be called from a subclass override.");
 }
 
 -(void)reset
 {
-  //Default implementation. Override in subclass.
-  NSAssert(YES, @"This method should only be called from a subclass override.");
+    //Default implementation. Override in subclass.
+    NSAssert(YES, @"This method should only be called from a subclass override.");
 }
 @end

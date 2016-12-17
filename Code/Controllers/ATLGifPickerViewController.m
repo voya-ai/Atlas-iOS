@@ -30,13 +30,13 @@ static NSString *const GIF_CELL_REUSE_IDENTIFIER = @"gifCellReuseID";
 #pragma mark - Initializers
 -(instancetype)init
 {
-  self = [super init];
-  if(self)
-  {
-    gifSendLock = dispatch_semaphore_create(1);
-  }
-  
-  return self;
+    self = [super init];
+    if(self)
+    {
+        gifSendLock = dispatch_semaphore_create(1);
+    }
+    
+    return self;
 }
 
 -(void)dealloc
@@ -76,9 +76,9 @@ static NSString *const GIF_CELL_REUSE_IDENTIFIER = @"gifCellReuseID";
 
 -(void)viewDidLayoutSubviews
 {
-  [super viewDidLayoutSubviews];
-  
-  _gifPickerCollectionView.frame = self.view.bounds;
+    [super viewDidLayoutSubviews];
+    
+    _gifPickerCollectionView.frame = self.view.bounds;
 }
 
 #pragma mark - <UICollectionViewDelegateFlowLayout> methods
@@ -170,7 +170,7 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath
                      andGIFCell:(ATLGIFCollectionViewCell *)cell
 {
     NSData *gifData = [[LocalDiskDataCache defaultCache] lookupObjectAtKey:string];
-
+    
     if(gifData)
     {
         [self updateCellWithRemoteGIFURL:string withGIFData:gifData andCell:cell];
@@ -200,14 +200,13 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath
         [targetCell updateWithGIFData:gifData];
     });
     
-    //remove the index path <-> url mapping for this URL
     downloadIndexMapping[downloadUrl] = nil;
 }
 
 -(void)clearAllCells
 {
-  [gifList removeAllObjects];
-  [_gifPickerCollectionView reloadData];
+    [gifList removeAllObjects];
+    [_gifPickerCollectionView reloadData];
 }
 
 #pragma mark - <NSURLSessionDownloadDelegate> methods

@@ -1,6 +1,6 @@
 //
-//  GKObject.h
-//  GifKeyboardSDK
+//  RFObject.h
+//  Atlas
 //
 //  Created by Jeff on 4/6/15.
 //  Copyright (c) 2015 Jeff. All rights reserved.
@@ -12,7 +12,7 @@
 @import UIKit;
 
 @interface RFObject : NSObject {
-    @protected
+@protected
     NSString *_rfIdentifier;
     NSString *_userPosterIdentifier;
     NSString *_title;

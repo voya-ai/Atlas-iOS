@@ -58,6 +58,9 @@ static CGFloat const ATLRightAccessoryButtonDefaultWidth = 46.0f;
 static CGFloat const ATLRightAccessoryButtonPadding = 5.3f;
 static CGFloat const ATLButtonHeight = 28.0f;
 
+// GIF Tray Size Constants
+static CGFloat const ATLGIFTrayHeight = 120.f;
+
 + (void)initialize
 {
     ATLMessageInputToolbar *proxy = [self appearance];
@@ -102,20 +105,20 @@ static CGFloat const ATLButtonHeight = 28.0f;
         self.rightAccessoryButtonTitle = @"Send";
         [self addSubview:self.rightAccessoryButton];
         [self configureRightAccessoryButtonState];
-      
+        
         self.gifPicker = [ATLGifPickerViewController new];
         [self.gifPicker.view setHidden:YES];
         [self.gifPicker setGifPickerDelegate:self];
         [self addSubview:self.gifPicker.view];
-      
-      UISwipeGestureRecognizer *upSwipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(showGifPicker)];
-      [upSwipeGesture setDirection:UISwipeGestureRecognizerDirectionUp];
-      [self addGestureRecognizer:upSwipeGesture];
-      
-      UISwipeGestureRecognizer *downSwipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(hideGifPicker)];
-      [downSwipeGesture setDirection:UISwipeGestureRecognizerDirectionDown];
-      [self addGestureRecognizer:downSwipeGesture];
-      
+        
+        UISwipeGestureRecognizer *upSwipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(showGifPicker)];
+        [upSwipeGesture setDirection:UISwipeGestureRecognizerDirectionUp];
+        [self addGestureRecognizer:upSwipeGesture];
+        
+        UISwipeGestureRecognizer *downSwipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(hideGifPicker)];
+        [downSwipeGesture setDirection:UISwipeGestureRecognizerDirectionDown];
+        [self addGestureRecognizer:downSwipeGesture];
+        
         // Calling sizeThatFits: or contentSize on the displayed UITextView causes the cursor's position to momentarily appear out of place and prevent scrolling to the selected range. So we use another text view for height calculations.
         self.dummyTextView = [[ATLMessageComposeTextView alloc] init];
         self.maxNumberOfLines = 8;
@@ -140,7 +143,7 @@ static CGFloat const ATLButtonHeight = 28.0f;
     CGRect leftButtonFrame = self.leftAccessoryButton.frame;
     CGRect rightButtonFrame = self.rightAccessoryButton.frame;
     CGRect textViewFrame = self.textInputView.frame;
-
+    
     if (!self.leftAccessoryButton) {
         leftButtonFrame.size.width = 0;
     } else {
@@ -156,7 +159,7 @@ static CGFloat const ATLButtonHeight = 28.0f;
     
     leftButtonFrame.size.height = ATLButtonHeight;
     leftButtonFrame.origin.x = ATLLeftButtonHorizontalMargin;
-
+    
     if (self.rightAccessoryButtonFont && (self.textInputView.text.length || !self.displaysRightAccessoryImage)) {
         rightButtonFrame.size.width = CGRectIntegral([ATLLocalizedString(@"atl.messagetoolbar.send.key", self.rightAccessoryButtonTitle, nil) boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:0 attributes:@{NSFontAttributeName: self.rightAccessoryButtonFont} context:nil]).size.width + ATLRightAccessoryButtonPadding;
     } else {
@@ -165,21 +168,21 @@ static CGFloat const ATLButtonHeight = 28.0f;
     
     rightButtonFrame.size.height = ATLButtonHeight;
     rightButtonFrame.origin.x = CGRectGetWidth(frame) - CGRectGetWidth(rightButtonFrame) - ATLRightButtonHorizontalMargin;
-
+    
     textViewFrame.origin.x = CGRectGetMaxX(leftButtonFrame) + ATLLeftButtonHorizontalMargin;
     textViewFrame.origin.y = self.verticalMargin;
     textViewFrame.size.width = CGRectGetMinX(rightButtonFrame) - CGRectGetMinX(textViewFrame) - ATLRightButtonHorizontalMargin;
-
+    
     self.dummyTextView.attributedText = self.textInputView.attributedText;
     CGSize fittedTextViewSize = [self.dummyTextView sizeThatFits:CGSizeMake(CGRectGetWidth(textViewFrame), MAXFLOAT)];
     textViewFrame.size.height = ceil(MIN(fittedTextViewSize.height, self.textViewMaxHeight));
-  
+    
     textViewFrame.origin.y = CGRectGetHeight(frame) - self.verticalMargin - textViewFrame.size.height;
-
+    
     //TODO move height value into configurable property or variable
-    frame.size.height = _gifsEnabled ? 120 : CGRectGetHeight(textViewFrame) + self.verticalMargin * 2;
+    frame.size.height = _gifsEnabled ? ATLGIFTrayHeight : CGRectGetHeight(textViewFrame) + self.verticalMargin * 2;
     frame.origin.y -= frame.size.height - CGRectGetHeight(self.frame);
- 
+    
     // Only calculate button centerY once to anchor it to bottom of bar.
     if (!self.buttonCenterY) {
         self.buttonCenterY = (CGRectGetHeight(frame) - CGRectGetHeight(leftButtonFrame)) / 2;
@@ -188,7 +191,7 @@ static CGFloat const ATLButtonHeight = 28.0f;
     rightButtonFrame.origin.y = frame.size.height - rightButtonFrame.size.height - self.buttonCenterY;
     
     BOOL heightChanged = CGRectGetHeight(frame) != CGRectGetHeight(self.frame);
-
+    
     self.leftAccessoryButton.frame = leftButtonFrame;
     self.rightAccessoryButton.frame = rightButtonFrame;
     self.textInputView.frame = textViewFrame;
@@ -205,10 +208,10 @@ static CGFloat const ATLButtonHeight = 28.0f;
     }
     else
         [_gifPicker.view setHidden:YES];
-
+    
     // Setting one's own frame like this is a no-no but seems to be the lesser of evils when working around the layout issues mentioned above.
     self.frame = frame;
-
+    
     if (heightChanged) {
         [[NSNotificationCenter defaultCenter] postNotificationName:ATLMessageInputToolbarDidChangeHeightNotification object:self];
     }
@@ -216,37 +219,37 @@ static CGFloat const ATLButtonHeight = 28.0f;
 
 - (void)paste:(id)sender
 {
-  NSData *gifData = [[UIPasteboard generalPasteboard] dataForPasteboardType:@"com.compuserve.gif"];
-  if(gifData) {
-    
-      //GIF approach #1: Works, but requires the GIF data to be saved to a file
-    //temporary -- save the GIF clipboard data to a local file URL
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
-    NSURL *baseURL = [NSURL fileURLWithPath:basePath isDirectory:YES];
-    NSURL *outputDirURL = [NSURL URLWithString:@"com.layer.atlas" relativeToURL:baseURL];
-    NSURL *outputURL = [NSURL URLWithString:@"clipboard_gif.gif" relativeToURL:outputDirURL];
-    [[NSFileManager defaultManager] createDirectoryAtURL:outputDirURL withIntermediateDirectories:YES attributes:nil error:nil];
-    [[NSFileManager defaultManager] removeItemAtURL:outputURL error:nil];
-    
-    [gifData writeToURL:outputURL atomically:YES];
-    ATLMediaAttachment *mediaAttachment = [ATLMediaAttachment mediaAttachmentWithFileURL:outputURL thumbnailSize:ATLDefaultGIFThumbnailSize];
-    [self insertMediaAttachment:mediaAttachment withEndLineBreak:YES];
-      
-      //GIF approach #2: Does not work
-    /*
-      UIImage *image = ATLAnimatedImageWithAnimatedGIFData(gifData);
-      ATLMediaAttachment *mediaAttachment = [ATLMediaAttachment mediaAttachmentWithGIF:image metadata:nil thumbnailSize:ATLDefaultGIFThumbnailSize];
-      [self insertMediaAttachment:mediaAttachment withEndLineBreak:YES];
-  }
-    NSData *imageData = [[UIPasteboard generalPasteboard] dataForPasteboardType:ATLPasteboardImageKey];
-    if (imageData) {
-        UIImage *image = [UIImage imageWithData:imageData];
-        ATLMediaAttachment *mediaAttachment = [ATLMediaAttachment mediaAttachmentWithImage:image
-                                                                                  metadata:nil
-                                                                             thumbnailSize:ATLDefaultThumbnailSize];
+    NSData *gifData = [[UIPasteboard generalPasteboard] dataForPasteboardType:@"com.compuserve.gif"];
+    if(gifData) {
+        
+        //GIF approach #1: Works, but requires the GIF data to be saved to a file
+        //temporary -- save the GIF clipboard data to a local file URL
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+        NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+        NSURL *baseURL = [NSURL fileURLWithPath:basePath isDirectory:YES];
+        NSURL *outputDirURL = [NSURL URLWithString:@"com.layer.atlas" relativeToURL:baseURL];
+        NSURL *outputURL = [NSURL URLWithString:@"clipboard_gif.gif" relativeToURL:outputDirURL];
+        [[NSFileManager defaultManager] createDirectoryAtURL:outputDirURL withIntermediateDirectories:YES attributes:nil error:nil];
+        [[NSFileManager defaultManager] removeItemAtURL:outputURL error:nil];
+        
+        [gifData writeToURL:outputURL atomically:YES];
+        ATLMediaAttachment *mediaAttachment = [ATLMediaAttachment mediaAttachmentWithFileURL:outputURL thumbnailSize:ATLDefaultGIFThumbnailSize];
         [self insertMediaAttachment:mediaAttachment withEndLineBreak:YES];
-     */
+        
+        //GIF approach #2: Does not work
+        /*
+         UIImage *image = ATLAnimatedImageWithAnimatedGIFData(gifData);
+         ATLMediaAttachment *mediaAttachment = [ATLMediaAttachment mediaAttachmentWithGIF:image metadata:nil thumbnailSize:ATLDefaultGIFThumbnailSize];
+         [self insertMediaAttachment:mediaAttachment withEndLineBreak:YES];
+         }
+         NSData *imageData = [[UIPasteboard generalPasteboard] dataForPasteboardType:ATLPasteboardImageKey];
+         if (imageData) {
+         UIImage *image = [UIImage imageWithData:imageData];
+         ATLMediaAttachment *mediaAttachment = [ATLMediaAttachment mediaAttachmentWithImage:image
+         metadata:nil
+         thumbnailSize:ATLDefaultThumbnailSize];
+         [self insertMediaAttachment:mediaAttachment withEndLineBreak:YES];
+         */
     }
 }
 
@@ -262,13 +265,13 @@ static CGFloat const ATLButtonHeight = 28.0f;
 - (void)insertMediaAttachment:(ATLMediaAttachment *)mediaAttachment withEndLineBreak:(BOOL)endLineBreak;
 {
     UITextView *textView = self.textInputView;
-
+    
     NSMutableAttributedString *attributedString = [textView.attributedText mutableCopy];
     NSAttributedString *lineBreak = [[NSAttributedString alloc] initWithString:@"\n" attributes:@{NSFontAttributeName: self.textInputView.font}];
     if (attributedString.length > 0 && ![textView.text hasSuffix:@"\n"]) {
         [attributedString appendAttributedString:lineBreak];
     }
-
+    
     NSMutableAttributedString *attachmentString = (mediaAttachment.mediaMIMEType == ATLMIMETypeTextPlain) ? [[NSAttributedString alloc] initWithString:mediaAttachment.textRepresentation] : [[NSAttributedString attributedStringWithAttachment:mediaAttachment] mutableCopy];
     [attributedString appendAttributedString:attachmentString];
     if (endLineBreak) {
@@ -328,30 +331,30 @@ static CGFloat const ATLButtonHeight = 28.0f;
 
 -(void)showGifPicker
 {
-  if(_gifsEnabled)
-    return;
-  
-  _gifsEnabled = YES;
-  [self setNeedsUpdateConstraints];
-  [self setNeedsLayout];
-  [UIView animateWithDuration:.3f animations:^{
-    [self layoutIfNeeded];
-  }];
-  
-  [_gifPicker newRequesterForQuery:[self getGIFSearchText]];
+    if(_gifsEnabled)
+        return;
+    
+    _gifsEnabled = YES;
+    [self setNeedsUpdateConstraints];
+    [self setNeedsLayout];
+    [UIView animateWithDuration:.3f animations:^{
+        [self layoutIfNeeded];
+    }];
+    
+    [_gifPicker newRequesterForQuery:[self getGIFSearchText]];
 }
 
 -(void)hideGifPicker
 {
-  _gifsEnabled = NO;
-  
-  [_gifPicker clearAllCells];
-  
-  [self setNeedsUpdateConstraints];
-  [self setNeedsLayout];
-  [UIView animateWithDuration:.3f animations:^{
-    [self layoutIfNeeded];
-  }];
+    _gifsEnabled = NO;
+    
+    [_gifPicker clearAllCells];
+    
+    [self setNeedsUpdateConstraints];
+    [self setNeedsLayout];
+    [UIView animateWithDuration:.3f animations:^{
+        [self layoutIfNeeded];
+    }];
 }
 
 #pragma mark - Actions
@@ -366,7 +369,7 @@ static CGFloat const ATLButtonHeight = 28.0f;
         
         if(_gifsEnabled)
         {
-          [_gifPicker newRequesterForQuery:[self getGIFSearchText]];
+            [_gifPicker newRequesterForQuery:[self getGIFSearchText]];
         }
     }
     else
@@ -404,10 +407,10 @@ static CGFloat const ATLButtonHeight = 28.0f;
     } else if (textView.text.length == 0 && [self.inputToolBarDelegate respondsToSelector:@selector(messageInputToolbarDidEndTyping:)]) {
         [self.inputToolBarDelegate messageInputToolbarDidEndTyping:self];
     }
-  
-  if(_gifsEnabled)
-    [_gifPicker newRequesterForQuery:[self getGIFSearchText]];
-
+    
+    if(_gifsEnabled)
+        [_gifPicker newRequesterForQuery:[self getGIFSearchText]];
+    
     [self setNeedsLayout];
     
     CGRect line = [textView caretRectForPosition:textView.selectedTextRange.start];
@@ -526,8 +529,7 @@ static CGFloat const ATLButtonHeight = 28.0f;
     [self.leftAccessoryButton setImage:nil forState:UIControlStateNormal];
     self.leftAccessoryButton.contentEdgeInsets = UIEdgeInsetsZero;
     self.leftAccessoryButton.titleLabel.font = self.rightAccessoryButtonFont;
-  
-    //TODO localize value if necessary
+    
     [self.leftAccessoryButton setTitle:@"GIF" forState:UIControlStateNormal];
     [self.leftAccessoryButton setTitleColor:self.rightAccessoryButtonActiveColor forState:UIControlStateNormal];
     [self.leftAccessoryButton setTitleColor:self.rightAccessoryButtonDisabledColor forState:UIControlStateDisabled];

@@ -1,6 +1,6 @@
 //
-//  GKRequester.m
-//  GifKeyboardSDK
+//  RFRequester.m
+//  Atlas
 //
 //  Created by Jeff on 4/14/15.
 //  Copyright (c) 2015 Jeff. All rights reserved.
