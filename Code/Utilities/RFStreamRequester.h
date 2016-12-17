@@ -14,35 +14,35 @@
 #define USERID_EXCLUSION_KEY @"usernameExclusion"
 
 typedef enum {
-  StreamTypeStream = 0,
-  StreamTypeSearch,
+    StreamTypeStream = 0,
+    StreamTypeSearch,
 } StreamType;
 
 typedef enum {
-  APITargetOld = 0,
-  APITargetNew,
+    APITargetOld = 0,
+    APITargetNew,
 } APITarget;
 
 @interface RFStreamRequester : RFRequester {
-  NSUInteger numberItemsFetched;
-  NSString *streamEndPosition;
-  StreamType currentStreamType;
-  
-  //general parameters
-  BOOL shouldFetchExtra;
-  
-  //stream parameters
-  NSString *streamPosition;
-  
-  //search parameters
-  NSUInteger skipAmount;
-  BOOL endOfStream;
-  
-  //related stream parameters
-  NSString *relatedRiffID;
+    NSUInteger numberItemsFetched;
+    NSString *streamEndPosition;
+    StreamType currentStreamType;
     
-  //dictionaty that holds values used for exclusion
-  NSDictionary *exclusionParameters;
+    //general parameters
+    BOOL shouldFetchExtra;
+    
+    //stream parameters
+    NSString *streamPosition;
+    
+    //search parameters
+    NSUInteger skipAmount;
+    BOOL endOfStream;
+    
+    //related stream parameters
+    NSString *relatedRiffID;
+    
+    //dictionaty that holds values used for exclusion
+    NSDictionary *exclusionParameters;
 }
 
 @property (nonatomic, readonly) APITarget apiTarget;

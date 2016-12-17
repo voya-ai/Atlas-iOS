@@ -179,7 +179,6 @@ static CGFloat const ATLGIFTrayHeight = 120.f;
     
     textViewFrame.origin.y = CGRectGetHeight(frame) - self.verticalMargin - textViewFrame.size.height;
     
-    //TODO move height value into configurable property or variable
     frame.size.height = _gifsEnabled ? ATLGIFTrayHeight : CGRectGetHeight(textViewFrame) + self.verticalMargin * 2;
     frame.origin.y -= frame.size.height - CGRectGetHeight(self.frame);
     
