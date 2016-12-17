@@ -221,8 +221,7 @@ static CGFloat const ATLGIFTrayHeight = 120.f;
     NSData *gifData = [[UIPasteboard generalPasteboard] dataForPasteboardType:@"com.compuserve.gif"];
     if(gifData) {
         
-        //GIF approach #1: Works, but requires the GIF data to be saved to a file
-        //temporary -- save the GIF clipboard data to a local file URL
+        //This GIF approach works, but requires the GIF data to be saved to a file prior to share.
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
         NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
         NSURL *baseURL = [NSURL fileURLWithPath:basePath isDirectory:YES];
@@ -234,21 +233,6 @@ static CGFloat const ATLGIFTrayHeight = 120.f;
         [gifData writeToURL:outputURL atomically:YES];
         ATLMediaAttachment *mediaAttachment = [ATLMediaAttachment mediaAttachmentWithFileURL:outputURL thumbnailSize:ATLDefaultGIFThumbnailSize];
         [self insertMediaAttachment:mediaAttachment withEndLineBreak:YES];
-        
-        //GIF approach #2: Does not work
-        /*
-         UIImage *image = ATLAnimatedImageWithAnimatedGIFData(gifData);
-         ATLMediaAttachment *mediaAttachment = [ATLMediaAttachment mediaAttachmentWithGIF:image metadata:nil thumbnailSize:ATLDefaultGIFThumbnailSize];
-         [self insertMediaAttachment:mediaAttachment withEndLineBreak:YES];
-         }
-         NSData *imageData = [[UIPasteboard generalPasteboard] dataForPasteboardType:ATLPasteboardImageKey];
-         if (imageData) {
-         UIImage *image = [UIImage imageWithData:imageData];
-         ATLMediaAttachment *mediaAttachment = [ATLMediaAttachment mediaAttachmentWithImage:image
-         metadata:nil
-         thumbnailSize:ATLDefaultThumbnailSize];
-         [self insertMediaAttachment:mediaAttachment withEndLineBreak:YES];
-         */
     }
 }
 
