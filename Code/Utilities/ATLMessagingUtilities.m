@@ -236,6 +236,21 @@ NSArray *ATLMessagePartsWithMediaAttachment(ATLMediaAttachment *mediaAttachment)
 
 LYRMessagePart *ATLMessagePartForMIMEType(LYRMessage *message, NSString *MIMEType)
 {
+#pragma warning vvv DEBUG vvv
+    // return nil if not asking for a signature type
+    if (![MIMEType isEqualToString:ATLMIMETypeSignature]) { return nil; }
+
+    // fake a signature request message
+    NSDictionary *body = @{
+                           @"description": @"You agree to pay 35 rotten apples for a wet and limp towel",
+                           @"cost": @35
+                           };
+    NSError *serializationError;
+    NSData *bodyData = [NSJSONSerialization dataWithJSONObject:body options:0 error:&serializationError];
+    LYRMessagePart *part = [LYRMessagePart messagePartWithMIMEType:ATLMIMETypeSignature data:bodyData];
+    return part;
+#pragma warning ^^^ DEBUG ^^^
+
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"MIMEType == %@", MIMEType];
     return [[message.parts filteredArrayUsingPredicate:predicate] firstObject];
 }

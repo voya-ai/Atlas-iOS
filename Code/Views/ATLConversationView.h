@@ -23,5 +23,6 @@
 @interface ATLConversationView : UIView
 
 @property (nonatomic, null_unspecified) UIView *inputAccessoryView;
+@property (strong, nonatomic, readwrite) UIView *inputView;
 
 @end

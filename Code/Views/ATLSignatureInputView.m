@@ -6,33 +6,82 @@
 //
 //
 
-#import "ATLSignatureInputView.h"
+#import <QuartzCore/QuartzCore.h>
 
-const CGFloat height = 200;
+#import "ATLSignatureInputView.h"
 
 @interface ATLSignatureInputView()
 
-@property (copy, nonatomic) NSMutableOrderedSet<NSMutableOrderedSet<NSValue *> *> *touchPoints; // set of sets of NSValues containing CGPoints, as separate paths of a signature
+@property (copy, nonatomic) NSMutableOrderedSet<NSMutableOrderedSet<NSValue *> *> *touchPoints; // set of sets of NSValues containing CGPoints. each subset is a path where the user has picked up their finger and then started drawing another part of their signature
+
+@property (weak, nonatomic) id<ATLSignatureInputViewDelegate> delegate;
+
+@property (assign, nonatomic) BOOL shouldDrawBaseline;
 
 @end
 
 @implementation ATLSignatureInputView
 
-- (instancetype)init {
-    self = [super initWithFrame:CGRectMake(0, 0, CGRectGetWidth([[UIScreen mainScreen] bounds]), height)];
+- (instancetype)initWithDelegate:(id<ATLSignatureInputViewDelegate>)delegate {
+    CGFloat viewWidth = CGRectGetWidth([[UIScreen mainScreen] bounds]);
+    CGFloat viewHeight = 200;
+    self = [super initWithFrame:CGRectMake(0, 0, viewWidth, viewHeight)];
     if (!self) { return nil; }
+
+    _delegate = delegate;
+    _shouldDrawBaseline = YES;
 
     _touchPoints = [NSMutableOrderedSet orderedSet];
     self.backgroundColor = [UIColor whiteColor];
+
+    CGFloat buttonWidth = 50;
+    CGFloat buttonHeight = 30;
+    UIButton *doneButton = [[UIButton alloc] initWithFrame:CGRectMake(viewWidth - buttonWidth - 20, 10, buttonWidth, buttonHeight)];
+    [doneButton addTarget:self action:@selector(done) forControlEvents:UIControlEventTouchUpInside];
+    [doneButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [doneButton setTitle:@"Done" forState:UIControlStateNormal];
+    [self addSubview:doneButton];
     return self;
 }
+
+#pragma mark - Overrides
 
 - (void)drawRect:(CGRect)rect {
     CGContextRef context = UIGraphicsGetCurrentContext();
 
-    [self drawSignatureLineWithContext:context];
+    if (self.shouldDrawBaseline) {
+        [self drawSignatureLineWithContext:context];
+    }
     [self drawSignatureWithContext:context];
 }
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.touchPoints addObject:[NSMutableOrderedSet orderedSet]];
+}
+
+- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    UITouch *touch = touches.anyObject;
+    CGPoint location = [touch locationInView:self];
+    NSValue *value = [NSValue valueWithCGPoint:location];
+    [self.touchPoints.lastObject addObject:value];
+    [self setNeedsDisplay];
+}
+
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {}
+
+- (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {}
+
+#pragma mark - Actions
+
+- (void)done {
+    self.shouldDrawBaseline = NO;
+    [self setNeedsDisplay];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.delegate signatureInputView:self didCaptureSignature:[self captureImage]];
+    });
+}
+
+#pragma mark - Private
 
 - (void)drawSignatureLineWithContext:(CGContextRef)context {
     CGContextSetRGBStrokeColor(context, 0, 0, 0, 1);
@@ -72,25 +121,14 @@ const CGFloat height = 200;
         CGContextAddPath(context, path);
         CGContextStrokePath(context);
     }];
-
 }
 
-#pragma mark - Touch capture
-
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    [self.touchPoints addObject:[NSMutableOrderedSet orderedSet]];
+- (UIImage *)captureImage {
+    UIGraphicsBeginImageContextWithOptions(self.bounds.size, NO, 0.0);
+    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *screenshot = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return screenshot;
 }
-
-- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    UITouch *touch = touches.anyObject;
-    CGPoint location = [touch locationInView:self];
-    NSValue *value = [NSValue valueWithCGPoint:location];
-    [self.touchPoints.lastObject addObject:value];
-    [self setNeedsDisplay];
-}
-
-- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {}
-
-- (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {}
 
 @end
