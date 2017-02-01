@@ -23,6 +23,7 @@
 #import "ATLUIImageHelper.h"
 #import "ATLIncomingMessageCollectionViewCell.h"
 #import "ATLOutgoingMessageCollectionViewCell.h"
+#import "ATLMessageCardSignature.h"
 
 @import LayerKit;
 

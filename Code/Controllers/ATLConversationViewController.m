@@ -1107,7 +1107,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     if ([self.delegate respondsToSelector:@selector(conversationViewController:heightForMessage:withCellWidth:)]) {
         LYRMessage *message = [self.conversationDataSource messageAtCollectionViewIndexPath:indexPath];
         LYRMessagePart *messagePart = message.parts.firstObject;
-        if (messagePart.MIMEType == ATLMIMETypeCardSignature || messagePart.MIMEType == ATLMIMETypeCardSignature) {
+        if (messagePart.MIMEType == ATLMIMETypeSignature || messagePart.MIMEType == ATLMIMETypeSignature) {
             height = [self.delegate conversationViewController:self heightForMessage:message withCellWidth:width];
     }
     
