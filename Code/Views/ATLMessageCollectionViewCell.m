@@ -24,6 +24,7 @@
 #import "ATLIncomingMessageCollectionViewCell.h"
 #import "ATLOutgoingMessageCollectionViewCell.h"
 #import "ATLMessageCardSignature.h"
+#import "ATLSignatureInputView.h"
 
 @import LayerKit;
 
@@ -431,7 +432,23 @@ NSInteger const kATLSharedCellTag = 1000;
     } else if ([part.MIMEType isEqualToString:ATLMIMETypeLocation]) {
         size.width = ATLMessageBubbleMapWidth;
         size.height = ATLMessageBubbleMapHeight;
+    } else if ([part.MIMEType isEqualToString:ATLMIMETypeSignature]) {
+        size = [[self class] cellSizeForSignatureCard];
+    } else if ([part.MIMEType isEqualToString:ATLMIMETypeList]) {
+        size = [[self class] cellSizeForListCard];
     }
+    return size;
+}
+
++ (CGSize)cellSizeForSignatureCard
+{
+    CGSize size = [[ATLMessageCardSignature class] intrinsicContentSize];
+    return size;
+}
+
++ (CGSize)cellSizeForListCard
+{
+    CGSize size = [[ATLMessageCardSignature class] intrinsicContentSize];
     return size;
 }
 
