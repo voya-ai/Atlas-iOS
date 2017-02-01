@@ -1109,6 +1109,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
         LYRMessagePart *messagePart = message.parts.firstObject;
         if (messagePart.MIMEType == ATLMIMETypeSignature || messagePart.MIMEType == ATLMIMETypeSignature) {
             height = [self.delegate conversationViewController:self heightForMessage:message withCellWidth:width];
+        }
     }
     
     if (!height) {
@@ -1121,7 +1122,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 {
     
 }
-    
+
 - (NSOrderedSet *)messagesForMediaAttachments:(NSArray *)mediaAttachments
 {
     NSOrderedSet *messages;
