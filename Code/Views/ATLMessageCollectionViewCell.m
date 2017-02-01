@@ -122,8 +122,20 @@ NSInteger const kATLSharedCellTag = 1000;
         [self configureBubbleViewForLocationContent];
     } else if ([messagePart.MIMEType isEqualToString:ATLMIMETypeVideoMP4]) {
         [self configureBubbleViewForVideoContent];
+    } else {
+        [self configureBubbleViewForCardContent];
+    }
+}
+
+- (void)configureBubbleViewForCardContent
+{
+    UIView *cardView;
+    LYRMessagePart *messagePart = self.message.parts.firstObject;
+    if ([messagePart.MIMEType isEqualToString:ATLMIMETypeSignature]) {
+        cardView = [[ATLMessageCardSignature alloc] init];
     }
     
+    self.cardView = cardView;
 }
 
 - (void)configureBubbleViewForTextContent

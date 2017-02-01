@@ -42,6 +42,8 @@ extern CGFloat const ATLMessageCellHorizontalMargin;
  */
 @property (nonatomic) ATLMessageBubbleView *bubbleView;
 
+@property (nonatomic) UIView *cardView;
+
 /**
  @abstract The optional avatar image view representing a user.
  */
