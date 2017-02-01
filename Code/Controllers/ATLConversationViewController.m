@@ -1107,8 +1107,9 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     if ([self.delegate respondsToSelector:@selector(conversationViewController:heightForMessage:withCellWidth:)]) {
         LYRMessage *message = [self.conversationDataSource messageAtCollectionViewIndexPath:indexPath];
         LYRMessagePart *messagePart = message.parts.firstObject;
-        if (messagePart.MIMEType == ATLMIMETypeCardSignature || messagePart.MIMEType == ATLMIMETypeCardSignature) {
+        if (messagePart.MIMEType == ATLMIMETypeSignature || messagePart.MIMEType == ATLMIMETypeSignature) {
             height = [self.delegate conversationViewController:self heightForMessage:message withCellWidth:width];
+        }
     }
     
     if (!height) {
@@ -1117,11 +1118,6 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     return CGSizeMake(width, height);
 }
 
-- (CGFloat)conversationViewController:(ATLConversationViewController *)viewController heightForMessage:(LYRMessage *)message withCellWidth:(CGFloat)cellWidth
-{
-    
-}
-    
 - (NSOrderedSet *)messagesForMediaAttachments:(NSArray *)mediaAttachments
 {
     NSOrderedSet *messages;
