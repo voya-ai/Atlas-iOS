@@ -23,6 +23,7 @@
 #import "ATLConstants.h"
 #import "ATLMessagingUtilities.h"
 #import "ATLParticipant.h"
+#import "ATLMessageCardSignature.h"
 
 CGFloat const ATLMessageCellHorizontalMargin = 16.0f;
 CGFloat const ATLAvatarImageLeadPadding = 12.0f;
