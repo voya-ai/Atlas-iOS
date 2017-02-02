@@ -1,18 +1,18 @@
 //
-//  ATLMessageCardSignature.m
+//  ATLMessageCardSignatureView.m
 //  Pods
 //
 //  Created by Daniel Maness on 1/31/17.
 //
 //
 
-#import "ATLMessageCardSignature.h"
+#import "ATLMessageCardSignatureView.h"
 
-@interface ATLMessageCardSignature ()
+@interface ATLMessageCardSignatureView ()
 
 @end
 
-@implementation ATLMessageCardSignature
+@implementation ATLMessageCardSignatureView
 
 + (void)initialize
 {
@@ -51,7 +51,7 @@
 {
     CGFloat viewWidth = CGRectGetWidth([[UIScreen mainScreen] bounds]);
     CGFloat viewHeight = 50;
-    CGSize size = CGSizeMake(viewWidth * 0.75, viewHeight);
+    CGSize size = CGSizeMake(viewWidth * 0.9, viewHeight);
     return size;
 }
 

@@ -23,7 +23,9 @@
 #import "ATLUIImageHelper.h"
 #import "ATLIncomingMessageCollectionViewCell.h"
 #import "ATLOutgoingMessageCollectionViewCell.h"
-#import "ATLMessageCardSignature.h"
+#import "ATLMessageCardSignatureView.h"
+#import "ATLCardListViewController.h"
+#import "ATLMessageCardListView.h"
 #import "ATLSignatureInputView.h"
 
 @import LayerKit;
@@ -134,10 +136,15 @@ NSInteger const kATLSharedCellTag = 1000;
     UIView *cardView;
     LYRMessagePart *messagePart = self.message.parts.firstObject;
     if ([messagePart.MIMEType isEqualToString:ATLMIMETypeSignature]) {
-        cardView = [[ATLMessageCardSignature alloc] init];
+        cardView = [[ATLMessageCardSignatureView alloc] init];
+    } else if ([messagePart.MIMEType isEqualToString:ATLMIMETypeList]) {
+        CGSize size = [[ATLMessageCardListView class] intrinsicContentSize];
+        CGRect frame = CGRectMake(0, 0, size.width, size.height);
+        ATLCardListViewController *viewController = [[ATLCardListViewController alloc] initWithMessage:self.message withFrame:frame];
+        self.cardView = viewController.view;
     }
-    
-    self.cardView = cardView;
+
+    [self addSubview:self.cardView];
 }
 
 - (void)configureBubbleViewForTextContent
@@ -442,13 +449,13 @@ NSInteger const kATLSharedCellTag = 1000;
 
 + (CGSize)cellSizeForSignatureCard
 {
-    CGSize size = [[ATLMessageCardSignature class] intrinsicContentSize];
+    CGSize size = [[ATLMessageCardSignatureView class] intrinsicContentSize];
     return size;
 }
 
 + (CGSize)cellSizeForListCard
 {
-    CGSize size = [[ATLMessageCardSignature class] intrinsicContentSize];
+    CGSize size = [[ATLMessageCardListView class] intrinsicContentSize];
     return size;
 }
 
