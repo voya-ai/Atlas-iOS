@@ -32,6 +32,8 @@
 @property (nonatomic, readonly, weak) LYRMessageMock *lastMessage LYR_QUERYABLE_PROPERTY;
 @property (nonatomic, readonly) BOOL hasUnreadMessages LYR_QUERYABLE_PROPERTY;
 @property (nonatomic, readonly) BOOL isDeleted;
+@property (nonatomic, readwrite) BOOL deliveryReceiptsEnabled;
+@property (nonatomic, readwrite) BOOL readReceiptsEnabled;
 @property (nonatomic, readonly) NSDictionary *metadata;
 @property (nonatomic, readonly) NSUInteger totalNumberOfMessages;
 

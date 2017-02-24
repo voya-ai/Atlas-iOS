@@ -432,6 +432,12 @@ NSString *const ATLConversationListViewControllerDeletionModeEveryone = @"Everyo
                 [self deleteConversationAtIndexPath:indexPath withDeletionMode:deletionMode.integerValue];
             }];
             deleteAction.backgroundColor = actionColor;
+            LYRConversation *conversation = [self.queryController objectAtIndexPath:indexPath];
+            if (!conversation.readReceiptsEnabled && deletionMode.integerValue == LYRDeletionModeMyDevices) {
+                // Disable support for synchronized deletion for
+                // conversations that have read receipts disabled.
+                continue;
+            }
             [actions addObject:deleteAction];
         }
     }

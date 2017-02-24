@@ -461,7 +461,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     } else {
         [cell updateWithSender:nil];
     }
-    if (message.isUnread && [[UIApplication sharedApplication] applicationState] == UIApplicationStateActive && self.marksMessagesAsRead) {
+    if (message.isUnread && [[UIApplication sharedApplication] applicationState] == UIApplicationStateActive && self.marksMessagesAsRead && self.conversation.readReceiptsEnabled) {
         [message markAsRead:nil];
     }
 }

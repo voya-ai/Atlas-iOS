@@ -137,6 +137,21 @@ extern NSString *const ATLAvatarImageViewAccessibilityLabel;
     [self deleteConversation:conversation1 deletionMode:LYRDeletionModeMyDevices];
 }
 
+//Test swipe to delete only shows global delete option.
+- (void)testToVerifyOnlyGlobalDeleteShowsWhenSwiped
+{
+    self.viewController = [ATLSampleConversationListViewController conversationListViewControllerWithLayerClient:(LYRClient *)self.testInterface.layerClient];
+    [self setRootViewController:self.viewController];
+    
+    NSString *message1 = @"Message1";
+    ATLUserMock *mockUser1 = [ATLUserMock userWithMockUserName:ATLMockUserNameKlemen];
+    LYRConversationMock *conversation1 = [self.testInterface conversationWithParticipants:[NSSet setWithObject:mockUser1.userID] lastMessageText:message1];
+    conversation1.readReceiptsEnabled = NO;
+    [tester swipeViewWithAccessibilityLabel:[self.testInterface conversationLabelForConversation:conversation1] inDirection:KIFSwipeDirectionLeft];
+    NSString *const ATLConversationListViewControllerDeletionModeMyDevices = @"My Devices";
+    [tester waitForAbsenceOfViewWithAccessibilityLabel:ATLConversationListViewControllerDeletionModeMyDevices];
+}
+
 //Test editing mode and deleting several conversations at once. Verify that all conversations selected are deleted from the table and from the Layer client.
 - (void)testToVerifyEditingModeAndMultipleConversationDeletionFunctionality
 {
