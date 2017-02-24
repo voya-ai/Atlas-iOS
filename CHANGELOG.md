@@ -8,6 +8,10 @@
 * Fixed a crash that could occur if the `tableFooterView` in the `ATLConversationListViewController` wasn't initialized. [APPS-2774]
 * Fixed an issue where pulling to load more messages in a conversations wouldn't work when it should
 
+### Enhancements
+
+* Added support for conversations with read receipts disabled. [APPS-2688]
+
 ## 1.0.31
 
 ### Enhancements
