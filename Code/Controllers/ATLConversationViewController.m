@@ -598,7 +598,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
                                                              delegate:self
                                                     cancelButtonTitle:ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.cancel.key", @"Cancel", nil)
                                                destructiveButtonTitle:nil
-                                                    otherButtonTitles:ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.takephoto.key", @"Take Photo/Video", nil), ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.lastphoto.key", @"Last Photo/Video", nil), ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.library.key", @"Photo/Video Library", nil), nil];
+                                                    otherButtonTitles:ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.takephoto.key", @"Take Photo/Video", nil), ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.lastphoto.key", @"Last Photo/Video", nil), ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.library.key", @"Photo/Video Library", nil), ATLLocalizedString(@"atl.conversation.actionsheet.gif.key", @"GIFs", nil), nil];
     [actionSheet showInView:self.view];
     actionSheet.tag = ATLPhotoActionSheet;
 }
@@ -621,6 +621,14 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     if (self.addressBarController) [self.addressBarController disable];
 }
 
+-(void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didRequestAttachmentSend:(ATLMediaAttachment *)attachment
+{
+    NSOrderedSet *messages = [self messagesForMediaAttachments:@[attachment]];
+    for (LYRMessage *message in messages) {
+        [self sendMessage:message];
+    }
+}
+
 - (void)messageInputToolbarDidType:(ATLMessageInputToolbar *)messageInputToolbar
 {
     if (!self.conversation) return;
@@ -631,6 +639,12 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 {
     if (!self.conversation) return;
     [self.conversation sendTypingIndicator:LYRTypingIndicatorActionFinish];
+}
+
+-(LYRMessage *)messageInputToolbarDidRequestLastMessage:(ATLMessageInputToolbar *)messageInputToolbar
+{
+    if (!self.conversation) return nil;
+    return self.conversation.lastMessage;
 }
 
 #pragma mark - Message Sending
@@ -733,6 +747,9 @@ static NSInteger const ATLPhotoActionSheet = 1000;
                 [self displayImagePickerWithSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
                 break;
                 
+            case 3:
+                [self.messageInputToolbar showGifPicker];
+                
             default:
                 break;
         }
@@ -813,7 +830,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     if (!self.conversation) return;
     if (!notification.object) return;
     if (![notification.object isEqual:self.conversation]) return;
-
+    
     LYRTypingIndicator *typingIndicator = notification.userInfo[LYRTypingIndicatorObjectUserInfoKey];
     if (typingIndicator.action == LYRTypingIndicatorActionBegin) {
         [self.typingParticipantIDs addObject:typingIndicator.sender.userID];

@@ -22,7 +22,7 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   Atlas:
-    :path: "."
+    :path: .
   LYRCountDownLatch:
     :git: https://github.com/layerhq/LYRCountDownLatch.git
 

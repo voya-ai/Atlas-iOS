@@ -92,6 +92,7 @@ static float const ATLMediaAttachmentDefaultThumbnailJPEGCompression = 0.5f;
 @property (nonatomic) UIImage *inputImage;
 
 - (instancetype)initWithImage:(UIImage *)image metadata:(NSDictionary *)metadata thumbnailSize:(NSUInteger)thumbnailSize;
+- (instancetype)initWithGIFImage:(UIImage *)image metadata:(NSDictionary *)metadata thumbnailSize:(NSUInteger)thumbnailSize;
 
 @end
 
@@ -382,6 +383,68 @@ static float const ATLMediaAttachmentDefaultThumbnailJPEGCompression = 0.5f;
     return self;
 }
 
+-(instancetype)initWithGIFImage:(UIImage *)image metadata:(NSDictionary *)metadata thumbnailSize:(NSUInteger)thumbnailSize
+{
+  self = [super init];
+  if (self) {
+    if (!image) {
+      @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"Cannot initialize %@ with `nil` image.", self.superclass] userInfo:nil];
+    }
+    self.inputImage = image;
+   
+    // --------------------------------------------------------------------
+    // Prepare the input stream and MIMEType for the full size media.
+    // --------------------------------------------------------------------
+    self.mediaInputStream = [ATLMediaInputStream mediaInputStreamWithImage:image metadata:metadata];
+    self.mediaMIMEType = ATLMIMETypeImageGIF;
+    
+    // --------------------------------------------------------------------
+    // Prepare the input stream and MIMEType for the thumbnail.
+    // --------------------------------------------------------------------
+    self.thumbnailInputStream = [ATLMediaInputStream mediaInputStreamWithImage:image metadata:metadata];
+    ((ATLMediaInputStream *)self.thumbnailInputStream).maximumSize = thumbnailSize;
+    ((ATLMediaInputStream *)self.thumbnailInputStream).compressionQuality = ATLMediaAttachmentDefaultThumbnailJPEGCompression;
+    self.thumbnailMIMEType = ATLMIMETypeImageGIFPreview;
+    
+    // --------------------------------------------------------------------
+    // Prepare the input stream and MIMEType for the metadata
+    // about the asset.
+    // --------------------------------------------------------------------
+    NSDictionary *imageMetadata = @{ @"width": @(image.size.width),
+                                     @"height": @(image.size.height),
+                                     @"orientation": @(image.imageOrientation) };
+    NSError *JSONSerializerError;
+    NSData *JSONData = [NSJSONSerialization dataWithJSONObject:imageMetadata options:NSJSONWritingPrettyPrinted error:&JSONSerializerError];
+    if (JSONData) {
+      self.metadataInputStream = [NSInputStream inputStreamWithData:JSONData];
+      self.metadataMIMEType = ATLMIMETypeImageSize;
+    } else {
+      NSLog(@"ATLMediaAttachment failed to generate a JSON object for image metadata");
+    }
+    
+    // --------------------------------------------------------------------
+    // Prepare the attachable thumbnail meant for the UI (which is inlined
+    // with text in the message composer).
+    //
+    // Since we got the full resolution UIImage, we need to create a
+    // thumbnail size in the initializer.
+    // --------------------------------------------------------------------
+    ATLMediaInputStream *attachableThumbnailInputStream = [ATLMediaInputStream mediaInputStreamWithImage:image metadata:metadata];
+    attachableThumbnailInputStream.maximumSize = thumbnailSize;
+    attachableThumbnailInputStream.compressionQuality = ATLMediaAttachmentDefaultThumbnailJPEGCompression;
+    NSData *resampledImageData = ATLMediaAttachmentDataFromInputStream(attachableThumbnailInputStream);
+    self.attachableThumbnailImage = [UIImage imageWithData:resampledImageData scale:image.scale];
+    
+    // --------------------------------------------------------------------
+    // Set the type and the rest of the public properties.
+    // --------------------------------------------------------------------
+    self.thumbnailSize = thumbnailSize;
+    self.mediaType = ATLMediaAttachmentTypeImage;
+    self.textRepresentation = @"Attachment: Image";
+  }
+  return self;
+}
+
 @end
 
 @implementation ATLLocationMediaAttachment
@@ -441,6 +504,11 @@ static float const ATLMediaAttachmentDefaultThumbnailJPEGCompression = 0.5f;
 + (instancetype)mediaAttachmentWithImage:(UIImage *)image metadata:(NSDictionary *)metadata thumbnailSize:(NSUInteger)thumbnailSize;
 {
     return [[ATLImageMediaAttachment alloc] initWithImage:image metadata:(NSDictionary *)metadata thumbnailSize:thumbnailSize];
+}
+
++ (instancetype)mediaAttachmentWithGIF:(UIImage *)image metadata:(NSDictionary *)metadata thumbnailSize:(NSUInteger)thumbnailSize
+{
+  return [[ATLImageMediaAttachment alloc] initWithGIFImage:image metadata:(NSDictionary *)metadata thumbnailSize:thumbnailSize];
 }
 
 + (instancetype)mediaAttachmentWithText:(NSString *)text

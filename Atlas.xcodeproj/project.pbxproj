@@ -219,6 +219,18 @@
 		D6F406361A8FE28C00AE9581 /* ATLTestInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = D6F4060C1A8FDEEB00AE9581 /* ATLTestInterface.m */; };
 		D8F526991CE2AE4E45DA34DB /* Pods_Storyboard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 921B2F42195B3C5F0569C57B /* Pods_Storyboard.framework */; };
 		D9D282D2BB1B4AD3789CDAFE /* Pods_Programmatic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B085A18188DCFC913F85665D /* Pods_Programmatic.framework */; };
+		E623AB821C4874CF00CCA0B1 /* GlobalDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = E623AB811C4874CF00CCA0B1 /* GlobalDefines.h */; };
+		E623AB8B1C48883100CCA0B1 /* ATLGIFCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = E623AB891C48883100CCA0B1 /* ATLGIFCollectionViewCell.h */; };
+		E623AB8E1C48883100CCA0B1 /* ATLGIFCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E623AB8A1C48883100CCA0B1 /* ATLGIFCollectionViewCell.m */; };
+		E623ABD51C4EF23100CCA0B1 /* ATLGifPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E623AB631C48537800CCA0B1 /* ATLGifPickerViewController.m */; };
+		E623ABD61C4EF25600CCA0B1 /* ATLGifPickerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = E623AB621C48537800CCA0B1 /* ATLGifPickerViewController.h */; };
+		E623AC111C50A86D00CCA0B1 /* RFMedia.m in Sources */ = {isa = PBXBuildFile; fileRef = E623AB721C4873BD00CCA0B1 /* RFMedia.m */; };
+		E623AC121C50A87600CCA0B1 /* RFObject.m in Sources */ = {isa = PBXBuildFile; fileRef = E623AB741C4873BD00CCA0B1 /* RFObject.m */; };
+		E623AC131C50A88200CCA0B1 /* RFRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = E623AB6A1C48736C00CCA0B1 /* RFRequester.m */; };
+		E623AC141C50A88800CCA0B1 /* RFStreamRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = E623AB6C1C48736C00CCA0B1 /* RFStreamRequester.m */; };
+		E623AC151C50A88F00CCA0B1 /* RFTag.m in Sources */ = {isa = PBXBuildFile; fileRef = E623AB7E1C48745600CCA0B1 /* RFTag.m */; };
+		E6BE133E1C991BAC00530090 /* LocalDiskDataCache.m in Sources */ = {isa = PBXBuildFile; fileRef = E6BE133B1C991B1500530090 /* LocalDiskDataCache.m */; };
+		E6D509701C9B79740086D322 /* LocalDiskDataCache.h in Headers */ = {isa = PBXBuildFile; fileRef = E6BE133A1C991B1500530090 /* LocalDiskDataCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -427,6 +439,23 @@
 		D6F57E6C1A8BE4B500B62BD9 /* StoryboardTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StoryboardTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8050D6CFBC2EA1D5D6B800A /* Pods_test_ProgrammaticTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_test_ProgrammaticTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD247AF2EF0D58C390C41D9F /* Pods-Programmatic.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Programmatic.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Programmatic/Pods-Programmatic.debug.xcconfig"; sourceTree = "<group>"; };
+		E623AB621C48537800CCA0B1 /* ATLGifPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATLGifPickerViewController.h; sourceTree = "<group>"; };
+		E623AB631C48537800CCA0B1 /* ATLGifPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATLGifPickerViewController.m; sourceTree = "<group>"; };
+		E623AB691C48736C00CCA0B1 /* RFRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFRequester.h; sourceTree = "<group>"; };
+		E623AB6A1C48736C00CCA0B1 /* RFRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RFRequester.m; sourceTree = "<group>"; };
+		E623AB6B1C48736C00CCA0B1 /* RFStreamRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFStreamRequester.h; sourceTree = "<group>"; };
+		E623AB6C1C48736C00CCA0B1 /* RFStreamRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RFStreamRequester.m; sourceTree = "<group>"; };
+		E623AB711C4873BD00CCA0B1 /* RFMedia.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFMedia.h; sourceTree = "<group>"; };
+		E623AB721C4873BD00CCA0B1 /* RFMedia.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RFMedia.m; sourceTree = "<group>"; };
+		E623AB731C4873BD00CCA0B1 /* RFObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFObject.h; sourceTree = "<group>"; };
+		E623AB741C4873BD00CCA0B1 /* RFObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RFObject.m; sourceTree = "<group>"; };
+		E623AB7D1C48745600CCA0B1 /* RFTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFTag.h; sourceTree = "<group>"; };
+		E623AB7E1C48745600CCA0B1 /* RFTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RFTag.m; sourceTree = "<group>"; };
+		E623AB811C4874CF00CCA0B1 /* GlobalDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalDefines.h; sourceTree = "<group>"; };
+		E623AB891C48883100CCA0B1 /* ATLGIFCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATLGIFCollectionViewCell.h; sourceTree = "<group>"; };
+		E623AB8A1C48883100CCA0B1 /* ATLGIFCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATLGIFCollectionViewCell.m; sourceTree = "<group>"; };
+		E6BE133A1C991B1500530090 /* LocalDiskDataCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalDiskDataCache.h; sourceTree = "<group>"; };
+		E6BE133B1C991B1500530090 /* LocalDiskDataCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalDiskDataCache.m; sourceTree = "<group>"; };
 		E994C194C8CEC4ECECA9506A /* Pods-test-ProgrammaticTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-test-ProgrammaticTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-test-ProgrammaticTests/Pods-test-ProgrammaticTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -515,6 +544,8 @@
 				253C29B71C3C9E0000ED1549 /* ATLConversationListViewController.m */,
 				253C29B81C3C9E0000ED1549 /* ATLConversationViewController.h */,
 				253C29B91C3C9E0000ED1549 /* ATLConversationViewController.m */,
+				E623AB621C48537800CCA0B1 /* ATLGifPickerViewController.h */,
+				E623AB631C48537800CCA0B1 /* ATLGifPickerViewController.m */,
 				253C29BA1C3C9E0000ED1549 /* ATLParticipantTableViewController.h */,
 				253C29BB1C3C9E0000ED1549 /* ATLParticipantTableViewController.m */,
 				253C29BC1C3C9E0000ED1549 /* ATLTypingIndicatorViewController.h */,
@@ -565,6 +596,19 @@
 				253C29D71C3C9E0000ED1549 /* ATLMessagingUtilities.m */,
 				253C29D81C3C9E0000ED1549 /* ATLUIImageHelper.h */,
 				253C29D91C3C9E0000ED1549 /* ATLUIImageHelper.m */,
+				E623AB811C4874CF00CCA0B1 /* GlobalDefines.h */,
+				E6BE133A1C991B1500530090 /* LocalDiskDataCache.h */,
+				E6BE133B1C991B1500530090 /* LocalDiskDataCache.m */,
+				E623AB711C4873BD00CCA0B1 /* RFMedia.h */,
+				E623AB721C4873BD00CCA0B1 /* RFMedia.m */,
+				E623AB731C4873BD00CCA0B1 /* RFObject.h */,
+				E623AB741C4873BD00CCA0B1 /* RFObject.m */,
+				E623AB691C48736C00CCA0B1 /* RFRequester.h */,
+				E623AB6A1C48736C00CCA0B1 /* RFRequester.m */,
+				E623AB6B1C48736C00CCA0B1 /* RFStreamRequester.h */,
+				E623AB6C1C48736C00CCA0B1 /* RFStreamRequester.m */,
+				E623AB7D1C48745600CCA0B1 /* RFTag.h */,
+				E623AB7E1C48745600CCA0B1 /* RFTag.m */,
 				253C29DA1C3C9E0000ED1549 /* UIResponder+ATLFirstResponder.h */,
 				253C29DB1C3C9E0000ED1549 /* UIResponder+ATLFirstResponder.m */,
 				5AEF687F1C75284300808463 /* LYRIdentity+ATLParticipant.h */,
@@ -598,6 +642,8 @@
 				253C29EE1C3C9E0000ED1549 /* ATLConversationTableViewCell.m */,
 				253C29EF1C3C9E0000ED1549 /* ATLConversationView.h */,
 				253C29F01C3C9E0000ED1549 /* ATLConversationView.m */,
+				E623AB891C48883100CCA0B1 /* ATLGIFCollectionViewCell.h */,
+				E623AB8A1C48883100CCA0B1 /* ATLGIFCollectionViewCell.m */,
 				253C29F11C3C9E0000ED1549 /* ATLIncomingMessageCollectionViewCell.h */,
 				253C29F21C3C9E0000ED1549 /* ATLIncomingMessageCollectionViewCell.m */,
 				253C29F31C3C9E0000ED1549 /* ATLMessageBubbleView.h */,
@@ -744,7 +790,6 @@
 		D676CF171A8C4344002D9D27 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
-				D0E729491A02F1C700B76672 /* Mocks */,
 				D6F405A71A8FDDAA00AE9581 /* ATLSampleConversationAvatarItem.h */,
 				D6F405A81A8FDDAA00AE9581 /* ATLSampleConversationAvatarItem.m */,
 				D6F405A91A8FDDAA00AE9581 /* ATLSampleConversationListViewController.h */,
@@ -753,6 +798,7 @@
 				D6F405AC1A8FDDAA00AE9581 /* ATLSampleConversationViewController.m */,
 				D6F405AD1A8FDDAA00AE9581 /* ATLSampleParticipantTableViewController.h */,
 				D6F405AE1A8FDDAA00AE9581 /* ATLSampleParticipantTableViewController.m */,
+				D0E729491A02F1C700B76672 /* Mocks */,
 				D6F57E2B1A8BE4AF00B62BD9 /* Programmatic */,
 				D6F57E551A8BE4B500B62BD9 /* Storyboard */,
 			);
@@ -908,13 +954,16 @@
 				253C2A481C3C9E0000ED1549 /* ATLMessageComposeTextView.h in Headers */,
 				253C2A1B1C3C9E0000ED1549 /* ATLAvatarItem.h in Headers */,
 				253C2A0F1C3C9E0000ED1549 /* ATLParticipantTableViewController.h in Headers */,
+				E6D509701C9B79740086D322 /* LocalDiskDataCache.h in Headers */,
 				253C2A1C1C3C9E0000ED1549 /* ATLConversationPresenting.h in Headers */,
 				253C2A1D1C3C9E0000ED1549 /* ATLMessagePresenting.h in Headers */,
 				253C2A341C3C9E0000ED1549 /* ATLAvatarImageView.h in Headers */,
+				E623AB8B1C48883100CCA0B1 /* ATLGIFCollectionViewCell.h in Headers */,
 				253C2A071C3C9E0000ED1549 /* ATLAddressBarViewController.h in Headers */,
 				253C2A201C3C9E0000ED1549 /* ATLConstants.h in Headers */,
 				253C2A3E1C3C9E0000ED1549 /* ATLConversationTableViewCell.h in Headers */,
 				253C2A381C3C9E0000ED1549 /* ATLConversationCollectionViewFooter.h in Headers */,
+				E623AB821C4874CF00CCA0B1 /* GlobalDefines.h in Headers */,
 				253C2A4C1C3C9E0000ED1549 /* ATLOutgoingMessageCollectionViewCell.h in Headers */,
 				253C2A2C1C3C9E0000ED1549 /* UIResponder+ATLFirstResponder.h in Headers */,
 				253C2A111C3C9E0000ED1549 /* ATLTypingIndicatorViewController.h in Headers */,
@@ -930,6 +979,7 @@
 				253C2A091C3C9E0000ED1549 /* ATLBaseConversationViewController.h in Headers */,
 				251C57AF1C5AA21200110871 /* ATLBaseCollectionViewCell.h in Headers */,
 				253C2A441C3C9E0000ED1549 /* ATLMessageBubbleView.h in Headers */,
+				E623ABD61C4EF25600CCA0B1 /* ATLGifPickerViewController.h in Headers */,
 				253C2A1F1C3C9E0000ED1549 /* ATLParticipantPresenting.h in Headers */,
 				253C2A421C3C9E0000ED1549 /* ATLIncomingMessageCollectionViewCell.h in Headers */,
 			);
@@ -1074,6 +1124,7 @@
 					};
 					D6F57E291A8BE4AF00B62BD9 = {
 						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = TD2N2YXSU3;
 					};
 					D6F57E411A8BE4AF00B62BD9 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -1453,23 +1504,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E623ABD51C4EF23100CCA0B1 /* ATLGifPickerViewController.m in Sources */,
 				253C2A271C3C9E0000ED1549 /* ATLMediaInputStream.m in Sources */,
 				253C2A0E1C3C9E0000ED1549 /* ATLConversationViewController.m in Sources */,
 				251C57AE1C5AA20200110871 /* ATLBaseCollectionViewCell.m in Sources */,
 				253C2A311C3C9E0000ED1549 /* ATLAddressBarTextView.m in Sources */,
 				253C2A351C3C9E0000ED1549 /* ATLAvatarImageView.m in Sources */,
 				253C2A121C3C9E0000ED1549 /* ATLTypingIndicatorViewController.m in Sources */,
+				E623AC131C50A88200CCA0B1 /* RFRequester.m in Sources */,
 				253C2A061C3C9E0000ED1549 /* Atlas.m in Sources */,
 				253C2A211C3C9E0000ED1549 /* ATLConstants.m in Sources */,
+				E623AC151C50A88F00CCA0B1 /* RFTag.m in Sources */,
 				253C2A0C1C3C9E0000ED1549 /* ATLConversationListViewController.m in Sources */,
 				253C2A371C3C9E0000ED1549 /* ATLConversationCollectionView.m in Sources */,
 				253C2A431C3C9E0000ED1549 /* ATLIncomingMessageCollectionViewCell.m in Sources */,
 				253C2A3D1C3C9E0000ED1549 /* ATLConversationCollectionViewMoreMessagesHeader.m in Sources */,
+				E623AC121C50A87600CCA0B1 /* RFObject.m in Sources */,
 				253C2A511C3C9E0000ED1549 /* ATLParticipantTableViewCell.m in Sources */,
 				253C2A081C3C9E0000ED1549 /* ATLAddressBarViewController.m in Sources */,
 				253C2A411C3C9E0000ED1549 /* ATLConversationView.m in Sources */,
 				253C2A391C3C9E0000ED1549 /* ATLConversationCollectionViewFooter.m in Sources */,
 				253C2A331C3C9E0000ED1549 /* ATLAddressBarView.m in Sources */,
+				E623AB8E1C48883100CCA0B1 /* ATLGIFCollectionViewCell.m in Sources */,
 				253C2A2F1C3C9E0000ED1549 /* ATLAddressBarContainerView.m in Sources */,
 				253C2A471C3C9E0000ED1549 /* ATLMessageCollectionViewCell.m in Sources */,
 				253C2A141C3C9E0000ED1549 /* ATLConversationDataSource.m in Sources */,
@@ -1484,7 +1540,10 @@
 				253C2A251C3C9E0000ED1549 /* ATLLocationManager.m in Sources */,
 				253C2A4D1C3C9E0000ED1549 /* ATLOutgoingMessageCollectionViewCell.m in Sources */,
 				253C2A451C3C9E0000ED1549 /* ATLMessageBubbleView.m in Sources */,
+				E623AC111C50A86D00CCA0B1 /* RFMedia.m in Sources */,
+				E623AC141C50A88800CCA0B1 /* RFStreamRequester.m in Sources */,
 				253C2A181C3C9E0000ED1549 /* ATLMediaAttachment.m in Sources */,
+				E6BE133E1C991BAC00530090 /* LocalDiskDataCache.m in Sources */,
 				253C2A4B1C3C9E0000ED1549 /* ATLMessageInputToolbar.m in Sources */,
 				253C2A551C3C9E0000ED1549 /* ATLProgressView.m in Sources */,
 				253C2A291C3C9E0000ED1549 /* ATLMessagingUtilities.m in Sources */,
@@ -1863,7 +1922,12 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = TD2N2YXSU3;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1905,7 +1969,7 @@
 					"-framework",
 					"\"UIKit\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.layer.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.layer.Programmatic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 			};
@@ -1934,7 +1998,12 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				DEVELOPMENT_TEAM = TD2N2YXSU3;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -1969,7 +2038,7 @@
 					"-framework",
 					"\"UIKit\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.layer.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.layer.Programmatic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;

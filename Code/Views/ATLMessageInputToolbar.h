@@ -22,7 +22,10 @@
 #import "ATLMessageComposeTextView.h"
 #import "ATLMediaAttachment.h"
 
+@import LayerKit;
+
 @class ATLMessageInputToolbar;
+@class ATLGifPickerViewController;
 
 NS_ASSUME_NONNULL_BEGIN
 extern NSString *const ATLMessageInputToolbarDidChangeHeightNotification;
@@ -51,6 +54,11 @@ extern NSString *const ATLMessageInputToolbarAccessibilityLabel;
 @optional
 
 /**
+ @abstract Notifies the receiver that an attachment needs to be sent out
+ */
+- (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didRequestAttachmentSend:(ATLMediaAttachment *)attachment;
+
+/**
  @abstract Notifies the receiver that typing has occurred.
  */
 - (void)messageInputToolbarDidType:(ATLMessageInputToolbar *)messageInputToolbar;
@@ -59,6 +67,11 @@ extern NSString *const ATLMessageInputToolbarAccessibilityLabel;
  @abstract Notifies the receiver that typing has ended.
  */
 - (void)messageInputToolbarDidEndTyping:(ATLMessageInputToolbar *)messageInputToolbar;
+
+/**
+ @abstract Requests the last LYRMessage sent in the current conversation from the receiver.
+ */
+- (LYRMessage *)messageInputToolbarDidRequestLastMessage:(ATLMessageInputToolbar *)messageInputToolbar;
 
 @end
 
@@ -85,6 +98,12 @@ extern NSString *const ATLMessageInputToolbarAccessibilityLabel;
  property.
  */
 - (void)insertMediaAttachment:(ATLMediaAttachment *)mediaAttachment withEndLineBreak:(BOOL)endLineBreak;
+
+/**
+ @abstract Displays the GIF picker.
+ @discussion Functions properly regardless of the current state of the GIF Picker.
+ */
+-(void)showGifPicker;
 
 //-----------------------------
 // UI Customization
@@ -140,6 +159,17 @@ extern NSString *const ATLMessageInputToolbarAccessibilityLabel;
  @default YES
  */
 @property(nonatomic) BOOL displaysRightAccessoryImage;
+
+/**
+ @abstract Flag that maintains the state of the GIF picker.
+ @default NO
+ */
+@property (nonatomic) BOOL gifsEnabled;
+
+/**
+ @abstract Controller interface for displaying and selecting GIFs
+ */
+@property (nonatomic) ATLGifPickerViewController *gifPicker;
 
 /**
  @abstract An automatically resizing message composition field.
