@@ -115,7 +115,7 @@ NSInteger const ATLQueryControllerPaginationWindow = 30;
 - (void)finishExpandingPaginationWindow
 {
     NSUInteger numberOfMessagesToDisplay = MIN(-self.queryController.paginationWindow + ATLQueryControllerPaginationWindow, self.queryController.totalNumberOfObjects);
-    self.queryController.paginationWindow = -numberOfMessagesToDisplay;
+    self.queryController.paginationWindow = -numberOfMessagesToDisplay != 0 ? -numberOfMessagesToDisplay : -1;
     self.expandingPaginationWindow = NO;
 }
 
@@ -164,7 +164,8 @@ NSInteger const ATLQueryControllerPaginationWindow = 30;
 
 - (NSIndexPath *)queryControllerIndexPathForCollectionViewIndexPath:(NSIndexPath *)collectionViewIndexPath
 {
-    return [self queryControllerIndexPathForCollectionViewSection:collectionViewIndexPath.section];
+    NSInteger section = collectionViewIndexPath.section;
+    return [self queryControllerIndexPathForCollectionViewSection:section];
 }
 
 - (NSIndexPath *)queryControllerIndexPathForCollectionViewSection:(NSInteger)collectionViewSection

@@ -65,6 +65,7 @@ static NSString *const ATLDefaultPushAlertLocation = @"sent you a location.";
 static NSString *const ATLDefaultPushAlertVideo = @"sent you a video.";
 static NSString *const ATLDefaultPushAlertText = @"sent you a message.";
 static NSInteger const ATLPhotoActionSheet = 1000;
+static NSInteger const ATLCardsActionSheet = 2000;
 
 + (NSCache *)sharedMediaAttachmentCache
 {
@@ -588,6 +589,21 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 
 #pragma mark - ATLMessageInputToolbarDelegate
 
+- (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didTapCardsAccessoryButton:(UIButton *)cardsAccessoryButton
+{
+    if (messageInputToolbar.textInputView.isFirstResponder) {
+        [messageInputToolbar.textInputView resignFirstResponder];
+    }
+    
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                             delegate:self
+                                                    cancelButtonTitle:ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.cancel.key", @"Cancel", nil)
+                                               destructiveButtonTitle:nil
+                                                    otherButtonTitles:ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.voxeet.key", @"Voxeet Card", nil), nil];
+    [actionSheet showInView:self.view];
+    actionSheet.tag = ATLCardsActionSheet;
+}
+
 - (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didTapLeftAccessoryButton:(UIButton *)leftAccessoryButton
 {
     if (messageInputToolbar.textInputView.isFirstResponder) {
@@ -598,7 +614,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
                                                              delegate:self
                                                     cancelButtonTitle:ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.cancel.key", @"Cancel", nil)
                                                destructiveButtonTitle:nil
-                                                    otherButtonTitles:ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.takephoto.key", @"Take Photo/Video", nil), ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.lastphoto.key", @"Last Photo/Video", nil), ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.library.key", @"Photo/Video Library", nil), ATLLocalizedString(@"atl.conversation.actionsheet.gif.key", @"GIFs", nil), nil];
+                                                    otherButtonTitles:ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.takephoto.key", @"Take Photo/Video", nil), ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.lastphoto.key", @"Last Photo/Video", nil), ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.library.key", @"Photo/Video Library", nil), ATLLocalizedString(@"atl.conversation.actionsheet.gif.key", @"GIFs", nil), ATLLocalizedString(@"atl.conversation.actionsheet.gif.key", @"Voxeet Card", nil), nil];
     [actionSheet showInView:self.view];
     actionSheet.tag = ATLPhotoActionSheet;
 }
@@ -750,10 +766,25 @@ static NSInteger const ATLPhotoActionSheet = 1000;
             case 3:
                 [self.messageInputToolbar showGifPicker];
                 
+            case 4:
+                [self didSelectCardFromActionSheet:buttonIndex];
             default:
                 break;
         }
     }
+}
+
+- (void)didSelectCardFromActionSheet:(NSInteger)buttonIndex {
+    if ([self.delegate respondsToSelector:@selector(conversationViewController:didSelectCardsActionSheetIndex:)]) {
+        [self.delegate conversationViewController:self didSelectCardsActionSheetIndex:buttonIndex];
+    }
+}
+
+# pragma mark - Cards Picking
+
+- (void)insertVoxeetConferenceCard
+{
+    
 }
 
 #pragma mark - Image Picking
@@ -1213,6 +1244,11 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     conversationOptions.deliveryReceiptsEnabled = participants.count <= 5;
     conversation = [self.layerClient newConversationWithParticipants:participantIdentifiers options:conversationOptions error:nil];
     return conversation;
+}
+
+- (LYRMessage *)messageAtCollectionViewIndexPath:(NSIndexPath *)indexPath
+{
+    return [self.conversationDataSource messageAtCollectionViewIndexPath:indexPath];
 }
 
 #pragma mark - LYRQueryControllerDelegate

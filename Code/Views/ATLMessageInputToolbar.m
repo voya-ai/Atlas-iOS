@@ -49,7 +49,7 @@ NSString *const ATLMessageInputToolbarSendButton  = @"Message Input Toolbar Send
 NSString *const ATLMessageInputToolbarGIFButton = @"Message Input Toolbar GIF Button";
 
 // Compose View Margin Constants
-static CGFloat const ATLLeftButtonHorizontalMargin = 6.0f;
+static CGFloat const ATLLeftButtonHorizontalMargin = 4.0f;
 static CGFloat const ATLRightButtonHorizontalMargin = 4.0f;
 static CGFloat const ATLVerticalMargin = 7.0f;
 
@@ -79,7 +79,7 @@ static CGFloat const ATLGIFTrayHeight = 120.f;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         
         NSBundle *resourcesBundle = ATLResourcesBundle();
-        self.leftAccessoryImage = [UIImage imageNamed:@"camera_dark" inBundle:resourcesBundle compatibleWithTraitCollection:nil];
+        self.leftAccessoryImage = [UIImage imageNamed:@"plus" inBundle:resourcesBundle compatibleWithTraitCollection:nil];
         self.rightAccessoryImage = [UIImage imageNamed:@"location_dark" inBundle:resourcesBundle compatibleWithTraitCollection:nil];
         self.displaysRightAccessoryImage = YES;
         self.firstAppearance = YES;
@@ -188,6 +188,7 @@ static CGFloat const ATLGIFTrayHeight = 120.f;
     if (!self.buttonCenterY) {
         self.buttonCenterY = (CGRectGetHeight(frame) - CGRectGetHeight(leftButtonFrame)) / 2;
     }
+    
     leftButtonFrame.origin.y = frame.size.height - leftButtonFrame.size.height - self.buttonCenterY;
     rightButtonFrame.origin.y = frame.size.height - rightButtonFrame.size.height - self.buttonCenterY;
     
@@ -496,11 +497,7 @@ static CGFloat const ATLGIFTrayHeight = 120.f;
 
 - (void)configureLeftAccessoryButtonState
 {
-    if(self.textInputView.text.length) {
-        [self configureLeftAccessoryButtonForGIF];
-    } else {
-        [self configureLeftAccessoryButtonForCamera];
-    }
+    [self configureLeftAccessoryButtonForCamera];
 }
 
 -(void)configureLeftAccessoryButtonForCamera

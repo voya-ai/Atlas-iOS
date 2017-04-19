@@ -68,6 +68,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (instancetype)participantTableViewControllerWithParticipants:(NSSet <id<ATLParticipant>> *)participants sortType:(ATLParticipantPickerSortType)sortType;
 
++ (instancetype)participantTableViewControllerWithSelectedParticipants:(NSSet *)selectedParticipants participants:(NSSet *)participants sortType:(ATLParticipantPickerSortType)sortType;
+
 /**
  @abstract The participants to display.
  @raises NSInternalInconsistencyException Raised if the value is mutated after the receiver has been presented.

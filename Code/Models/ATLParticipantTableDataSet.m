@@ -81,6 +81,8 @@ static NSString *ATLInitialForName(NSString *name)
             case ATLParticipantPickerSortTypeLastName:
                 _sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"lastName" ascending:YES selector:@selector(localizedStandardCompare:)];
                 break;
+            case ATLParticipantPickerSortTypeDisplayName:
+                _sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"displayName" ascending:YES selector:@selector(localizedStandardCompare:)];
         }
         _sectionsNeedUpdating = YES;
     }
@@ -183,6 +185,9 @@ static NSString *ATLInitialForName(NSString *name)
                 break;
             case ATLParticipantPickerSortTypeLastName:
                 name = participant.lastName;
+                break;
+            case ATLParticipantPickerSortTypeDisplayName:
+                name = participant.displayName;
                 break;
         }
         NSString *initial = ATLInitialForName(name);

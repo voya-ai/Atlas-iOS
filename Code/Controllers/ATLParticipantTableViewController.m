@@ -46,7 +46,12 @@ NSString *const ATLParticipantTableViewControllerTitle = @"Participants";
 
 + (instancetype)participantTableViewControllerWithParticipants:(NSSet *)participants sortType:(ATLParticipantPickerSortType)sortType
 {
-    return  [[self alloc] initWithParticipants:participants sortType:sortType];
+    return [[self alloc] initWithParticipants:participants sortType:sortType];
+}
+
++ (instancetype)participantTableViewControllerWithSelectedParticipants:(NSSet *)selectedParticipants participants:(NSSet *)participants sortType:(ATLParticipantPickerSortType)sortType
+{
+    return [[self alloc] initWithSelectedParticipants:selectedParticipants participants:participants sortType:sortType];
 }
 
 - (id)initWithParticipants:(NSSet *)participants sortType:(ATLParticipantPickerSortType)sortType
@@ -57,6 +62,21 @@ NSString *const ATLParticipantTableViewControllerTitle = @"Participants";
         _participants = participants;
         _sortType = sortType;
         [self lyr_commonInit];
+    }
+    return self;
+}
+
+- (id)initWithSelectedParticipants:(NSSet *)selectedParticipants participants:(NSSet *)participants sortType:(ATLParticipantPickerSortType)sortType
+{
+    NSAssert(selectedParticipants, @"Selected participants cannot be nil");
+    NSAssert(participants, @"Participants cannot be nil");
+    self = [super initWithStyle:UITableViewStylePlain];
+    if (self) {
+        _participants = participants;
+        _sortType = sortType;
+        [self lyr_commonInit];
+        
+        _selectedParticipants = [[NSMutableSet alloc] initWithSet:selectedParticipants];
     }
     return self;
 }
@@ -128,6 +148,7 @@ NSString *const ATLParticipantTableViewControllerTitle = @"Participants";
         [self.tableView registerClass:self.cellClass forCellReuseIdentifier:ATLParticipantCellIdentifier];
         self.participantsDataSet = [ATLParticipantTableDataSet dataSetWithParticipants:self.participants sortType:self.sortType];
         [self startObservingParticipants];
+        
         [self.tableView reloadData];
     }
 }
@@ -275,6 +296,11 @@ NSString *const ATLParticipantTableViewControllerTitle = @"Participants";
     if ([self.delegate respondsToSelector:@selector(participantTableViewController:didDeselectParticipant:)]) {
         [self.delegate participantTableViewController:self didDeselectParticipant:participant];
     }
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 3;
 }
 
 #pragma mark - Helpers

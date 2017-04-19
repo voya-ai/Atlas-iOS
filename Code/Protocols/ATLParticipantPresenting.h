@@ -25,6 +25,7 @@
  @abstract The `ATLParticipantPickerSortType` allows for configuration of the sorting order of participants.
  */
 typedef NS_ENUM(NSUInteger, ATLParticipantPickerSortType) {
+    ATLParticipantPickerSortTypeDisplayName,
     ATLParticipantPickerSortTypeFirstName,
     ATLParticipantPickerSortTypeLastName,
 };

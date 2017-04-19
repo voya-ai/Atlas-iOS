@@ -23,6 +23,7 @@
 #import <MapKit/MapKit.h>
 #import "ATLParticipant.h"
 #import "ATLBaseConversationViewController.h"
+#import "ATLConversationDataSource.h"
 
 typedef NS_ENUM(NSUInteger, ATLAvatarItemDisplayFrequency) {
     ATLAvatarItemDisplayFrequencySection,
@@ -62,6 +63,8 @@ NS_ASSUME_NONNULL_BEGIN
  @param message The `LYRMessage` object which that was tapped.
  */
 - (void)conversationViewController:(ATLConversationViewController *)viewController didSelectMessage:(LYRMessage *)message;
+
+- (void)conversationViewController:(ATLConversationViewController *)viewController didSelectCardsActionSheetIndex:(NSInteger)index;
 
 /**
  @abstract Asks the delegate for the height to use for a message's cell.
@@ -261,6 +264,12 @@ NS_ASSUME_NONNULL_BEGIN
  @param message The Message object to send.
  */
 - (void)sendMessage:(LYRMessage *)message;
+
+- (LYRMessage *)messageAtCollectionViewIndexPath:(NSIndexPath *)indexPath;
+
+- (void)reloadCollectionViewAdjustingForContentHeightChange;
+
+- (void)scrollToBottomAnimated:(BOOL)animated;
 
 ///---------------------------
 /// @name Configuring Behavior

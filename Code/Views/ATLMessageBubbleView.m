@@ -284,7 +284,9 @@ typedef NS_ENUM(NSInteger, ATLBubbleViewContentType) {
 {
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
     if (!self.bubbleViewLabel.isHidden) {
-        pasteboard.string = self.bubbleViewLabel.text;
+        if (self.bubbleViewLabel.text != nil) {
+            pasteboard.string = self.bubbleViewLabel.text;
+        }
     } else {
         NSData *imageData = UIImagePNGRepresentation(self.bubbleImageView.image);
         [pasteboard setData:imageData forPasteboardType:ATLPasteboardImageKey];

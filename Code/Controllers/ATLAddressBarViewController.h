@@ -162,6 +162,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)selectParticipant:(id<ATLParticipant>)participant;
 
+- (void)deselectParticipant:(id<ATLParticipant>)participant;
+
 ///-------------------------
 /// @name Reloading the View
 ///-------------------------

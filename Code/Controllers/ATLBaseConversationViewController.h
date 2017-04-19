@@ -95,5 +95,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (CGPoint)bottomOffsetForContentSize:(CGSize)contentSize;
 
+- (void)updateBottomCollectionViewInset;
+
 @end
 NS_ASSUME_NONNULL_END

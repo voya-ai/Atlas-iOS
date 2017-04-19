@@ -119,10 +119,31 @@ static NSString *const ATLAddressBarParticipantAttributeName = @"ATLAddressBarPa
 
     NSMutableOrderedSet *participants = [NSMutableOrderedSet orderedSetWithOrderedSet:self.selectedParticipants];
     [participants addObject:participant];
-    self.selectedParticipants = participants;
+    [self setSelectedParticipants:participants notifyDelegate:YES];
+}
+
+- (void)deselectParticipant:(id<ATLParticipant>)participant
+{
+    if (!participant) return;
+    
+    NSMutableOrderedSet *participants = [NSMutableOrderedSet orderedSetWithOrderedSet:self.selectedParticipants];
+    [participants enumerateObjectsUsingBlock:^(id<ATLParticipant> obj, NSUInteger index, BOOL *stop) {
+        if ([obj.userID isEqualToString:participant.userID]) {
+            [participants removeObject:obj];
+            *stop = YES;
+            return;
+        }
+    }];
+    
+    [self setSelectedParticipants:participants notifyDelegate:YES];
 }
 
 - (void)setSelectedParticipants:(NSOrderedSet *)selectedParticipants
+{
+    [self setSelectedParticipants:selectedParticipants notifyDelegate:NO];
+}
+
+- (void)setSelectedParticipants:(NSOrderedSet *)selectedParticipants notifyDelegate:(BOOL)notifyDelegate
 {
     if (!selectedParticipants && !_selectedParticipants) return;
     if ([[selectedParticipants valueForKey:@"userID"] isEqual:[_selectedParticipants valueForKey:@"userID"]]) return;
@@ -142,12 +163,22 @@ static NSString *const ATLAddressBarParticipantAttributeName = @"ATLAddressBarPa
     if (self.isDisabled) return;
     
     NSMutableOrderedSet *removedParticipants = [NSMutableOrderedSet orderedSetWithOrderedSet:existingParticipants];
-    if (selectedParticipants) [removedParticipants minusOrderedSet:selectedParticipants];
-    [self notifyDelegateOfRemovedParticipants:removedParticipants];
+    if (selectedParticipants) {
+        [removedParticipants minusOrderedSet:selectedParticipants];
+    }
+    
+    if (notifyDelegate) {
+        [self notifyDelegateOfRemovedParticipants:removedParticipants];
+    }
     
     NSMutableOrderedSet *addedParticipants = [NSMutableOrderedSet orderedSetWithOrderedSet:selectedParticipants];
-    if (existingParticipants) [addedParticipants minusOrderedSet:existingParticipants];
-    [self notifyDelegateOfSelectedParticipants:addedParticipants];
+    if (existingParticipants) {
+        [addedParticipants minusOrderedSet:existingParticipants];
+    }
+    
+    if (notifyDelegate) {
+        [self notifyDelegateOfSelectedParticipants:addedParticipants];
+    }
     
     [self searchEnded];
 }
@@ -443,7 +474,14 @@ static NSString *const ATLAddressBarParticipantAttributeName = @"ATLAddressBarPa
 - (NSArray *)filteredParticipants:(NSArray *)participants
 {
     NSMutableArray *prospectiveParticipants = [participants mutableCopy];
-    [prospectiveParticipants removeObjectsInArray:self.selectedParticipants.array];
+    [self.selectedParticipants enumerateObjectsUsingBlock:^(id<ATLParticipant> selectedParticipant, NSUInteger selectedIndex, BOOL *stop) {
+        [prospectiveParticipants enumerateObjectsUsingBlock:^(id<ATLParticipant> participant, NSUInteger index, BOOL *stop) {
+            if ([participant.userID isEqualToString:selectedParticipant.userID]) {
+                [prospectiveParticipants removeObject:participant];
+                *stop = YES;
+            }
+        }];
+    }];
     return prospectiveParticipants;
 }
 

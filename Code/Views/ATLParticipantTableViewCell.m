@@ -152,6 +152,10 @@
                 rangeToBold = [self.participant.displayName rangeOfString:self.participant.lastName options:NSBackwardsSearch];
             }
             break;
+        case ATLParticipantPickerSortTypeDisplayName:
+            if (self.participant.displayName.length != 0) {
+                rangeToBold = [self.participant.displayName rangeOfString:self.participant.displayName];
+            }
     }
     if (rangeToBold.location != NSNotFound && self.shouldBoldTitle) {
         [attributedString addAttributes:@{NSFontAttributeName: self.boldTitleFont} range:rangeToBold];

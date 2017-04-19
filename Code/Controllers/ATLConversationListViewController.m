@@ -27,6 +27,7 @@ static NSString *const ATLImageMIMETypePlaceholderText = @"Attachment: Image";
 static NSString *const ATLVideoMIMETypePlaceholderText = @"Attachment: Video";
 static NSString *const ATLLocationMIMETypePlaceholderText = @"Attachment: Location";
 static NSString *const ATLGIFMIMETypePlaceholderText = @"Attachment: GIF";
+static NSString *const ATLVoxeetConferencePlaceholderText = @"Video Conference";
 static NSInteger const ATLConverstionListPaginationWindow = 30;
 static CGFloat const ATLConversationListLoadMoreConversationsDistanceThreshold = 200.0f;
 static CGFloat const ATLConversationListLoadingMoreConversationsIndicatorViewWidth = 30.0f;
@@ -61,6 +62,7 @@ NSString *const ATLConversationTableViewAccessibilityLabel = @"Conversation Tabl
 NSString *const ATLConversationTableViewAccessibilityIdentifier = @"Conversation Table View Identifier";
 NSString *const ATLConversationListViewControllerDeletionModeMyDevices = @"My Devices";
 NSString *const ATLConversationListViewControllerDeletionModeEveryone = @"Everyone";
+NSString *const LarryUserID = @"fdfc15db-e66e-4cbc-b780-a95cd0d3628f";
 
 + (instancetype)conversationListViewControllerWithLayerClient:(LYRClient *)layerClient
 {
@@ -268,6 +270,7 @@ NSString *const ATLConversationListViewControllerDeletionModeEveryone = @"Everyo
         return;
     }
     LYRQuery *query = [LYRQuery queryWithQueryableClass:[LYRConversation class]];
+    query.predicate = [LYRPredicate predicateWithProperty:@"participants" predicateOperator:LYRPredicateOperatorIsNotIn value:@[LarryUserID]];
     query.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"lastMessage.receivedAt" ascending:NO]];
     
     if ([self.dataSource respondsToSelector:@selector(conversationListViewController:willLoadWithQuery:)]) {
@@ -665,6 +668,8 @@ NSString *const ATLConversationListViewControllerDeletionModeEveryone = @"Everyo
         lastMessageText = ATLLocalizedString(@"atl.conversationlist.lastMessage.text.location.key", ATLLocationMIMETypePlaceholderText, nil);
     } else if ([messagePart.MIMEType isEqualToString:ATLMIMETypeVideoMP4]) {
         lastMessageText = ATLLocalizedString(@"atl.conversationlist.lastMessage.text.video.key", ATLVideoMIMETypePlaceholderText, nil);
+    } else if ([messagePart.MIMEType isEqualToString:ATLMIMETypeVoxeetConference]) {
+        lastMessageText = ATLLocalizedString(@"atl.conversationlist.lastMessage.text.voxeet.key", ATLVoxeetConferencePlaceholderText, nil);
     } else {
         lastMessageText = ATLLocalizedString(@"atl.conversationlist.lastMessage.text.default.key", ATLImageMIMETypePlaceholderText, nil);
     }
