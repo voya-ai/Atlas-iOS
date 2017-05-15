@@ -22,7 +22,7 @@
 #import "ATLParticipantTableDataSet.h"
 #import "ATLParticipantSectionHeaderView.h"
 #import "ATLConstants.h"
-#import "ATLAvatarImageView.h"
+#import "ATLAvatarView.h"
 #import "ATLMessagingUtilities.h"
 
 static NSString *const ATLParticipantTableSectionHeaderIdentifier = @"ATLParticipantTableSectionHeaderIdentifier";
@@ -34,7 +34,6 @@ static NSString *const ATLParticipantCellIdentifier = @"ATLParticipantCellIdenti
 @property (nonatomic) NSMutableSet *selectedParticipants;
 @property (nonatomic) UISearchBar *searchBar;
 @property (nonatomic) BOOL hasAppeared;
-@property (nonatomic) BOOL isObservingParticipants;
 @property (nonatomic) UISearchController *searchController;
 
 @end
@@ -100,7 +99,7 @@ NSString *const ATLParticipantTableViewControllerTitle = @"Participants";
 
 - (void)dealloc
 {
-    [self stopObservingParticipants];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:LYRClientObjectsDidChangeNotification object:nil];
 }
 
 - (void)loadView
@@ -147,7 +146,8 @@ NSString *const ATLParticipantTableViewControllerTitle = @"Participants";
         self.tableView.allowsMultipleSelection = self.allowsMultipleSelection;
         [self.tableView registerClass:self.cellClass forCellReuseIdentifier:ATLParticipantCellIdentifier];
         self.participantsDataSet = [ATLParticipantTableDataSet dataSetWithParticipants:self.participants sortType:self.sortType];
-        [self startObservingParticipants];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(layerClientObjectsDidChange:) name:LYRClientObjectsDidChangeNotification object:nil];
         
         [self.tableView reloadData];
     }
@@ -325,22 +325,6 @@ NSString *const ATLParticipantTableViewControllerTitle = @"Participants";
 }
 
 #pragma mark - Notification Handlers
-
-- (void)startObservingParticipants
-{
-    if (!self.isObservingParticipants) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(layerClientObjectsDidChange:) name:LYRClientObjectsDidChangeNotification object:nil];
-        self.isObservingParticipants = YES;
-    }
-}
-
-- (void)stopObservingParticipants
-{
-    if (self.isObservingParticipants) {
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:LYRClientObjectsDidChangeNotification object:nil];
-        self.isObservingParticipants = NO;
-    }
-}
 
 - (void)layerClientObjectsDidChange:(NSNotification *)notification
 {

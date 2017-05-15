@@ -1,5 +1,37 @@
 # Atlas Changelog
 
+## 1.1.0
+
+Introducing the presence feature, which allows you to display a user's presence status as a color-coded icon next to their avatar image. [APPS-2740]
+
+### Public API Changes
+
+* Added a new `ATLPresenceStatusView` object, which renders a color-coded circle to represent a user's presence status. Added this to the `ATLAvatarItem`.
+* `ATLAvatarImageView` was renamed to `ATLAvatarView`.
+* Added the `presenceStatusEnabled` property to `ATLAvatarView`, which sets whether the presence status is shown. Default is `YES`.
+* Added a read-only accessor `presenceStatus` to the `ATLAvatarItem`.
+
+## 1.0.33
+
+### Public API Changes
+
+* Added `shouldDisplayUsernameForOneOtherParticipant` as a configurable property to `ATLConversationViewController`.
+* `dateString` and `participantName` parameters marked as `nullable` within `ATLConversationCollectionViewHeader:headerHeightWithDateString:`.
+* Made the return value of `ATLConversationListViewController:avatarItemForConversation:` `nullable`.
+
+### Enhancements
+
+* Refactored queryController delegate methods to return early if the view is not visible. This helps harden against `NSInternalInconsistencyException` errors.
+* Refactored `ATLConversationListViewController` to track all changes from the queryController as they come in. Once the queryController finishes the changes, the tableView is updated. This helps harden against `NSInternalInconsistencyException` errors.
+* Changed all `@import LayerKit` to `#import <LayerKit/LayerKit.h>`
+* Refactored code to satisfy analyzer warnings.
+
+### Bug Fixes
+
+* `ATLConversationListViewController:configureCell:atIndexPath:` returns early if no conversation is found at `indexPath`.
+* Prevent `ATLAvatarImageView` from flickering when setting the same `remoteImageURL`'s image
+* Fixes a bug where the timestamp might incorrectly get overlaid across the message bubble.
+
 ## 1.0.32
 
 ### Bug Fixes
