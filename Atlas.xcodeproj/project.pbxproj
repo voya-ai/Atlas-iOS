@@ -115,18 +115,6 @@
 		D6F406361A8FE28C00AE9581 /* ATLTestInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = D6F4060C1A8FDEEB00AE9581 /* ATLTestInterface.m */; };
 		D8F526991CE2AE4E45DA34DB /* Pods_Storyboard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 921B2F42195B3C5F0569C57B /* Pods_Storyboard.framework */; };
 		D9D282D2BB1B4AD3789CDAFE /* Pods_Programmatic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B085A18188DCFC913F85665D /* Pods_Programmatic.framework */; };
-		E623AB821C4874CF00CCA0B1 /* GlobalDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = E623AB811C4874CF00CCA0B1 /* GlobalDefines.h */; };
-		E623AB8B1C48883100CCA0B1 /* ATLGIFCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = E623AB891C48883100CCA0B1 /* ATLGIFCollectionViewCell.h */; };
-		E623AB8E1C48883100CCA0B1 /* ATLGIFCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E623AB8A1C48883100CCA0B1 /* ATLGIFCollectionViewCell.m */; };
-		E623ABD51C4EF23100CCA0B1 /* ATLGifPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E623AB631C48537800CCA0B1 /* ATLGifPickerViewController.m */; };
-		E623ABD61C4EF25600CCA0B1 /* ATLGifPickerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = E623AB621C48537800CCA0B1 /* ATLGifPickerViewController.h */; };
-		E623AC111C50A86D00CCA0B1 /* RFMedia.m in Sources */ = {isa = PBXBuildFile; fileRef = E623AB721C4873BD00CCA0B1 /* RFMedia.m */; };
-		E623AC121C50A87600CCA0B1 /* RFObject.m in Sources */ = {isa = PBXBuildFile; fileRef = E623AB741C4873BD00CCA0B1 /* RFObject.m */; };
-		E623AC131C50A88200CCA0B1 /* RFRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = E623AB6A1C48736C00CCA0B1 /* RFRequester.m */; };
-		E623AC141C50A88800CCA0B1 /* RFStreamRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = E623AB6C1C48736C00CCA0B1 /* RFStreamRequester.m */; };
-		E623AC151C50A88F00CCA0B1 /* RFTag.m in Sources */ = {isa = PBXBuildFile; fileRef = E623AB7E1C48745600CCA0B1 /* RFTag.m */; };
-		E6BE133E1C991BAC00530090 /* LocalDiskDataCache.m in Sources */ = {isa = PBXBuildFile; fileRef = E6BE133B1C991B1500530090 /* LocalDiskDataCache.m */; };
-		E6D509701C9B79740086D322 /* LocalDiskDataCache.h in Headers */ = {isa = PBXBuildFile; fileRef = E6BE133A1C991B1500530090 /* LocalDiskDataCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -250,23 +238,6 @@
 		D6F57E6C1A8BE4B500B62BD9 /* StoryboardTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StoryboardTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8050D6CFBC2EA1D5D6B800A /* Pods_test_ProgrammaticTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_test_ProgrammaticTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD247AF2EF0D58C390C41D9F /* Pods-Programmatic.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Programmatic.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Programmatic/Pods-Programmatic.debug.xcconfig"; sourceTree = "<group>"; };
-		E623AB621C48537800CCA0B1 /* ATLGifPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATLGifPickerViewController.h; sourceTree = "<group>"; };
-		E623AB631C48537800CCA0B1 /* ATLGifPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATLGifPickerViewController.m; sourceTree = "<group>"; };
-		E623AB691C48736C00CCA0B1 /* RFRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFRequester.h; sourceTree = "<group>"; };
-		E623AB6A1C48736C00CCA0B1 /* RFRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RFRequester.m; sourceTree = "<group>"; };
-		E623AB6B1C48736C00CCA0B1 /* RFStreamRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFStreamRequester.h; sourceTree = "<group>"; };
-		E623AB6C1C48736C00CCA0B1 /* RFStreamRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RFStreamRequester.m; sourceTree = "<group>"; };
-		E623AB711C4873BD00CCA0B1 /* RFMedia.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFMedia.h; sourceTree = "<group>"; };
-		E623AB721C4873BD00CCA0B1 /* RFMedia.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RFMedia.m; sourceTree = "<group>"; };
-		E623AB731C4873BD00CCA0B1 /* RFObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFObject.h; sourceTree = "<group>"; };
-		E623AB741C4873BD00CCA0B1 /* RFObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RFObject.m; sourceTree = "<group>"; };
-		E623AB7D1C48745600CCA0B1 /* RFTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFTag.h; sourceTree = "<group>"; };
-		E623AB7E1C48745600CCA0B1 /* RFTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RFTag.m; sourceTree = "<group>"; };
-		E623AB811C4874CF00CCA0B1 /* GlobalDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalDefines.h; sourceTree = "<group>"; };
-		E623AB891C48883100CCA0B1 /* ATLGIFCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATLGIFCollectionViewCell.h; sourceTree = "<group>"; };
-		E623AB8A1C48883100CCA0B1 /* ATLGIFCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATLGIFCollectionViewCell.m; sourceTree = "<group>"; };
-		E6BE133A1C991B1500530090 /* LocalDiskDataCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalDiskDataCache.h; sourceTree = "<group>"; };
-		E6BE133B1C991B1500530090 /* LocalDiskDataCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalDiskDataCache.m; sourceTree = "<group>"; };
 		E994C194C8CEC4ECECA9506A /* Pods-test-ProgrammaticTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-test-ProgrammaticTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-test-ProgrammaticTests/Pods-test-ProgrammaticTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -314,166 +285,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-<<<<<<< HEAD
-		253C29A61C3C9D7100ED1549 /* Atlas */ = {
-			isa = PBXGroup;
-			children = (
-				253C29AE1C3C9E0000ED1549 /* Code */,
-			);
-			path = Atlas;
-			sourceTree = "<group>";
-		};
-		253C29AE1C3C9E0000ED1549 /* Code */ = {
-			isa = PBXGroup;
-			children = (
-				253C29AF1C3C9E0000ED1549 /* Atlas.h */,
-				253C29B01C3C9E0000ED1549 /* Atlas.m */,
-				253C29B11C3C9E0000ED1549 /* Controllers */,
-				253C29BE1C3C9E0000ED1549 /* Models */,
-				253C29C71C3C9E0000ED1549 /* Protocols */,
-				253C29CD1C3C9E0000ED1549 /* Utilities */,
-				253C29DC1C3C9E0000ED1549 /* Views */,
-			);
-			path = Code;
-			sourceTree = SOURCE_ROOT;
-		};
-		253C29B11C3C9E0000ED1549 /* Controllers */ = {
-			isa = PBXGroup;
-			children = (
-				253C29B21C3C9E0000ED1549 /* ATLAddressBarViewController.h */,
-				253C29B31C3C9E0000ED1549 /* ATLAddressBarViewController.m */,
-				253C29B41C3C9E0000ED1549 /* ATLBaseConversationViewController.h */,
-				253C29B51C3C9E0000ED1549 /* ATLBaseConversationViewController.m */,
-				253C29B61C3C9E0000ED1549 /* ATLConversationListViewController.h */,
-				253C29B71C3C9E0000ED1549 /* ATLConversationListViewController.m */,
-				253C29B81C3C9E0000ED1549 /* ATLConversationViewController.h */,
-				253C29B91C3C9E0000ED1549 /* ATLConversationViewController.m */,
-				E623AB621C48537800CCA0B1 /* ATLGifPickerViewController.h */,
-				E623AB631C48537800CCA0B1 /* ATLGifPickerViewController.m */,
-				253C29BA1C3C9E0000ED1549 /* ATLParticipantTableViewController.h */,
-				253C29BB1C3C9E0000ED1549 /* ATLParticipantTableViewController.m */,
-				253C29BC1C3C9E0000ED1549 /* ATLTypingIndicatorViewController.h */,
-				253C29BD1C3C9E0000ED1549 /* ATLTypingIndicatorViewController.m */,
-			);
-			path = Controllers;
-			sourceTree = "<group>";
-		};
-		253C29BE1C3C9E0000ED1549 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				253C29BF1C3C9E0000ED1549 /* ATLConversationDataSource.h */,
-				253C29C01C3C9E0000ED1549 /* ATLConversationDataSource.m */,
-				253C29C11C3C9E0000ED1549 /* ATLDataSourceChange.h */,
-				253C29C21C3C9E0000ED1549 /* ATLDataSourceChange.m */,
-				253C29C31C3C9E0000ED1549 /* ATLMediaAttachment.h */,
-				253C29C41C3C9E0000ED1549 /* ATLMediaAttachment.m */,
-				253C29C51C3C9E0000ED1549 /* ATLParticipantTableDataSet.h */,
-				253C29C61C3C9E0000ED1549 /* ATLParticipantTableDataSet.m */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		253C29C71C3C9E0000ED1549 /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-				253C29C81C3C9E0000ED1549 /* ATLAvatarItem.h */,
-				253C29C91C3C9E0000ED1549 /* ATLConversationPresenting.h */,
-				253C29CA1C3C9E0000ED1549 /* ATLMessagePresenting.h */,
-				253C29CB1C3C9E0000ED1549 /* ATLParticipant.h */,
-				253C29CC1C3C9E0000ED1549 /* ATLParticipantPresenting.h */,
-			);
-			path = Protocols;
-			sourceTree = "<group>";
-		};
-		253C29CD1C3C9E0000ED1549 /* Utilities */ = {
-			isa = PBXGroup;
-			children = (
-				253C29CE1C3C9E0000ED1549 /* ATLConstants.h */,
-				253C29CF1C3C9E0000ED1549 /* ATLConstants.m */,
-				253C29D01C3C9E0000ED1549 /* ATLErrors.h */,
-				253C29D11C3C9E0000ED1549 /* ATLErrors.m */,
-				253C29D21C3C9E0000ED1549 /* ATLLocationManager.h */,
-				253C29D31C3C9E0000ED1549 /* ATLLocationManager.m */,
-				253C29D41C3C9E0000ED1549 /* ATLMediaInputStream.h */,
-				253C29D51C3C9E0000ED1549 /* ATLMediaInputStream.m */,
-				253C29D61C3C9E0000ED1549 /* ATLMessagingUtilities.h */,
-				253C29D71C3C9E0000ED1549 /* ATLMessagingUtilities.m */,
-				253C29D81C3C9E0000ED1549 /* ATLUIImageHelper.h */,
-				253C29D91C3C9E0000ED1549 /* ATLUIImageHelper.m */,
-				E623AB811C4874CF00CCA0B1 /* GlobalDefines.h */,
-				E6BE133A1C991B1500530090 /* LocalDiskDataCache.h */,
-				E6BE133B1C991B1500530090 /* LocalDiskDataCache.m */,
-				E623AB711C4873BD00CCA0B1 /* RFMedia.h */,
-				E623AB721C4873BD00CCA0B1 /* RFMedia.m */,
-				E623AB731C4873BD00CCA0B1 /* RFObject.h */,
-				E623AB741C4873BD00CCA0B1 /* RFObject.m */,
-				E623AB691C48736C00CCA0B1 /* RFRequester.h */,
-				E623AB6A1C48736C00CCA0B1 /* RFRequester.m */,
-				E623AB6B1C48736C00CCA0B1 /* RFStreamRequester.h */,
-				E623AB6C1C48736C00CCA0B1 /* RFStreamRequester.m */,
-				E623AB7D1C48745600CCA0B1 /* RFTag.h */,
-				E623AB7E1C48745600CCA0B1 /* RFTag.m */,
-				253C29DA1C3C9E0000ED1549 /* UIResponder+ATLFirstResponder.h */,
-				253C29DB1C3C9E0000ED1549 /* UIResponder+ATLFirstResponder.m */,
-				5AEF687F1C75284300808463 /* LYRIdentity+ATLParticipant.h */,
-				5AEF68801C75284300808463 /* LYRIdentity+ATLParticipant.m */,
-			);
-			path = Utilities;
-			sourceTree = "<group>";
-		};
-		253C29DC1C3C9E0000ED1549 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				251C57AB1C5A9E3C00110871 /* ATLBaseCollectionViewCell.h */,
-				251C57AC1C5A9E3C00110871 /* ATLBaseCollectionViewCell.m */,
-				253C29DD1C3C9E0000ED1549 /* ATLAddressBarContainerView.h */,
-				253C29DE1C3C9E0000ED1549 /* ATLAddressBarContainerView.m */,
-				253C29DF1C3C9E0000ED1549 /* ATLAddressBarTextView.h */,
-				253C29E01C3C9E0000ED1549 /* ATLAddressBarTextView.m */,
-				253C29E11C3C9E0000ED1549 /* ATLAddressBarView.h */,
-				253C29E21C3C9E0000ED1549 /* ATLAddressBarView.m */,
-				253C29E31C3C9E0000ED1549 /* ATLAvatarImageView.h */,
-				253C29E41C3C9E0000ED1549 /* ATLAvatarImageView.m */,
-				253C29E51C3C9E0000ED1549 /* ATLConversationCollectionView.h */,
-				253C29E61C3C9E0000ED1549 /* ATLConversationCollectionView.m */,
-				253C29E71C3C9E0000ED1549 /* ATLConversationCollectionViewFooter.h */,
-				253C29E81C3C9E0000ED1549 /* ATLConversationCollectionViewFooter.m */,
-				253C29E91C3C9E0000ED1549 /* ATLConversationCollectionViewHeader.h */,
-				253C29EA1C3C9E0000ED1549 /* ATLConversationCollectionViewHeader.m */,
-				253C29EB1C3C9E0000ED1549 /* ATLConversationCollectionViewMoreMessagesHeader.h */,
-				253C29EC1C3C9E0000ED1549 /* ATLConversationCollectionViewMoreMessagesHeader.m */,
-				253C29ED1C3C9E0000ED1549 /* ATLConversationTableViewCell.h */,
-				253C29EE1C3C9E0000ED1549 /* ATLConversationTableViewCell.m */,
-				253C29EF1C3C9E0000ED1549 /* ATLConversationView.h */,
-				253C29F01C3C9E0000ED1549 /* ATLConversationView.m */,
-				E623AB891C48883100CCA0B1 /* ATLGIFCollectionViewCell.h */,
-				E623AB8A1C48883100CCA0B1 /* ATLGIFCollectionViewCell.m */,
-				253C29F11C3C9E0000ED1549 /* ATLIncomingMessageCollectionViewCell.h */,
-				253C29F21C3C9E0000ED1549 /* ATLIncomingMessageCollectionViewCell.m */,
-				253C29F31C3C9E0000ED1549 /* ATLMessageBubbleView.h */,
-				253C29F41C3C9E0000ED1549 /* ATLMessageBubbleView.m */,
-				253C29F51C3C9E0000ED1549 /* ATLMessageCollectionViewCell.h */,
-				253C29F61C3C9E0000ED1549 /* ATLMessageCollectionViewCell.m */,
-				253C29F71C3C9E0000ED1549 /* ATLMessageComposeTextView.h */,
-				253C29F81C3C9E0000ED1549 /* ATLMessageComposeTextView.m */,
-				253C29F91C3C9E0000ED1549 /* ATLMessageInputToolbar.h */,
-				253C29FA1C3C9E0000ED1549 /* ATLMessageInputToolbar.m */,
-				253C29FB1C3C9E0000ED1549 /* ATLOutgoingMessageCollectionViewCell.h */,
-				253C29FC1C3C9E0000ED1549 /* ATLOutgoingMessageCollectionViewCell.m */,
-				253C29FD1C3C9E0000ED1549 /* ATLParticipantSectionHeaderView.h */,
-				253C29FE1C3C9E0000ED1549 /* ATLParticipantSectionHeaderView.m */,
-				253C29FF1C3C9E0000ED1549 /* ATLParticipantTableViewCell.h */,
-				253C2A001C3C9E0000ED1549 /* ATLParticipantTableViewCell.m */,
-				253C2A011C3C9E0000ED1549 /* ATLPlayView.h */,
-				253C2A021C3C9E0000ED1549 /* ATLPlayView.m */,
-				253C2A031C3C9E0000ED1549 /* ATLProgressView.h */,
-				253C2A041C3C9E0000ED1549 /* ATLProgressView.m */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-=======
->>>>>>> master
 		412524007C3A7505AC34F33C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -594,6 +405,7 @@
 		D676CF171A8C4344002D9D27 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
+				D0E729491A02F1C700B76672 /* Mocks */,
 				D6F405A71A8FDDAA00AE9581 /* ATLSampleConversationAvatarItem.h */,
 				D6F405A81A8FDDAA00AE9581 /* ATLSampleConversationAvatarItem.m */,
 				D6F405A91A8FDDAA00AE9581 /* ATLSampleConversationListViewController.h */,
@@ -602,7 +414,6 @@
 				D6F405AC1A8FDDAA00AE9581 /* ATLSampleConversationViewController.m */,
 				D6F405AD1A8FDDAA00AE9581 /* ATLSampleParticipantTableViewController.h */,
 				D6F405AE1A8FDDAA00AE9581 /* ATLSampleParticipantTableViewController.m */,
-				D0E729491A02F1C700B76672 /* Mocks */,
 				D6F57E2B1A8BE4AF00B62BD9 /* Programmatic */,
 				D6F57E551A8BE4B500B62BD9 /* Storyboard */,
 			);
@@ -733,68 +544,6 @@
 		};
 /* End PBXGroup section */
 
-<<<<<<< HEAD
-/* Begin PBXHeadersBuildPhase section */
-		253C29A21C3C9D7100ED1549 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				253C2A361C3C9E0000ED1549 /* ATLConversationCollectionView.h in Headers */,
-				253C2A261C3C9E0000ED1549 /* ATLMediaInputStream.h in Headers */,
-				253C2A131C3C9E0000ED1549 /* ATLConversationDataSource.h in Headers */,
-				253C2A521C3C9E0000ED1549 /* ATLPlayView.h in Headers */,
-				253C2A4A1C3C9E0000ED1549 /* ATLMessageInputToolbar.h in Headers */,
-				253C2A321C3C9E0000ED1549 /* ATLAddressBarView.h in Headers */,
-				253C2A3C1C3C9E0000ED1549 /* ATLConversationCollectionViewMoreMessagesHeader.h in Headers */,
-				253C2A0D1C3C9E0000ED1549 /* ATLConversationViewController.h in Headers */,
-				253C2A281C3C9E0000ED1549 /* ATLMessagingUtilities.h in Headers */,
-				253C2A4E1C3C9E0000ED1549 /* ATLParticipantSectionHeaderView.h in Headers */,
-				253C2A171C3C9E0000ED1549 /* ATLMediaAttachment.h in Headers */,
-				253C2A3A1C3C9E0000ED1549 /* ATLConversationCollectionViewHeader.h in Headers */,
-				253C2A0B1C3C9E0000ED1549 /* ATLConversationListViewController.h in Headers */,
-				253C2A2A1C3C9E0000ED1549 /* ATLUIImageHelper.h in Headers */,
-				253C2A501C3C9E0000ED1549 /* ATLParticipantTableViewCell.h in Headers */,
-				253C2A301C3C9E0000ED1549 /* ATLAddressBarTextView.h in Headers */,
-				253C2A401C3C9E0000ED1549 /* ATLConversationView.h in Headers */,
-				253C2A541C3C9E0000ED1549 /* ATLProgressView.h in Headers */,
-				253C2A481C3C9E0000ED1549 /* ATLMessageComposeTextView.h in Headers */,
-				253C2A1B1C3C9E0000ED1549 /* ATLAvatarItem.h in Headers */,
-				253C2A0F1C3C9E0000ED1549 /* ATLParticipantTableViewController.h in Headers */,
-				E6D509701C9B79740086D322 /* LocalDiskDataCache.h in Headers */,
-				253C2A1C1C3C9E0000ED1549 /* ATLConversationPresenting.h in Headers */,
-				253C2A1D1C3C9E0000ED1549 /* ATLMessagePresenting.h in Headers */,
-				253C2A341C3C9E0000ED1549 /* ATLAvatarImageView.h in Headers */,
-				E623AB8B1C48883100CCA0B1 /* ATLGIFCollectionViewCell.h in Headers */,
-				253C2A071C3C9E0000ED1549 /* ATLAddressBarViewController.h in Headers */,
-				253C2A201C3C9E0000ED1549 /* ATLConstants.h in Headers */,
-				253C2A3E1C3C9E0000ED1549 /* ATLConversationTableViewCell.h in Headers */,
-				253C2A381C3C9E0000ED1549 /* ATLConversationCollectionViewFooter.h in Headers */,
-				E623AB821C4874CF00CCA0B1 /* GlobalDefines.h in Headers */,
-				253C2A4C1C3C9E0000ED1549 /* ATLOutgoingMessageCollectionViewCell.h in Headers */,
-				253C2A2C1C3C9E0000ED1549 /* UIResponder+ATLFirstResponder.h in Headers */,
-				253C2A111C3C9E0000ED1549 /* ATLTypingIndicatorViewController.h in Headers */,
-				253C2A1E1C3C9E0000ED1549 /* ATLParticipant.h in Headers */,
-				253C2A151C3C9E0000ED1549 /* ATLDataSourceChange.h in Headers */,
-				5AEF68811C75284300808463 /* LYRIdentity+ATLParticipant.h in Headers */,
-				253C2A191C3C9E0000ED1549 /* ATLParticipantTableDataSet.h in Headers */,
-				253C2A051C3C9E0000ED1549 /* Atlas.h in Headers */,
-				253C2A221C3C9E0000ED1549 /* ATLErrors.h in Headers */,
-				253C2A461C3C9E0000ED1549 /* ATLMessageCollectionViewCell.h in Headers */,
-				253C2A2E1C3C9E0000ED1549 /* ATLAddressBarContainerView.h in Headers */,
-				253C2A241C3C9E0000ED1549 /* ATLLocationManager.h in Headers */,
-				253C2A091C3C9E0000ED1549 /* ATLBaseConversationViewController.h in Headers */,
-				251C57AF1C5AA21200110871 /* ATLBaseCollectionViewCell.h in Headers */,
-				253C2A441C3C9E0000ED1549 /* ATLMessageBubbleView.h in Headers */,
-				E623ABD61C4EF25600CCA0B1 /* ATLGifPickerViewController.h in Headers */,
-				253C2A1F1C3C9E0000ED1549 /* ATLParticipantPresenting.h in Headers */,
-				253C2A421C3C9E0000ED1549 /* ATLIncomingMessageCollectionViewCell.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
-
-=======
->>>>>>> master
 /* Begin PBXNativeTarget section */
 		D0294DD71A93F33900702856 /* UnitTests */ = {
 			isa = PBXNativeTarget;
@@ -911,7 +660,6 @@
 					};
 					D6F57E291A8BE4AF00B62BD9 = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = TD2N2YXSU3;
 					};
 					D6F57E411A8BE4AF00B62BD9 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -1260,64 +1008,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-<<<<<<< HEAD
-		253C29A01C3C9D7100ED1549 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E623ABD51C4EF23100CCA0B1 /* ATLGifPickerViewController.m in Sources */,
-				253C2A271C3C9E0000ED1549 /* ATLMediaInputStream.m in Sources */,
-				253C2A0E1C3C9E0000ED1549 /* ATLConversationViewController.m in Sources */,
-				251C57AE1C5AA20200110871 /* ATLBaseCollectionViewCell.m in Sources */,
-				253C2A311C3C9E0000ED1549 /* ATLAddressBarTextView.m in Sources */,
-				253C2A351C3C9E0000ED1549 /* ATLAvatarImageView.m in Sources */,
-				253C2A121C3C9E0000ED1549 /* ATLTypingIndicatorViewController.m in Sources */,
-				E623AC131C50A88200CCA0B1 /* RFRequester.m in Sources */,
-				253C2A061C3C9E0000ED1549 /* Atlas.m in Sources */,
-				253C2A211C3C9E0000ED1549 /* ATLConstants.m in Sources */,
-				E623AC151C50A88F00CCA0B1 /* RFTag.m in Sources */,
-				253C2A0C1C3C9E0000ED1549 /* ATLConversationListViewController.m in Sources */,
-				253C2A371C3C9E0000ED1549 /* ATLConversationCollectionView.m in Sources */,
-				253C2A431C3C9E0000ED1549 /* ATLIncomingMessageCollectionViewCell.m in Sources */,
-				253C2A3D1C3C9E0000ED1549 /* ATLConversationCollectionViewMoreMessagesHeader.m in Sources */,
-				E623AC121C50A87600CCA0B1 /* RFObject.m in Sources */,
-				253C2A511C3C9E0000ED1549 /* ATLParticipantTableViewCell.m in Sources */,
-				253C2A081C3C9E0000ED1549 /* ATLAddressBarViewController.m in Sources */,
-				253C2A411C3C9E0000ED1549 /* ATLConversationView.m in Sources */,
-				253C2A391C3C9E0000ED1549 /* ATLConversationCollectionViewFooter.m in Sources */,
-				253C2A331C3C9E0000ED1549 /* ATLAddressBarView.m in Sources */,
-				E623AB8E1C48883100CCA0B1 /* ATLGIFCollectionViewCell.m in Sources */,
-				253C2A2F1C3C9E0000ED1549 /* ATLAddressBarContainerView.m in Sources */,
-				253C2A471C3C9E0000ED1549 /* ATLMessageCollectionViewCell.m in Sources */,
-				253C2A141C3C9E0000ED1549 /* ATLConversationDataSource.m in Sources */,
-				253C2A4F1C3C9E0000ED1549 /* ATLParticipantSectionHeaderView.m in Sources */,
-				253C2A491C3C9E0000ED1549 /* ATLMessageComposeTextView.m in Sources */,
-				253C2A1A1C3C9E0000ED1549 /* ATLParticipantTableDataSet.m in Sources */,
-				253C2A161C3C9E0000ED1549 /* ATLDataSourceChange.m in Sources */,
-				5AEF68821C75284300808463 /* LYRIdentity+ATLParticipant.m in Sources */,
-				253C2A531C3C9E0000ED1549 /* ATLPlayView.m in Sources */,
-				253C2A2D1C3C9E0000ED1549 /* UIResponder+ATLFirstResponder.m in Sources */,
-				253C2A231C3C9E0000ED1549 /* ATLErrors.m in Sources */,
-				253C2A251C3C9E0000ED1549 /* ATLLocationManager.m in Sources */,
-				253C2A4D1C3C9E0000ED1549 /* ATLOutgoingMessageCollectionViewCell.m in Sources */,
-				253C2A451C3C9E0000ED1549 /* ATLMessageBubbleView.m in Sources */,
-				E623AC111C50A86D00CCA0B1 /* RFMedia.m in Sources */,
-				E623AC141C50A88800CCA0B1 /* RFStreamRequester.m in Sources */,
-				253C2A181C3C9E0000ED1549 /* ATLMediaAttachment.m in Sources */,
-				E6BE133E1C991BAC00530090 /* LocalDiskDataCache.m in Sources */,
-				253C2A4B1C3C9E0000ED1549 /* ATLMessageInputToolbar.m in Sources */,
-				253C2A551C3C9E0000ED1549 /* ATLProgressView.m in Sources */,
-				253C2A291C3C9E0000ED1549 /* ATLMessagingUtilities.m in Sources */,
-				253C2A3F1C3C9E0000ED1549 /* ATLConversationTableViewCell.m in Sources */,
-				253C2A0A1C3C9E0000ED1549 /* ATLBaseConversationViewController.m in Sources */,
-				253C2A3B1C3C9E0000ED1549 /* ATLConversationCollectionViewHeader.m in Sources */,
-				253C2A2B1C3C9E0000ED1549 /* ATLUIImageHelper.m in Sources */,
-				253C2A101C3C9E0000ED1549 /* ATLParticipantTableViewController.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-=======
->>>>>>> master
 		D0294DD41A93F33900702856 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1604,12 +1294,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = TD2N2YXSU3;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1651,7 +1336,7 @@
 					"-framework",
 					"\"UIKit\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.layer.Programmatic;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.layer.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 			};
@@ -1680,12 +1365,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
-				DEVELOPMENT_TEAM = TD2N2YXSU3;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -1720,7 +1400,7 @@
 					"-framework",
 					"\"UIKit\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.layer.Programmatic;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.layer.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;

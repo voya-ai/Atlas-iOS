@@ -7,7 +7,7 @@ PODS:
   - KIF/Core (3.5.2)
   - KIFViewControllerActions (1.0.2):
     - KIF (>= 2.0.0)
-  - LayerKit (0.26.2)
+  - LayerKit (0.26.3)
   - LYRCountDownLatch (0.9.0)
   - OCMock (3.4)
 
@@ -21,7 +21,7 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   Atlas:
-    :path: .
+    :path: "."
   LYRCountDownLatch:
     :git: https://github.com/layerhq/LYRCountDownLatch.git
 
@@ -35,7 +35,7 @@ SPEC CHECKSUMS:
   Expecta: e1c022fcd33910b6be89c291d2775b3fe27a89fe
   KIF: f2a6025bb3f11692df675054a134d43a9ec2d7db
   KIFViewControllerActions: 923795dc4bd4ca5657841ce7455ce67447693861
-  LayerKit: 1e50befac52ee79ef8234a646a7fd38197946929
+  LayerKit: 6244ff6b99a6e47562bb550247448ffbf7d15f88
   LYRCountDownLatch: 9b440b42a19ddbf4e75bdd4b43726baa1527606a
   OCMock: 35ae71d6a8fcc1b59434d561d1520b9dd4f15765
 
