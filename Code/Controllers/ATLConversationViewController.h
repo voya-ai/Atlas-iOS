@@ -31,6 +31,10 @@ typedef NS_ENUM(NSUInteger, ATLAvatarItemDisplayFrequency) {
     ATLAvatarItemDisplayFrequencyAll
 };
 
+typedef NS_ENUM(NSUInteger, ATLMActionSheetCardType) {
+    ATLMActionSheetCardTypeVoxeet
+};
+
 @class ATLConversationViewController;
 @protocol ATLMessagePresenting;
 
@@ -64,7 +68,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)conversationViewController:(ATLConversationViewController *)viewController didSelectMessage:(LYRMessage *)message;
 
-- (void)conversationViewController:(ATLConversationViewController *)viewController didSelectCardsActionSheetIndex:(NSInteger)index;
+/**
+ @abstract Informs the delegate that a card type was selected from the Action Sheet to be sent as a message.
+ @param cardType The card type to send as a message.
+ */
+- (void)conversationViewController:(ATLConversationViewController *)viewController didSelectActionSheetCardType:(enum ATLMActionSheetCardType)cardType;
 
 /**
  @abstract Asks the delegate for the height to use for a message's cell.

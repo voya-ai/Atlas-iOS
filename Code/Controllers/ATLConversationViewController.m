@@ -772,24 +772,18 @@ static NSInteger const ATLCardsActionSheet = 2000;
                 [self.messageInputToolbar showGifPicker];
                 
             case 4:
-                [self didSelectCardFromActionSheet:buttonIndex];
+                [self didSelectActionSheetCardType:ATLMActionSheetCardTypeVoxeet];
+                
             default:
                 break;
         }
     }
 }
 
-- (void)didSelectCardFromActionSheet:(NSInteger)buttonIndex {
-    if ([self.delegate respondsToSelector:@selector(conversationViewController:didSelectCardsActionSheetIndex:)]) {
-        [self.delegate conversationViewController:self didSelectCardsActionSheetIndex:buttonIndex];
+- (void)didSelectActionSheetCardType:(enum ATLMActionSheetCardType)cardType {
+    if ([self.delegate respondsToSelector:@selector(conversationViewController:didSelectActionSheetCardType:)]) {
+        [self.delegate conversationViewController:self didSelectActionSheetCardType:cardType];
     }
-}
-
-# pragma mark - Cards Picking
-
-- (void)insertVoxeetConferenceCard
-{
-    
 }
 
 #pragma mark - Image Picking
