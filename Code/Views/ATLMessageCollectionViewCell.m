@@ -23,6 +23,7 @@
 #import "ATLUIImageHelper.h"
 #import "ATLIncomingMessageCollectionViewCell.h"
 #import "ATLOutgoingMessageCollectionViewCell.h"
+#import "LYRMessage+Translation.h"
 
 #import <LayerKit/LayerKit.h>
 
@@ -128,11 +129,18 @@ NSInteger const kATLSharedCellTag = 1000;
 
 - (void)configureBubbleViewForTextContent
 {
-    LYRMessagePart *messagePart = self.message.parts.firstObject;
-    NSString *text = [[NSString alloc] initWithData:messagePart.data encoding:NSUTF8StringEncoding];
-    [self.bubbleView updateWithAttributedText:[self attributedStringForText:text]];
-    [self.bubbleView updateProgressIndicatorWithProgress:0.0 visible:NO animated:NO];
-    self.accessibilityLabel = [NSString stringWithFormat:@"Message: %@", text];
+    if (self.message.translatedText) {
+        NSString *text = self.message.translatedText;
+        [self.bubbleView updateWithAttributedText:[self attributedStringForTranslatedMessage]];
+        [self.bubbleView updateProgressIndicatorWithProgress:0.0 visible:NO animated:NO];
+        self.accessibilityLabel = [NSString stringWithFormat:@"Translated Message: %@", text];
+    } else {
+        LYRMessagePart *messagePart = self.message.parts.firstObject;
+        NSString *text = [[NSString alloc] initWithData:messagePart.data encoding:NSUTF8StringEncoding];
+        [self.bubbleView updateWithAttributedText:[self attributedStringForText:text]];
+        [self.bubbleView updateProgressIndicatorWithProgress:0.0 visible:NO animated:NO];
+        self.accessibilityLabel = [NSString stringWithFormat:@"Message: %@", text];
+    }
 }
 
 - (void)configureBubbleViewForImageContent
@@ -385,6 +393,31 @@ NSInteger const kATLSharedCellTag = 1000;
     return attributedString;
 }
 
+- (NSAttributedString *)attributedStringForTranslatedMessage
+{
+    UIFont *font = [[[self class] appearance] messageTextFont];
+    if (!font) {
+        font = self.messageTextFont;
+    }
+    
+    LYRMessagePart *part = self.message.parts.firstObject;
+    NSDictionary *attributes = @{ NSFontAttributeName : font };
+    NSString *text = [[NSString alloc] initWithData:part.data encoding:NSUTF8StringEncoding];
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:text attributes:attributes];
+    
+    NSString *languageCode = [[NSLocale autoupdatingCurrentLocale] objectForKey:NSLocaleLanguageCode];
+    NSString *languageName = [[NSLocale autoupdatingCurrentLocale] displayNameForKey:NSLocaleLanguageCode value:languageCode];
+    UIFont *translationHeaderFont = [UIFont boldSystemFontOfSize:14];
+    NSDictionary *translationHeaderAttributes = @{ NSFontAttributeName : translationHeaderFont };
+    NSString *translationHeader = [NSString stringWithFormat:@"\n\nTranslated to %@\n", languageName];
+    NSMutableAttributedString *translationString = [[NSMutableAttributedString alloc] initWithString:translationHeader attributes:translationHeaderAttributes];
+    [translationString.mutableString appendString:self.message.translatedText];
+    [translationString setAttributes:attributes range:NSMakeRange([translationHeader length], [self.message.translatedText length])];
+    [attributedString appendAttributedString:translationString];
+    
+    return attributedString;
+}
+
 - (BOOL)messageContainsTextContent
 {
     LYRMessagePart *messagePart = self.message.parts.firstObject;
@@ -431,17 +464,42 @@ NSInteger const kATLSharedCellTag = 1000;
     }
     
     LYRMessagePart *part = message.parts.firstObject;
-    NSString *text = [[NSString alloc] initWithData:part.data encoding:NSUTF8StringEncoding];
-    UIFont *font = [[[self class] appearance] messageTextFont];
-    if (!font) {
-        font = cell.messageTextFont;
+    CGSize size = CGSizeZero;
+    if (part.data) {
+        UIFont *font = [[[self class] appearance] messageTextFont];
+        if (!font) {
+            font = cell.messageTextFont;
+        }
+        NSDictionary *attributes = @{ NSFontAttributeName : font };
+        NSString *text = [[NSString alloc] initWithData:part.data encoding:NSUTF8StringEncoding];
+        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:text attributes:attributes];
+        
+        // Translations have attributed text and need to be calculated differenly
+        if (message.translatedText) {
+            NSString *languageCode = [[NSLocale autoupdatingCurrentLocale] objectForKey:NSLocaleLanguageCode];
+            NSString *languageName = [[NSLocale autoupdatingCurrentLocale] displayNameForKey:NSLocaleLanguageCode value:languageCode];
+            UIFont *translationHeaderFont = [UIFont boldSystemFontOfSize:14];
+            NSDictionary *translationHeaderAttributes = @{ NSFontAttributeName : translationHeaderFont };
+            NSString *translationHeader = [NSString stringWithFormat:@"\n\nTranslated to %@\n", languageName];
+            NSMutableAttributedString *translationString = [[NSMutableAttributedString alloc] initWithString:translationHeader attributes:translationHeaderAttributes];
+            [translationString.mutableString appendString:message.translatedText];
+            [translationString setAttributes:attributes range:NSMakeRange([translationHeader length], [message.translatedText length])];
+            [attributedString appendAttributedString:translationString];
+            
+            CGRect rect = [attributedString boundingRectWithSize:CGSizeMake(ATLMaxCellWidth(), CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
+            size = rect.size;
+        } else {
+            size = ATLTextPlainSize(text, font);
+        }
+        
+        size.width += ATLMessageBubbleLabelHorizontalPadding * 2 + ATLMessageBubbleLabelWidthMargin;
+        size.height += ATLMessageBubbleLabelVerticalPadding * 2;
+        
+        if (![[self sharedHeightCache] objectForKey:message.identifier]) {
+            [[self sharedHeightCache] setObject:[NSValue valueWithCGSize:size] forKey:message.identifier];
+        }
     }
-    CGSize size = ATLTextPlainSize(text, font);
-    size.width += ATLMessageBubbleLabelHorizontalPadding * 2 + ATLMessageBubbleLabelWidthMargin;
-    size.height += ATLMessageBubbleLabelVerticalPadding * 2;
-    if (![[self sharedHeightCache] objectForKey:message.identifier]) {
-        [[self sharedHeightCache] setObject:[NSValue valueWithCGSize:size] forKey:message.identifier];
-    }
+    
     return size;
 }
 
@@ -472,6 +530,11 @@ NSInteger const kATLSharedCellTag = 1000;
         }
     }
     return size;
+}
+
++ (void)evitCachedHeightForMessage:(LYRMessage *)message
+{
+    [[self sharedHeightCache] removeObjectForKey:message.identifier];
 }
 
 @end

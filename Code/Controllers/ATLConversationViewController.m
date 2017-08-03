@@ -772,7 +772,7 @@ static NSInteger const ATLCardsActionSheet = 2000;
                 [self.messageInputToolbar showGifPicker];
                 
             case 4:
-                [self didSelectActionSheetCardType:ATLMActionSheetCardTypeVoxeet];
+                [self didSelectActionSheetCardType:ATLActionSheetCardTypeVoxeet];
                 
             default:
                 break;
@@ -780,7 +780,7 @@ static NSInteger const ATLCardsActionSheet = 2000;
     }
 }
 
-- (void)didSelectActionSheetCardType:(enum ATLMActionSheetCardType)cardType {
+- (void)didSelectActionSheetCardType:(enum ATLActionSheetCardType)cardType {
     if ([self.delegate respondsToSelector:@selector(conversationViewController:didSelectActionSheetCardType:)]) {
         [self.delegate conversationViewController:self didSelectActionSheetCardType:cardType];
     }
