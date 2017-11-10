@@ -258,6 +258,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     }
     self.conversationDataSource.queryController.delegate = self;
     self.queryController = self.conversationDataSource.queryController;
+    [self.conversationDataSource updateMessages];
     [self.collectionView reloadData];
 }
 
@@ -336,7 +337,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
  */
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return [self.conversationDataSource.queryController numberOfObjectsInSection:0] + ATLNumberOfSectionsBeforeFirstMessageSection;
+    return [self.conversationDataSource numberOfMessages] + ATLNumberOfSectionsBeforeFirstMessageSection;
 }
 
 /**
@@ -540,7 +541,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 - (BOOL)shouldDisplayReadReceiptForSection:(NSUInteger)section
 {
     // Only show read receipt if last message was sent by currently authenticated user
-    NSInteger lastQueryControllerRow = [self.conversationDataSource.queryController numberOfObjectsInSection:0] - 1;
+    NSInteger lastQueryControllerRow = [self.conversationDataSource numberOfMessages] - 1;
     NSInteger lastSection = [self.conversationDataSource collectionViewSectionForQueryControllerRow:lastQueryControllerRow];
     if (section != lastSection) return NO;
     LYRMessage *message = [self.conversationDataSource messageAtCollectionViewSection:section];
@@ -578,7 +579,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     if (![self shouldClusterMessageAtSection:indexPath.section] && self.avatarItemDisplayFrequency == ATLAvatarItemDisplayFrequencyCluster) {
         return YES;
     }
-    NSInteger lastQueryControllerRow = [self.conversationDataSource.queryController numberOfObjectsInSection:0] - 1;
+    NSInteger lastQueryControllerRow = [self.conversationDataSource numberOfMessages] - 1;
     NSInteger lastSection = [self.conversationDataSource collectionViewSectionForQueryControllerRow:lastQueryControllerRow];
     if (indexPath.section < lastSection) {
         LYRMessage *nextMessage = [self.conversationDataSource messageAtCollectionViewSection:indexPath.section + 1];
@@ -968,6 +969,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 - (void)reloadCollectionViewAdjustingForContentHeightChange
 {
     CGFloat priorContentHeight = self.collectionView.contentSize.height;
+    [self.conversationDataSource updateMessages];
     [self.collectionView reloadData];
     CGFloat contentHeightDifference = self.collectionView.collectionViewLayout.collectionViewContentSize.height - priorContentHeight;
     CGFloat adjustment = contentHeightDifference;
@@ -1034,15 +1036,12 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 - (void)reloadCellForMessage:(LYRMessage *)message
 {
     dispatch_async(self.animationQueue, ^{
-        NSIndexPath *indexPath = [self.conversationDataSource.queryController indexPathForObject:message];
-        if (indexPath) {
-            NSIndexPath *collectionViewIndexPath = [self.conversationDataSource collectionViewIndexPathForQueryControllerIndexPath:indexPath];
-            if (collectionViewIndexPath) {
-                // Configure the cell, the header, and the footer
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self configureCollectionViewElementsAtCollectionViewIndexPath:collectionViewIndexPath];
-                });
-            }
+        NSIndexPath *collectionViewIndexPath = [self.conversationDataSource collectionViewIndexPathForMessage:message];
+        if (collectionViewIndexPath) {
+            // Configure the cell, the header, and the footer
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self configureCollectionViewElementsAtCollectionViewIndexPath:collectionViewIndexPath];
+            });
         }
     });
 }
@@ -1265,6 +1264,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     if (self.collectionView) {
         dispatch_suspend(self.animationQueue);
         [self.collectionView performBatchUpdates:^{
+            [self.conversationDataSource updateMessages];
             for (ATLDataSourceChange *change in objectChanges) {
                 switch (change.type) {
                     case LYRQueryControllerChangeTypeInsert:
