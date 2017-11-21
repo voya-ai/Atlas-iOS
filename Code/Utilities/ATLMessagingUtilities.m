@@ -22,6 +22,7 @@
 #import "ATLErrors.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "ATLMessageCollectionViewCell.h"
+#import "UIMutableUserNotificationAction+ATLHelpers.h"
 
 NSString *const ATLMIMETypeTextPlain = @"text/plain";
 NSString *const ATLMIMETypeTextHTML = @"text/HTML";
@@ -56,7 +57,7 @@ UIMutableUserNotificationCategory *ATLDefaultUserNotificationCategory()
     replyAction.title = @"Reply";
     replyAction.activationMode = UIUserNotificationActivationModeBackground;
     replyAction.authenticationRequired = NO;
-    replyAction.behavior = UIUserNotificationActionBehaviorTextInput;
+    [replyAction atl_setTextInputBehavior];
     
     UIMutableUserNotificationCategory *category = [UIMutableUserNotificationCategory new];
     category.identifier = ATLUserNotificationDefaultActionsCategoryIdentifier;
