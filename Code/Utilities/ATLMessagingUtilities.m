@@ -26,6 +26,7 @@
 NSString *const ATLMIMETypeTextPlain = @"text/plain";
 NSString *const ATLMIMETypeTextHTML = @"text/HTML";
 NSString *const ATLMIMETypeImagePNG = @"image/png";
+NSString *const ATLMIMETypeImageHEIC = @"image/heic";
 NSString *const ATLMIMETypeImageGIF = @"image/gif";
 NSString *const ATLMIMETypeVideoQuickTime = @"video/quicktime";
 NSString *const ATLMIMETypeImageSize = @"application/json+imageSize";
