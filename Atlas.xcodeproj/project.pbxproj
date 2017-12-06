@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		150813781FD826AC0069802E /* UIView+ATLHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 150813731FD826AB0069802E /* UIView+ATLHelpers.m */; };
+		150813791FD826AC0069802E /* UIMutableUserNotificationAction+ATLHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 150813741FD826AB0069802E /* UIMutableUserNotificationAction+ATLHelpers.m */; };
+		1508137A1FD826AC0069802E /* UICollectionView+ATLHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 150813751FD826AB0069802E /* UICollectionView+ATLHelpers.m */; };
 		3DA2FAC31F1E9DAE00E890FA /* block.png in Resources */ = {isa = PBXBuildFile; fileRef = 7858B60C1CE54BBE007795AB /* block.png */; };
 		3DA2FAC41F1E9DAE00E890FA /* block@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7858B60D1CE54BBE007795AB /* block@2x.png */; };
 		3DA2FAC51F1E9DAE00E890FA /* block@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7858B60E1CE54BBE007795AB /* block@3x.png */; };
@@ -242,6 +245,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		150813721FD826AB0069802E /* UIMutableUserNotificationAction+ATLHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIMutableUserNotificationAction+ATLHelpers.h"; sourceTree = "<group>"; };
+		150813731FD826AB0069802E /* UIView+ATLHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+ATLHelpers.m"; sourceTree = "<group>"; };
+		150813741FD826AB0069802E /* UIMutableUserNotificationAction+ATLHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIMutableUserNotificationAction+ATLHelpers.m"; sourceTree = "<group>"; };
+		150813751FD826AB0069802E /* UICollectionView+ATLHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UICollectionView+ATLHelpers.m"; sourceTree = "<group>"; };
+		150813761FD826AB0069802E /* UIView+ATLHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+ATLHelpers.h"; sourceTree = "<group>"; };
+		150813771FD826AC0069802E /* UICollectionView+ATLHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UICollectionView+ATLHelpers.h"; sourceTree = "<group>"; };
 		1886043CF840E83E9A77B78B /* Pods_UnitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UnitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		250C5EF21C7656610084EB18 /* LayerKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LayerKit.framework; path = Carthage/Build/iOS/LayerKit.framework; sourceTree = "<group>"; };
 		34C06B1C4F6FE86629A3C050 /* Pods-test-ProgrammaticTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-test-ProgrammaticTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-test-ProgrammaticTests/Pods-test-ProgrammaticTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -551,6 +560,12 @@
 		3DA2FAF51F1E9DF500E890FA /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				150813771FD826AC0069802E /* UICollectionView+ATLHelpers.h */,
+				150813751FD826AB0069802E /* UICollectionView+ATLHelpers.m */,
+				150813721FD826AB0069802E /* UIMutableUserNotificationAction+ATLHelpers.h */,
+				150813741FD826AB0069802E /* UIMutableUserNotificationAction+ATLHelpers.m */,
+				150813761FD826AB0069802E /* UIView+ATLHelpers.h */,
+				150813731FD826AB0069802E /* UIView+ATLHelpers.m */,
 				3DA2FAF61F1E9DF500E890FA /* ATLConstants.h */,
 				3DA2FAF71F1E9DF500E890FA /* ATLConstants.m */,
 				3DA2FAF81F1E9DF500E890FA /* ATLErrors.h */,
@@ -1516,6 +1531,9 @@
 			files = (
 				D02CDCDD1A9FFC930013CBE8 /* ATLTestUtilities.m in Sources */,
 				D0294DE81A93F39300702856 /* ATLMediaStreamTests.m in Sources */,
+				1508137A1FD826AC0069802E /* UICollectionView+ATLHelpers.m in Sources */,
+				150813791FD826AC0069802E /* UIMutableUserNotificationAction+ATLHelpers.m in Sources */,
+				150813781FD826AC0069802E /* UIView+ATLHelpers.m in Sources */,
 				D04517141A9F9A0C00E137D9 /* ATLMediaAttachmentTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1663,6 +1681,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/Pods/LayerKit",
 					"../releases-ios/**",
+					"../../Build/**",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1715,6 +1734,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/Pods/LayerKit",
 					"../releases-ios/**",
+					"../../Build/**",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
