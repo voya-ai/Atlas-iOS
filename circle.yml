@@ -3,7 +3,9 @@ machine:
     version: 9.0
 dependencies:
   pre:
+    - brew install carthage
     - gem install bundler
 test:
   override:
+    - carthage build --no-skip-current
     - bundle exec fastlane test
