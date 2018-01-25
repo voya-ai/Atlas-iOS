@@ -35,6 +35,8 @@ NSString *const ATLMessageInputToolbarDidChangeHeightNotification = @"ATLMessage
 @property (nonatomic) CGFloat buttonCenterY;
 @property (nonatomic) BOOL firstAppearance;
 
+
+
 @end
 
 @implementation ATLMessageInputToolbar
@@ -51,10 +53,10 @@ static CGFloat const ATLRightButtonHorizontalMargin = 4.0f;
 static CGFloat const ATLVerticalMargin = 7.0f;
 
 // Compose View Button Constants
-static CGFloat const ATLLeftAccessoryButtonWidth = 40.0f;
+static CGFloat const ATLLeftAccessoryButtonWidth = 44.0f;
 static CGFloat const ATLRightAccessoryButtonDefaultWidth = 46.0f;
 static CGFloat const ATLRightAccessoryButtonPadding = 5.3f;
-static CGFloat const ATLButtonHeight = 28.0f;
+static CGFloat const ATLButtonHeight = 44.0f;
 
 + (void)initialize
 {
@@ -62,6 +64,7 @@ static CGFloat const ATLButtonHeight = 28.0f;
     proxy.rightAccessoryButtonActiveColor = ATLBlueColor();
     proxy.rightAccessoryButtonDisabledColor = [UIColor grayColor];
     proxy.rightAccessoryButtonFont = [UIFont boldSystemFontOfSize:17];
+
 }
 
 - (id)init
@@ -71,10 +74,6 @@ static CGFloat const ATLButtonHeight = 28.0f;
         self.accessibilityLabel = ATLMessageInputToolbarAccessibilityLabel;
         self.translatesAutoresizingMaskIntoConstraints = NO;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        
-        NSBundle *resourcesBundle = ATLResourcesBundle();
-        self.leftAccessoryImage = [UIImage imageNamed:@"camera_dark" inBundle:resourcesBundle compatibleWithTraitCollection:nil];
-        self.rightAccessoryImage = [UIImage imageNamed:@"location_dark" inBundle:resourcesBundle compatibleWithTraitCollection:nil];
         self.displaysRightAccessoryImage = YES;
         self.firstAppearance = YES;
         
@@ -88,9 +87,9 @@ static CGFloat const ATLButtonHeight = 28.0f;
         self.textInputView = [[ATLMessageComposeTextView alloc] init];
         self.textInputView.accessibilityLabel = ATLMessageInputToolbarTextInputView;
         self.textInputView.delegate = self;
-        self.textInputView.layer.borderColor = ATLGrayColor().CGColor;
-        self.textInputView.layer.borderWidth = 0.5;
-        self.textInputView.layer.cornerRadius = 5.0f;
+        self.textInputView.layer.borderColor = [UIColor clearColor].CGColor;
+        self.textInputView.layer.borderWidth = 0.0;
+//        self.textInputView.layer.cornerRadius = .0f;
         self.textInputView.scrollEnabled = NO;
         [self addSubview:self.textInputView];
         
@@ -98,7 +97,7 @@ static CGFloat const ATLButtonHeight = 28.0f;
         
         self.rightAccessoryButton = [[UIButton alloc] init];
         [self.rightAccessoryButton addTarget:self action:@selector(rightAccessoryButtonTapped) forControlEvents:UIControlEventTouchUpInside];
-        self.rightAccessoryButtonTitle = @"Send";
+        self.rightAccessoryButtonTitle = NSLocalizedString(@"Send   ", "");
         [self addSubview:self.rightAccessoryButton];
         [self configureRightAccessoryButtonState];
         
@@ -132,7 +131,6 @@ static CGFloat const ATLButtonHeight = 28.0f;
     CGRect leftButtonFrame = self.leftAccessoryButton.frame;
     CGRect rightButtonFrame = self.rightAccessoryButton.frame;
     CGRect textViewFrame = self.textInputView.frame;
-
     if (!self.leftAccessoryButton) {
         leftButtonFrame.size.width = 0;
     } else {
@@ -142,8 +140,10 @@ static CGFloat const ATLButtonHeight = 28.0f;
     // This makes the input accessory view work with UISplitViewController to manage the frame width.
     if (self.containerViewController) {
         CGRect windowRect = [self.containerViewController.view.superview convertRect:self.containerViewController.view.frame toView:nil];
-        frame.size.width = windowRect.size.width;
-        frame.origin.x = windowRect.origin.x;
+        frame.size.width = windowRect.size.width - 30.0;
+        frame.origin.x = windowRect.origin.x + 15.0;
+//        frame.size.width = windowRect.size.width;
+//        frame.origin.x = windowRect.origin.x;
     }
     
     leftButtonFrame.size.height = ATLButtonHeight;
@@ -159,21 +159,27 @@ static CGFloat const ATLButtonHeight = 28.0f;
     rightButtonFrame.origin.x = CGRectGetWidth(frame) - CGRectGetWidth(rightButtonFrame) -
                                 ATLRightButtonHorizontalMargin - safeAreaInsets.right;
 
+    if (self.leftAccessoryButton.hidden == YES) {
+        textViewFrame.origin.x = 20 + ATLLeftButtonHorizontalMargin;
+    } else {
     textViewFrame.origin.x = CGRectGetMaxX(leftButtonFrame) + ATLLeftButtonHorizontalMargin;
+    }
     textViewFrame.origin.y = self.verticalMargin;
     textViewFrame.size.width = CGRectGetMinX(rightButtonFrame) - CGRectGetMinX(textViewFrame) - ATLRightButtonHorizontalMargin;
 
     self.dummyTextView.attributedText = self.textInputView.attributedText;
     CGSize fittedTextViewSize = [self.dummyTextView sizeThatFits:CGSizeMake(CGRectGetWidth(textViewFrame), MAXFLOAT)];
     textViewFrame.size.height = ceil(MIN(fittedTextViewSize.height, self.textViewMaxHeight));
+   
 
     frame.size.height = CGRectGetHeight(textViewFrame) + self.verticalMargin * 2 + safeAreaInsets.bottom;
     frame.origin.y -= frame.size.height - CGRectGetHeight(self.frame);
- 
+//    NSLog(@"x: %f, y: %f, frame height: %f, height: %f", frame.origin.x, frame.origin.y, frame.size.height, self.frame.size.height);
+    
     // Only calculate button centerY once to anchor it to bottom of bar.
-    if (!self.buttonCenterY) {
+//    if (!self.buttonCenterY) {
         self.buttonCenterY = (CGRectGetHeight(frame) - CGRectGetHeight(leftButtonFrame)) / 2;
-    }
+//    }
     leftButtonFrame.origin.y = frame.size.height - leftButtonFrame.size.height - self.buttonCenterY - safeAreaInsets.bottom;
     rightButtonFrame.origin.y = frame.size.height - rightButtonFrame.size.height - self.buttonCenterY - safeAreaInsets.bottom;
     
@@ -185,6 +191,10 @@ static CGFloat const ATLButtonHeight = 28.0f;
 
     // Setting one's own frame like this is a no-no but seems to be the lesser of evils when working around the layout issues mentioned above.
     self.frame = frame;
+    self.layer.cornerRadius = frame.size.height/2;
+    self.clipsToBounds = YES;
+    self.layer.borderColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1.0].CGColor;
+    self.layer.borderWidth = 1.0;
 
     if (heightChanged) {
         [[NSNotificationCenter defaultCenter] postNotificationName:ATLMessageInputToolbarDidChangeHeightNotification object:self];

@@ -28,7 +28,7 @@
 
 @end
 
-static NSString *const ATLPlaceholderText = @"Enter Message";
+static NSString *const ATLPlaceholderText = @"Enter your text here...";
 
 @implementation ATLMessageComposeTextView
 
@@ -39,15 +39,17 @@ static NSString *const ATLPlaceholderText = @"Enter Message";
         
         self.attributedText = [[NSAttributedString alloc] initWithString:@"" attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:17],
                                                                                          NSForegroundColorAttributeName : ATLGrayColor()}];
-        self.textContainerInset = UIEdgeInsetsMake(4, 4, 4, 4);
-        self.font = [UIFont systemFontOfSize:17];
+        self.textContainerInset = UIEdgeInsetsMake(15, 4, 15, 4);
+//        self.font = [UIFont systemFontOfSize:17];
+        self.font = [UIFont fontWithName:@"Roboto-Regular" size:16.0];
         self.dataDetectorTypes = UIDataDetectorTypeLink;
         self.placeholder = ATLPlaceholderText;
-
+        self.isAccessibilityElement = YES;
+        self.accessibilityIdentifier = ATLPlaceholderText;
         self.placeholderLabel = [UILabel new];
         self.placeholderLabel.font = self.font;
         self.placeholderLabel.text = ATLLocalizedString(self.placeholder, self.placeholder, nil);;
-        self.placeholderLabel.textColor = [UIColor lightGrayColor];
+        self.placeholderLabel.textColor = [UIColor colorWithRed:102.0/255.0 green:102.0/255.0 blue:102.0/255.0 alpha:1.0];
         self.placeholderLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         [self addSubview:self.placeholderLabel];
 

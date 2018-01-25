@@ -399,7 +399,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
         return self.showingMoreMessagesIndicator ? CGSizeMake(0, 30) : CGSizeZero;
     }
     NSAttributedString *dateString;
-    NSString *participantName;
+    NSAttributedString *participantName;
     if ([self shouldDisplayDateLabelForSection:section]) {
         dateString = [self attributedStringForMessageDate:[self.conversationDataSource messageAtCollectionViewSection:section]];
     }
@@ -494,7 +494,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     if ([self shouldDisplaySenderLabelForSection:indexPath.section]) {
         [header updateWithParticipantName:[self participantNameForMessage:message]];
     } else {
-        [header updateWithParticipantName:@""];
+        [header updateWithParticipantName:[[NSAttributedString alloc]initWithString:@""]];
     }
 }
 
@@ -520,23 +520,41 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     if (!previousMessage.sentAt) return NO;
     
     NSDate *date = message.sentAt ?: [NSDate date];
-    NSTimeInterval interval = [date timeIntervalSinceDate:previousMessage.sentAt];
-    if (fabs(interval) > self.dateDisplayTimeInterval) {
+    if( [[NSCalendar currentCalendar] isDate:date inSameDayAsDate:previousMessage.sentAt]) {
+        return NO;
+    } else {
         return YES;
     }
     return NO;
+
+}
+
+- (NSDate *)dateWithZeroSeconds:(NSDate *)date
+{
+    NSTimeInterval time = floor([date timeIntervalSinceReferenceDate] / 60.0) * 60.0;
+    return  [NSDate dateWithTimeIntervalSinceReferenceDate:time];
 }
 
 - (BOOL)shouldDisplaySenderLabelForSection:(NSUInteger)section
 {
-    if (!self.shouldDisplayUsernameForOneOtherParticipant && self.conversation.participants.count <= 2) return NO;
-    
     LYRMessage *message = [self.conversationDataSource messageAtCollectionViewSection:section];
-    if ([message.sender.userID isEqualToString:self.layerClient.authenticatedUser.userID]) return NO;
     if (section > ATLNumberOfSectionsBeforeFirstMessageSection) {
         LYRMessage *previousMessage = [self.conversationDataSource messageAtCollectionViewSection:section - 1];
-        if ([previousMessage.sender.userID isEqualToString:message.sender.userID]) {
-            return NO;
+        NSDate *date = message.sentAt ?: [NSDate date];
+        date = [self dateWithZeroSeconds:date];
+        NSDate *prevMessageDate = [self dateWithZeroSeconds:previousMessage.sentAt];
+        //        NSTimeInterval interval = [date timeIntervalSinceDate:prevMessageDate];
+        
+        if (message.sender == previousMessage.sender) {
+            if (date == prevMessageDate) {
+                return NO;
+            }
+        }
+        
+        if (![message.sender.userID isEqualToString:self.layerClient.authenticatedUser.userID] && ![previousMessage.sender.userID isEqualToString:self.layerClient.authenticatedUser.userID]) {
+            if (date == prevMessageDate) {
+                return NO;
+            }
         }
     }
     return YES;
@@ -561,12 +579,17 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     }
     LYRMessage *message = [self.conversationDataSource messageAtCollectionViewSection:section];
     LYRMessage *nextMessage = [self.conversationDataSource messageAtCollectionViewSection:section + 1];
-    if (!nextMessage.receivedAt) {
+    if ([message.parts.firstObject.MIMEType isEqualToString: nextMessage.parts.firstObject.MIMEType]) {
+        if ([message.parts.firstObject.MIMEType isEqualToString:ATLMIMETypeTextPlain]) {
+            return YES;
+            
+        } else {
+            return NO;
+            
+        }
+    } else {
         return NO;
     }
-    NSDate *date = message.receivedAt ?: [NSDate date];
-    NSTimeInterval interval = [nextMessage.receivedAt timeIntervalSinceDate:date];
-    return (interval < 60);
 }
 
 - (BOOL)shouldDisplayAvatarItemAtIndexPath:(NSIndexPath *)indexPath
@@ -599,17 +622,18 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 
 - (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didTapLeftAccessoryButton:(UIButton *)leftAccessoryButton
 {
-    if (messageInputToolbar.textInputView.isFirstResponder) {
-        [messageInputToolbar.textInputView resignFirstResponder];
-    }
-    
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                             delegate:self
-                                                    cancelButtonTitle:ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.cancel.key", @"Cancel", nil)
-                                               destructiveButtonTitle:nil
-                                                    otherButtonTitles:ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.takephoto.key", @"Take Photo/Video", nil), ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.lastphoto.key", @"Last Photo/Video", nil), ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.library.key", @"Photo/Video Library", nil), nil];
-    [actionSheet showInView:self.view];
-    actionSheet.tag = ATLPhotoActionSheet;
+    [[NSNotificationCenter defaultCenter] postNotificationName: @"ShowStructuredFlightRequest" object:nil];
+//    if (messageInputToolbar.textInputView.isFirstResponder) {
+//        [messageInputToolbar.textInputView resignFirstResponder];
+//    }
+//
+//    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
+//                                                             delegate:self
+//                                                    cancelButtonTitle:ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.cancel.key", @"Cancel", nil)
+//                                               destructiveButtonTitle:nil
+//                                                    otherButtonTitles:ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.takephoto.key", @"Take Photo/Video", nil), ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.lastphoto.key", @"Last Photo/Video", nil), ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.library.key", @"Photo/Video Library", nil), nil];
+//    [actionSheet showInView:self.view];
+//    actionSheet.tag = ATLPhotoActionSheet;
 }
 
 - (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didTapRightAccessoryButton:(UIButton *)rightAccessoryButton
@@ -1396,16 +1420,37 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     return participants;
 }
 
-- (NSString *)participantNameForMessage:(LYRMessage *)message
+- (NSAttributedString *)participantNameForMessage:(LYRMessage *)message
 {
-    NSString *participantName;
-    if (message.sender.userID) {
-        id<ATLParticipant> participant = [self participantForIdentity:message.sender];
-        participantName = participant.displayName ?: ATLLocalizedString(@"atl.conversation.participant.unknown.key", @"Unknown User", nil);
-    } else {
-        participantName = message.sender.displayName;
+    if (message.isSent == NO) {
+        return [[NSAttributedString alloc] initWithString: [NSString stringWithFormat:@"Sending..."] attributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:105.0/255.0 green:110.0/255.0 blue:120.0/255.0 alpha:1.0], NSFontAttributeName : [UIFont fontWithName:@"Roboto-Regular" size:12.0]}];
     }
-    return participantName;
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"HH:mm"];
+    
+    NSString *startTimeString = [formatter stringFromDate:message.sentAt];
+    
+    NSString *messSender = message.sender.userID;
+    NSString *authUser = self.layerClient.authenticatedUser.userID;
+    
+    if ([[[NSLocale preferredLanguages] objectAtIndex:0] containsString:@"de"]) {
+        NSAttributedString *voyaAgent = [messSender isEqualToString:authUser] ? [[NSAttributedString alloc] initWithString: @"Du" attributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.0 green:185.0/255.0 blue:185.0/255.0 alpha:1.0], NSFontAttributeName : [UIFont fontWithName:@"Roboto-Bold" size:12.0]}] : [[NSAttributedString alloc] initWithString: @"Voya" attributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.0 green:185.0/255.0 blue:185.0/255.0 alpha:1.0], NSFontAttributeName : [UIFont fontWithName:@"Roboto-Bold" size:12.0]}];
+        
+        NSAttributedString *timeStr = [[NSAttributedString alloc] initWithString: [NSString stringWithFormat:@" um %@", startTimeString] attributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:105.0/255.0 green:110.0/255.0 blue:120.0/255.0 alpha:1.0], NSFontAttributeName : [UIFont fontWithName:@"Roboto-Regular" size:12.0]}];
+        
+        NSMutableAttributedString *finalStr = [[NSMutableAttributedString alloc] initWithAttributedString:voyaAgent];
+        [finalStr appendAttributedString:timeStr];
+        return finalStr;
+    } else {
+        NSAttributedString *voyaAgent = [messSender isEqualToString:authUser] ? [[NSAttributedString alloc] initWithString: @"You" attributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.0 green:185.0/255.0 blue:185.0/255.0 alpha:1.0], NSFontAttributeName : [UIFont fontWithName:@"Roboto-Bold" size:12.0]}] : [[NSAttributedString alloc] initWithString: @"Voya" attributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.0 green:185.0/255.0 blue:185.0/255.0 alpha:1.0], NSFontAttributeName : [UIFont fontWithName:@"Roboto-Bold" size:12.0]}];
+        
+        NSAttributedString *timeStr = [[NSAttributedString alloc] initWithString: [NSString stringWithFormat:@" at %@", startTimeString] attributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:105.0/255.0 green:110.0/255.0 blue:120.0/255.0 alpha:1.0], NSFontAttributeName : [UIFont fontWithName:@"Roboto-Regular" size:12.0]}];
+        
+        NSMutableAttributedString *finalStr = [[NSMutableAttributedString alloc] initWithAttributedString:voyaAgent];
+        [finalStr appendAttributedString:timeStr];
+        return finalStr;
+    }
 }
 
 #pragma mark - NSNotification Center Registration

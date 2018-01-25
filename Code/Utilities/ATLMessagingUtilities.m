@@ -22,12 +22,10 @@
 #import "ATLErrors.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "ATLMessageCollectionViewCell.h"
-#import "UIMutableUserNotificationAction+ATLHelpers.h"
 
 NSString *const ATLMIMETypeTextPlain = @"text/plain";
 NSString *const ATLMIMETypeTextHTML = @"text/HTML";
 NSString *const ATLMIMETypeImagePNG = @"image/png";
-NSString *const ATLMIMETypeImageHEIC = @"image/heic";
 NSString *const ATLMIMETypeImageGIF = @"image/gif";
 NSString *const ATLMIMETypeVideoQuickTime = @"video/quicktime";
 NSString *const ATLMIMETypeImageSize = @"application/json+imageSize";
@@ -58,8 +56,15 @@ UIMutableUserNotificationCategory *ATLDefaultUserNotificationCategory()
     replyAction.title = @"Reply";
     replyAction.activationMode = UIUserNotificationActivationModeBackground;
     replyAction.authenticationRequired = NO;
-    [replyAction atl_setTextInputBehavior];
-    
+    if (@available(iOS 9.0, *)) {
+        replyAction.behavior = UIUserNotificationActionBehaviorTextInput;
+    } else {
+        // Fallback on earlier versions
+    }if (@available(iOS 9.0, *)) {
+        replyAction.behavior = UIUserNotificationActionBehaviorTextInput;
+    } else {
+        // Fallback on earlier versions
+    }
     UIMutableUserNotificationCategory *category = [UIMutableUserNotificationCategory new];
     category.identifier = ATLUserNotificationDefaultActionsCategoryIdentifier;
     [category setActions:@[ replyAction ] forContext:UIUserNotificationActionContextDefault];

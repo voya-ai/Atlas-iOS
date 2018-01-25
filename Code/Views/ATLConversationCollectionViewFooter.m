@@ -37,7 +37,7 @@
 NSString *const ATLConversationViewFooterIdentifier = @"ATLConversationViewFooterIdentifier";
 CGFloat const ATLConversationViewFooterTopPadding = 2;
 CGFloat const ATLConversationViewFooterEmptyHeight = 1;
-CGFloat const ATLConversationViewFooterUnClusteredPadding = 7;
+CGFloat const ATLConversationViewFooterUnClusteredPadding = 14;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -84,17 +84,11 @@ CGFloat const ATLConversationViewFooterUnClusteredPadding = 7;
 
 + (CGFloat)footerHeightWithRecipientStatus:(NSAttributedString *)recipientStatus clustered:(BOOL)clustered
 {
-    CGFloat height = ATLConversationViewFooterEmptyHeight;
     if (!clustered) {
-        height += ATLConversationViewFooterUnClusteredPadding;
+        return 15.0;
+    } else {
+        return 10.0;
     }
-    if (!recipientStatus.length) {
-        return height;
-    }
-    UIFont *defaultFont = [self defaultRecipientStatusFont];
-    NSAttributedString *recipientStatusWithDefaultFont = [self attributedStringWithDefaultFont:defaultFont attributedString:recipientStatus];
-    CGFloat recipientStatusHeight = [self heightForAttributedString:recipientStatusWithDefaultFont];
-    return ATLConversationViewFooterTopPadding + ceil(recipientStatusHeight) + height;
 }
 
 + (NSAttributedString *)attributedStringWithDefaultFont:(UIFont *)defaultFont attributedString:(NSAttributedString *)attributedString

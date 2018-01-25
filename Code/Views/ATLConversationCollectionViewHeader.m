@@ -25,6 +25,7 @@
 
 @property (nonatomic) UILabel *dateLabel;
 @property (nonatomic) UILabel *participantLabel;
+@property (nonatomic) UIView *dateSeparatorView;
 
 @end
 
@@ -33,9 +34,9 @@
 NSString *const ATLConversationViewHeaderIdentifier = @"ATLConversationViewHeaderIdentifier";
 
 CGFloat const ATLConversationViewHeaderParticipantLeftPadding = 60;
-CGFloat const ATLConversationViewHeaderHorizontalPadding = 10;
+CGFloat const ATLConversationViewHeaderHorizontalPadding = 15;
 CGFloat const ATLConversationViewHeaderTopPadding = 10;
-CGFloat const ATLConversationViewHeaderDateBottomPadding = 8;
+CGFloat const ATLConversationViewHeaderDateBottomPadding = 15;
 CGFloat const ATLConversationViewHeaderParticipantNameBottomPadding = 3;
 CGFloat const ATLConversationViewHeaderEmptyHeight = 1;
 
@@ -52,8 +53,10 @@ CGFloat const ATLConversationViewHeaderEmptyHeight = 1;
 + (void)initialize
 {
     ATLConversationCollectionViewHeader *proxy = [self appearance];
-    proxy.participantLabelTextColor = [UIColor grayColor];
-    proxy.participantLabelFont = [UIFont systemFontOfSize:11];
+    proxy.participantLabelTextColor = [UIColor colorWithRed:0.0 green:185.0/255.0 blue:185.0/255.0 alpha:1.0];
+    proxy.participantLabelFont = [UIFont fontWithName:@"Roboto-Bold" size:12.0];
+    proxy.dateLabelFont = [UIFont fontWithName:@"Roboto-Bold" size:15.0];
+    proxy.dateLabelTextColor = [UIColor colorWithRed:105.0/255.0 green:110.0/255.0 blue:120.0/255.0 alpha:1.0];
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -77,9 +80,15 @@ CGFloat const ATLConversationViewHeaderEmptyHeight = 1;
 - (void)lyr_commonInit
 {
     self.dateLabel = [[UILabel alloc] init];
-    self.dateLabel.textAlignment = NSTextAlignmentCenter;
-    self.dateLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    self.dateLabel.textAlignment = NSTextAlignmentLeft;
+    
+    self.dateLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:15.0];
+    self.dateLabel.textColor = [UIColor colorWithRed:105.0/255.0 green:110.0/255.0 blue:120.0/255.0 alpha:1.0];
+    self.dateLabel.translatesAutoresizingMaskIntoConstraints = YES;
     [self addSubview:self.dateLabel];
+    self.dateSeparatorView  = [[UIView alloc] init];
+    self.dateSeparatorView.backgroundColor = [UIColor colorWithRed:216.0/255.0 green:216.0/255.0 blue:216.0/255.0 alpha:1.0];
+    [self addSubview:self.dateSeparatorView];
     
     self.participantLabel = [[UILabel alloc] init];
     self.participantLabel.font = _participantLabelFont;
@@ -88,45 +97,85 @@ CGFloat const ATLConversationViewHeaderEmptyHeight = 1;
     self.participantLabel.accessibilityLabel = ATLConversationViewHeaderIdentifier;
     [self addSubview:self.participantLabel];
     
-    [self configureDateLabelConstraints];
-    [self configureParticipantLabelConstraints];
+    _leftConstraint = [NSLayoutConstraint new];
+    _rightConstraint = [NSLayoutConstraint new];
 }
 
 - (void)prepareForReuse
 {
     [super prepareForReuse];
+    self.dateLabel.attributedText = nil;
+    self.participantLabel.attributedText = nil;
     self.dateLabel.text = nil;
     self.participantLabel.text = nil;
 }
 
 - (void)updateWithAttributedStringForDate:(NSAttributedString *)date
 {
-    if (!date) return;
-    self.dateLabel.attributedText = date;
+    if (!date) {
+        [self.dateSeparatorView removeConstraints:self.dateSeparatorView.constraints];
+        [self.dateSeparatorView removeFromSuperview];
+        
+        [self setNeedsLayout];
+        return;
+    }
+    else {
+        self.dateLabel.attributedText = date;
+        [self.dateLabel sizeToFit];
+        self.dateLabel.adjustsFontSizeToFitWidth = YES;
+        self.dateLabel.numberOfLines = 1;
+        if (date.string.length > 0) {
+            [self addSubview:self.dateSeparatorView];
+            [self configureDateLabelConstraints];
+        } else {
+            [self.dateSeparatorView removeConstraints:self.dateSeparatorView.constraints];
+            [self.dateSeparatorView removeFromSuperview];
+        }
+        [self setNeedsLayout];
+    }
 }
 
-- (void)updateWithParticipantName:(NSString *)participantName
+- (void)updateWithParticipantName:(NSAttributedString *)participantName
 {
-    if (participantName) {
-        self.participantLabel.text = participantName;
+    if (participantName.length) {
+        self.participantLabel.attributedText = participantName;
+        if (participantName.length > 12) {
+            [self configureParticipantLabelConstraintsForIncoming];
+            
+        } else {
+            [self configureParticipantLabelConstraintsForOutgoing];
+        }
     } else {
-        self.participantLabel.text = @"Unknown User";
+        self.participantLabel.attributedText = [[NSAttributedString alloc] initWithString:@"" attributes:nil];
     }
+    [self setNeedsLayout];
 }
 
 - (void)setParticipantLabelFont:(UIFont *)participantLabelFont
 {
-    _participantLabelFont = participantLabelFont;
-    self.participantLabel.font = participantLabelFont;
+//    _participantLabelFont = participantLabelFont;
+//    self.participantLabel.font = participantLabelFont;
 }
 
 - (void)setParticipantLabelTextColor:(UIColor *)participantLabelTextColor
 {
-    _participantLabelTextColor = participantLabelTextColor;
-    self.participantLabel.textColor = participantLabelTextColor;
+//    _participantLabelTextColor = participantLabelTextColor;
+//    self.participantLabel.textColor = participantLabelTextColor;
 }
 
-+ (CGFloat)headerHeightWithDateString:(NSAttributedString *)dateString participantName:(NSString *)participantName inView:(UIView *)view
+- (void)setDateLabelFont:(UIFont *)dateLabelFont
+{
+    //    _dateLabelFont = dateLabelFont;
+    //    self.dateLabel.font = dateLabelFont;
+}
+
+- (void)setDateLabelTextColor:(UIColor *)dateLabelTextColor
+{
+    //    _dateLabelTextColor = dateLabelTextColor;
+    //    self.dateLabel.textColor = dateLabelTextColor;
+}
+
++ (CGFloat)headerHeightWithDateString:(NSAttributedString *)dateString participantName:(NSAttributedString *)participantName inView:(UIView *)view
 {
     if (!dateString && !participantName) return ATLConversationViewHeaderEmptyHeight;
     
@@ -156,28 +205,51 @@ CGFloat const ATLConversationViewHeaderEmptyHeight = 1;
 
 - (void)configureDateLabelConstraints
 {
+    [self.dateLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.dateSeparatorView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.dateLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1.0 constant:ATLConversationViewHeaderTopPadding]];
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.dateLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
     
-    // To work around an apparent system bug that initially requires the view to have zero width, instead of a required priority, we use a priority one higher than the content compression resistance.
-    NSLayoutConstraint *dateLabelLeftConstraint = [NSLayoutConstraint constraintWithItem:self.dateLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:1.0 constant:ATLConversationViewHeaderHorizontalPadding];
-    dateLabelLeftConstraint.priority = UILayoutPriorityDefaultHigh + 1;
-    [self addConstraint:dateLabelLeftConstraint];
+    [self addConstraint: [NSLayoutConstraint constraintWithItem:self.dateLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:1.0 constant:ATLConversationViewHeaderHorizontalPadding]];
     
-    NSLayoutConstraint *dateLabelRightConstraint = [NSLayoutConstraint constraintWithItem:self.dateLabel attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeRight multiplier:1.0 constant:-ATLConversationViewHeaderHorizontalPadding];
-    dateLabelRightConstraint.priority = UILayoutPriorityDefaultHigh + 1;
-    [self addConstraint:dateLabelRightConstraint];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.dateSeparatorView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.dateLabel attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0]];
+    
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.dateSeparatorView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.dateLabel attribute:NSLayoutAttributeRight multiplier:1.0 constant:ATLConversationViewHeaderHorizontalPadding]];
+    
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.dateSeparatorView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:1.0 constant:-ATLConversationViewHeaderHorizontalPadding]];
+    
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.dateSeparatorView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:1]];
 }
 
-- (void)configureParticipantLabelConstraints
+- (void)configureParticipantLabelConstraintsForIncoming
 {
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.participantLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-ATLConversationViewHeaderParticipantNameBottomPadding]];
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.participantLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:1.0 constant:ATLConversationViewHeaderParticipantLeftPadding]];
+    if ([self.constraints containsObject:_rightConstraint]) {
+        [self removeConstraint:_rightConstraint];
+    }
+    if ([self.constraints containsObject:_leftConstraint]) {
+        [self removeConstraint:_leftConstraint];
+    }
+    _leftConstraint = nil;
+    _rightConstraint = nil;
     
-    // To work around an apparent system bug that initially requires the view to have zero width, instead of a required priority, we use a priority one higher than the content compression resistance.
-    NSLayoutConstraint *participantLabelRightConstraint = [NSLayoutConstraint constraintWithItem:self.participantLabel attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeRight multiplier:1.0 constant:-ATLConversationViewHeaderHorizontalPadding];
-    participantLabelRightConstraint.priority = UILayoutPriorityDefaultHigh + 1;
-    [self addConstraint:participantLabelRightConstraint];
+    _leftConstraint = [NSLayoutConstraint constraintWithItem:self.participantLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:1.0 constant:15.0];
+    [self addConstraint: [NSLayoutConstraint constraintWithItem:self.participantLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-8.0]];
+    [self addConstraint:_leftConstraint];
+    
+}
+
+- (void)configureParticipantLabelConstraintsForOutgoing {
+    if ([self.constraints containsObject:_rightConstraint]) {
+        [self removeConstraint:_rightConstraint];
+    }
+    if ([self.constraints containsObject:_leftConstraint]) {
+        [self removeConstraint:_leftConstraint];
+    }
+    _leftConstraint = nil;
+    _rightConstraint = nil;
+    
+    _rightConstraint = [NSLayoutConstraint constraintWithItem:self.participantLabel attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:1.0 constant:-18.0];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.participantLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-8.0]];
+    [self addConstraint:_rightConstraint];
 }
 
 

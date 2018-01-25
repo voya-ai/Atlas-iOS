@@ -40,18 +40,23 @@ extern NSString *const ATLConversationViewHeaderIdentifier;
  @abstract The font for the participant label displayed in the header. Default is 10pt system font.
  */
 @property (nonatomic) UIFont *participantLabelFont UI_APPEARANCE_SELECTOR;
+@property (nonatomic) UIFont *dateLabelFont UI_APPEARANCE_SELECTOR;
 
 /**
  @abstract The text color for the participant label displayed in the header. Default is gray.
  */
 @property (nonatomic) UIColor *participantLabelTextColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic) UIColor *dateLabelTextColor UI_APPEARANCE_SELECTOR;
 
+
+@property(nonatomic) NSLayoutConstraint *leftConstraint;
+@property(nonatomic) NSLayoutConstraint *rightConstraint;
 /**
  @abstract Displays a string of text representing a participant. The string will be horizontally aligned with
  the left edge of the message bubble view.
  @param participantName The string of text to be displayed.
  */
-- (void)updateWithParticipantName:(NSString *)participantName;
+- (void)updateWithParticipantName:(NSAttributedString *)participantName;
 
 /**
  @abstract Displays a string of text representing a date. The string is horizontally centered in the view.
@@ -66,7 +71,7 @@ extern NSString *const ATLConversationViewHeaderIdentifier;
  @param view The superview for the header.
  @return The height for the header.
  */
-+ (CGFloat)headerHeightWithDateString:(nullable NSAttributedString *)dateString participantName:(nullable NSString *)participantName inView:(UIView *)view;
++ (CGFloat)headerHeightWithDateString:(nullable NSAttributedString *)dateString participantName:(nullable NSAttributedString *)participantName inView:(UIView *)view;
 
 @end
 NS_ASSUME_NONNULL_END
