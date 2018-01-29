@@ -227,7 +227,7 @@ static CGFloat const ATLMaxScrollDistanceFromBottom = 150;
     UIEdgeInsets insets = self.collectionView.contentInset;
     CGFloat keyboardHeight = MAX(self.keyboardHeight, CGRectGetHeight(self.messageInputToolbar.frame));
     
-    insets.bottom = keyboardHeight + self.typingIndicatorInset;
+    insets.bottom = keyboardHeight + self.typingIndicatorInset + 15;
     self.collectionView.scrollIndicatorInsets = insets;
     self.collectionView.contentInset = insets;
     self.typingIndicatorViewBottomConstraint.constant = -keyboardHeight;
