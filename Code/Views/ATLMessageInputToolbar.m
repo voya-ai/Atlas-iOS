@@ -171,8 +171,9 @@ static CGFloat const ATLButtonHeight = 44.0f;
     CGSize fittedTextViewSize = [self.dummyTextView sizeThatFits:CGSizeMake(CGRectGetWidth(textViewFrame), MAXFLOAT)];
     textViewFrame.size.height = ceil(MIN(fittedTextViewSize.height, self.textViewMaxHeight));
    
+    frame.size.height = CGRectGetHeight(textViewFrame) + self.verticalMargin * 2;
 
-    frame.size.height = CGRectGetHeight(textViewFrame) + self.verticalMargin * 2 + safeAreaInsets.bottom;
+//    frame.size.height = CGRectGetHeight(textViewFrame) + self.verticalMargin * 2 + safeAreaInsets.bottom;
     if (frame.origin.y == 0) {
         frame.origin.y = -15;
     }
@@ -182,9 +183,11 @@ static CGFloat const ATLButtonHeight = 44.0f;
 //    if (!self.buttonCenterY) {
         self.buttonCenterY = (CGRectGetHeight(frame) - CGRectGetHeight(leftButtonFrame)) / 2;
 //    }
-    leftButtonFrame.origin.y = frame.size.height - leftButtonFrame.size.height - self.buttonCenterY - safeAreaInsets.bottom;
-    rightButtonFrame.origin.y = frame.size.height - rightButtonFrame.size.height - self.buttonCenterY - safeAreaInsets.bottom;
-    
+//    leftButtonFrame.origin.y = frame.size.height - leftButtonFrame.size.height - self.buttonCenterY - safeAreaInsets.bottom;
+//    rightButtonFrame.origin.y = frame.size.height - rightButtonFrame.size.height - self.buttonCenterY - safeAreaInsets.bottom;
+//
+    leftButtonFrame.origin.y = frame.size.height - leftButtonFrame.size.height - self.buttonCenterY;
+    rightButtonFrame.origin.y = frame.size.height - rightButtonFrame.size.height - self.buttonCenterY;
     BOOL heightChanged = CGRectGetHeight(textViewFrame) != CGRectGetHeight(self.textInputView.frame);
 
     self.leftAccessoryButton.frame = leftButtonFrame;
