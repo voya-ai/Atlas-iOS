@@ -91,6 +91,7 @@ static CGFloat const ATLButtonHeight = 44.0f;
         self.textInputView.layer.borderWidth = 0.0;
 //        self.textInputView.layer.cornerRadius = .0f;
         self.textInputView.scrollEnabled = NO;
+        self.textInputView.autocorrectionType = UITextAutocorrectionTypeNo;
         [self addSubview:self.textInputView];
         
         self.verticalMargin = ATLVerticalMargin;
