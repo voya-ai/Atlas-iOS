@@ -1005,6 +1005,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 
 - (void)reloadCollectionViewAdjustingForContentHeightChange
 {
+    [self notifyDelegateOfLoadingMoreMessages];
     CGFloat priorContentHeight = self.collectionView.contentSize.height;
     [self.conversationDataSource updateMessages];
     [self.collectionView reloadData];
@@ -1148,6 +1149,13 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 {
     if ([self.delegate respondsToSelector:@selector(conversationViewController:didSelectMessage:)]) {
         [self.delegate conversationViewController:self didSelectMessage:message];
+    }
+}
+
+- (void)notifyDelegateOfLoadingMoreMessages
+{
+    if ([self.delegate respondsToSelector:@selector(didLoadAdditionalMessages)]) {
+        [self.delegate didLoadAdditionalMessages];
     }
 }
 
