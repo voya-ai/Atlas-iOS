@@ -86,6 +86,8 @@ extern NSString *const ATLMessageInputToolbarAccessibilityLabel;
  */
 - (void)insertMediaAttachment:(ATLMediaAttachment *)mediaAttachment withEndLineBreak:(BOOL)endLineBreak;
 
+- (void) adjustMessageToolbar;
+
 //-----------------------------
 // UI Customization
 //-----------------------------
@@ -140,6 +142,21 @@ extern NSString *const ATLMessageInputToolbarAccessibilityLabel;
  @default YES
  */
 @property(nonatomic) BOOL displaysRightAccessoryImage;
+
+/**
+ Flag for either to show instant options button or not
+ */
+@property(nonatomic) BOOL shouldShowInstantOptions;
+
+/**
+ The height of the message toolbar before increasing its height
+ */
+@property (nonatomic) NSUInteger messageToolbarDefaultHeight;
+
+/**
+ Flag to remember either the message toolbar height was set or not
+ */
+@property(nonatomic) BOOL isMessageToolbarHeightSet;
 
 /**
  @abstract An automatically resizing message composition field.

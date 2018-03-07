@@ -50,10 +50,10 @@ NSString *const ATLMessageInputToolbarSendButton  = @"Message Input Toolbar Send
 // Compose View Margin Constants
 static CGFloat const ATLLeftButtonHorizontalMargin = 6.0f;
 static CGFloat const ATLRightButtonHorizontalMargin = 4.0f;
-static CGFloat const ATLVerticalMargin = 7.0f;
+static CGFloat const ATLVerticalMargin = 0.0f;
 
 // Compose View Button Constants
-static CGFloat const ATLLeftAccessoryButtonWidth = 44.0f;
+static CGFloat const ATLLeftAccessoryButtonWidth = 0.0f;
 static CGFloat const ATLRightAccessoryButtonDefaultWidth = 46.0f;
 static CGFloat const ATLRightAccessoryButtonPadding = 5.3f;
 static CGFloat const ATLButtonHeight = 44.0f;
@@ -64,12 +64,13 @@ static CGFloat const ATLButtonHeight = 44.0f;
     proxy.rightAccessoryButtonActiveColor = ATLBlueColor();
     proxy.rightAccessoryButtonDisabledColor = [UIColor grayColor];
     proxy.rightAccessoryButtonFont = [UIFont boldSystemFontOfSize:17];
-
 }
 
 - (id)init
 {
     self = [super init];
+    _isMessageToolbarHeightSet = NO;
+    
     if (self) {
         self.accessibilityLabel = ATLMessageInputToolbarAccessibilityLabel;
         self.translatesAutoresizingMaskIntoConstraints = NO;
@@ -77,21 +78,23 @@ static CGFloat const ATLButtonHeight = 44.0f;
         self.displaysRightAccessoryImage = YES;
         self.firstAppearance = YES;
         
-        self.leftAccessoryButton = [[UIButton alloc] init];
-        self.leftAccessoryButton.accessibilityLabel = ATLMessageInputToolbarCameraButton;
-        self.leftAccessoryButton.contentMode = UIViewContentModeScaleAspectFit;
-        [self.leftAccessoryButton setImage:self.leftAccessoryImage forState:UIControlStateNormal];
-        [self.leftAccessoryButton addTarget:self action:@selector(leftAccessoryButtonTapped) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:self.leftAccessoryButton];
+        // We don't need the left accessory button
+        //        self.leftAccessoryButton = [[UIButton alloc] init];
+        //        self.leftAccessoryButton.accessibilityLabel = ATLMessageInputToolbarCameraButton;
+        //        self.leftAccessoryButton.contentMode = UIViewContentModeScaleAspectFit;
+        //        [self.leftAccessoryButton setImage:self.leftAccessoryImage forState:UIControlStateNormal];
+        //        [self.leftAccessoryButton addTarget:self action:@selector(leftAccessoryButtonTapped) forControlEvents:UIControlEventTouchUpInside];
+        //        [self addSubview:self.leftAccessoryButton];
         
         self.textInputView = [[ATLMessageComposeTextView alloc] init];
         self.textInputView.accessibilityLabel = ATLMessageInputToolbarTextInputView;
         self.textInputView.delegate = self;
         self.textInputView.layer.borderColor = [UIColor clearColor].CGColor;
         self.textInputView.layer.borderWidth = 0.0;
-//        self.textInputView.layer.cornerRadius = .0f;
         self.textInputView.scrollEnabled = NO;
         self.textInputView.autocorrectionType = UITextAutocorrectionTypeNo;
+        self.layer.cornerRadius = 25;
+        
         [self addSubview:self.textInputView];
         
         self.verticalMargin = ATLVerticalMargin;
@@ -104,7 +107,7 @@ static CGFloat const ATLButtonHeight = 44.0f;
         
         // Calling sizeThatFits: or contentSize on the displayed UITextView causes the cursor's position to momentarily appear out of place and prevent scrolling to the selected range. So we use another text view for height calculations.
         self.dummyTextView = [[ATLMessageComposeTextView alloc] init];
-        self.maxNumberOfLines = 8;
+        self.maxNumberOfLines = 4;
     }
     return self;
 }
@@ -138,18 +141,9 @@ static CGFloat const ATLButtonHeight = 44.0f;
         leftButtonFrame.size.width = ATLLeftAccessoryButtonWidth;
     }
     
-    // This makes the input accessory view work with UISplitViewController to manage the frame width.
-    if (self.containerViewController) {
-        CGRect windowRect = [self.containerViewController.view.superview convertRect:self.containerViewController.view.frame toView:nil];
-        frame.size.width = windowRect.size.width - 30.0;
-        frame.origin.x = windowRect.origin.x + 15.0;
-//        frame.size.width = windowRect.size.width;
-//        frame.origin.x = windowRect.origin.x;
-    }
-    
     leftButtonFrame.size.height = ATLButtonHeight;
     leftButtonFrame.origin.x = ATLLeftButtonHorizontalMargin + safeAreaInsets.left;
-
+    
     if (self.rightAccessoryButtonFont && (self.textInputView.text.length || !self.displaysRightAccessoryImage)) {
         rightButtonFrame.size.width = CGRectIntegral([ATLLocalizedString(@"atl.messagetoolbar.send.key", self.rightAccessoryButtonTitle, nil) boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:0 attributes:@{NSFontAttributeName: self.rightAccessoryButtonFont} context:nil]).size.width + ATLRightAccessoryButtonPadding;
     } else {
@@ -158,50 +152,67 @@ static CGFloat const ATLButtonHeight = 44.0f;
     
     rightButtonFrame.size.height = ATLButtonHeight;
     rightButtonFrame.origin.x = CGRectGetWidth(frame) - CGRectGetWidth(rightButtonFrame) -
-                                ATLRightButtonHorizontalMargin - safeAreaInsets.right;
-
+    ATLRightButtonHorizontalMargin - safeAreaInsets.right;
+    
     if (self.leftAccessoryButton.hidden == YES) {
         textViewFrame.origin.x = 20 + ATLLeftButtonHorizontalMargin;
     } else {
-    textViewFrame.origin.x = CGRectGetMaxX(leftButtonFrame) + ATLLeftButtonHorizontalMargin;
+        textViewFrame.origin.x = CGRectGetMaxX(leftButtonFrame) + ATLLeftButtonHorizontalMargin;
     }
     textViewFrame.origin.y = self.verticalMargin;
     textViewFrame.size.width = CGRectGetMinX(rightButtonFrame) - CGRectGetMinX(textViewFrame) - ATLRightButtonHorizontalMargin;
-
+    
     self.dummyTextView.attributedText = self.textInputView.attributedText;
     CGSize fittedTextViewSize = [self.dummyTextView sizeThatFits:CGSizeMake(CGRectGetWidth(textViewFrame), MAXFLOAT)];
     textViewFrame.size.height = ceil(MIN(fittedTextViewSize.height, self.textViewMaxHeight));
-   
-    frame.size.height = CGRectGetHeight(textViewFrame) + self.verticalMargin * 2;
-
+    
 //    frame.size.height = CGRectGetHeight(textViewFrame) + self.verticalMargin * 2 + safeAreaInsets.bottom;
+    frame.size.height = CGRectGetHeight(textViewFrame);
+    
+    //    frame.size.height = CGRectGetHeight(textViewFrame) + self.verticalMargin * 2 + safeAreaInsets.bottom;
     if (frame.origin.y == 0) {
         frame.origin.y = -15;
     }
-    frame.origin.y -= frame.size.height - CGRectGetHeight(self.frame);
+    
+    
+    frame.origin.y -= frame.size.height - CGRectGetHeight(self.frame) + safeAreaInsets.bottom / 2;
+//    frame.origin.y -= frame.size.height - CGRectGetHeight(self.frame);
     
     // Only calculate button centerY once to anchor it to bottom of bar.
-//    if (!self.buttonCenterY) {
-        self.buttonCenterY = (CGRectGetHeight(frame) - CGRectGetHeight(leftButtonFrame)) / 2;
-//    }
-//    leftButtonFrame.origin.y = frame.size.height - leftButtonFrame.size.height - self.buttonCenterY - safeAreaInsets.bottom;
-//    rightButtonFrame.origin.y = frame.size.height - rightButtonFrame.size.height - self.buttonCenterY - safeAreaInsets.bottom;
-//
+    //    if (!self.buttonCenterY) {
+    self.buttonCenterY = (CGRectGetHeight(frame) - CGRectGetHeight(leftButtonFrame)) / 2;
+    //    }
+    //    leftButtonFrame.origin.y = frame.size.height - leftButtonFrame.size.height - self.buttonCenterY - safeAreaInsets.bottom;
+    //    rightButtonFrame.origin.y = frame.size.height - rightButtonFrame.size.height - self.buttonCenterY - safeAreaInsets.bottom;
+    //
     leftButtonFrame.origin.y = frame.size.height - leftButtonFrame.size.height - self.buttonCenterY;
     rightButtonFrame.origin.y = frame.size.height - rightButtonFrame.size.height - self.buttonCenterY;
     BOOL heightChanged = CGRectGetHeight(textViewFrame) != CGRectGetHeight(self.textInputView.frame);
-
+    
     self.leftAccessoryButton.frame = leftButtonFrame;
     self.rightAccessoryButton.frame = rightButtonFrame;
     self.textInputView.frame = textViewFrame;
-
+    
+    // Get the default height of the message toolbar only once
+    if (!_isMessageToolbarHeightSet) {
+        _messageToolbarDefaultHeight = self.textInputView.frame.size.height;
+        _isMessageToolbarHeightSet = YES;
+    }
+    
+    // Based on the default height of the message toolbar, check if the new message toolbar height changed
+    // If it did, change its corner radius to 15; if not, revert/keep its original radius (25)
+    if (self.textInputView.frame.size.height > _messageToolbarDefaultHeight) {
+        self.layer.cornerRadius = 15;
+    } else {
+        self.layer.cornerRadius = 25;
+    }
+    
     // Setting one's own frame like this is a no-no but seems to be the lesser of evils when working around the layout issues mentioned above.
     self.frame = frame;
-    self.layer.cornerRadius = frame.size.height/2;
     self.clipsToBounds = YES;
     self.layer.borderColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1.0].CGColor;
     self.layer.borderWidth = 1.0;
-
+    
     if (heightChanged) {
         [[NSNotificationCenter defaultCenter] postNotificationName:ATLMessageInputToolbarDidChangeHeightNotification object:self];
     }
@@ -219,12 +230,32 @@ static CGFloat const ATLButtonHeight = 44.0f;
     }
 }
 
+- (void) adjustMessageToolbar {
+    // This makes the input accessory view work with UISplitViewController to manage the frame width.
+    if (self.containerViewController) {
+        __block CGRect frame = self.frame;
+        __block CGRect windowRect = [self.containerViewController.view.superview convertRect:self.containerViewController.view.frame toView:nil];
+        
+        if (_shouldShowInstantOptions) {
+            frame.size.width = windowRect.size.width - 80.0;
+            frame.origin.x = windowRect.origin.x + 65.0;
+        } else {
+            frame.size.width = windowRect.size.width - 30.0;
+            frame.origin.x = windowRect.origin.x + 15.0;
+        }
+        
+        [UIView animateWithDuration:0.2 animations:^{
+            self.frame = frame;
+        } completion:nil];
+    }
+}
+
 #pragma mark - Public Methods
 
 - (void)setMaxNumberOfLines:(NSUInteger)maxNumberOfLines
 {
     _maxNumberOfLines = maxNumberOfLines;
-    self.textViewMaxHeight = self.maxNumberOfLines * self.textInputView.font.lineHeight;
+    self.textViewMaxHeight = self.maxNumberOfLines * self.textInputView.font.lineHeight + 10;
     self.textViewMinScrollHeight = (self.maxNumberOfLines - 1) * self.textInputView.font.lineHeight;
     [self setNeedsLayout];
 }
@@ -232,13 +263,13 @@ static CGFloat const ATLButtonHeight = 44.0f;
 - (void)insertMediaAttachment:(ATLMediaAttachment *)mediaAttachment withEndLineBreak:(BOOL)endLineBreak;
 {
     UITextView *textView = self.textInputView;
-
+    
     NSMutableAttributedString *attributedString = [textView.attributedText mutableCopy];
     NSAttributedString *lineBreak = [[NSAttributedString alloc] initWithString:@"\n" attributes:@{NSFontAttributeName: self.textInputView.font}];
     if (attributedString.length > 0 && ![textView.text hasSuffix:@"\n"]) {
         [attributedString appendAttributedString:lineBreak];
     }
-
+    
     NSMutableAttributedString *attachmentString = (mediaAttachment.mediaMIMEType == ATLMIMETypeTextPlain) ? [[NSAttributedString alloc] initWithString:mediaAttachment.textRepresentation] : [[NSAttributedString attributedStringWithAttachment:mediaAttachment] mutableCopy];
     [attributedString appendAttributedString:attachmentString];
     if (endLineBreak) {
@@ -321,16 +352,24 @@ static CGFloat const ATLButtonHeight = 44.0f;
 
 - (void)textViewDidChange:(UITextView *)textView
 {
+    
     if (self.rightAccessoryButton.imageView) {
         [self configureRightAccessoryButtonState];
     }
     
-    if (textView.text.length > 0 && [self.inputToolBarDelegate respondsToSelector:@selector(messageInputToolbarDidType:)]) {
+    // Check if the text has a length of more than 0 (not including whitespaces and newlines)
+    NSUInteger textViewLength = [[textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length];
+    
+    if (textViewLength > 0 && [self.inputToolBarDelegate respondsToSelector:@selector(messageInputToolbarDidType:)]) {
         [self.inputToolBarDelegate messageInputToolbarDidType:self];
-    } else if (textView.text.length == 0 && [self.inputToolBarDelegate respondsToSelector:@selector(messageInputToolbarDidEndTyping:)]) {
+        
+        [self.rightAccessoryButton setHidden:false];
+    } else if (textViewLength == 0 && [self.inputToolBarDelegate respondsToSelector:@selector(messageInputToolbarDidEndTyping:)]) {
         [self.inputToolBarDelegate messageInputToolbarDidEndTyping:self];
+        
+        [self.rightAccessoryButton setHidden:true];
     }
-
+    
     [self setNeedsLayout];
     
     self.textInputView.scrollEnabled = self.textInputView.frame.size.height > self.textViewMinScrollHeight;
@@ -441,3 +480,4 @@ static CGFloat const ATLButtonHeight = 44.0f;
 
 
 @end
+
