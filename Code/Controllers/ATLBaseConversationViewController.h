@@ -69,8 +69,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic) BOOL displaysAddressBar;
 
-@property (nonatomic) BOOL auxShouldShowInstantOptions;
-
 /**
  @abstract Initializes the input accessory view of the ATLBaseConversationViewController, which by default is an instance of ATLMessageInputToolbar. Override this method to return a subclass of ATLMessageInputToolbar.
  */

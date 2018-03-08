@@ -76,8 +76,6 @@ static CGFloat const ATLMaxScrollDistanceFromBottom = 150;
 {
     [super viewDidLoad];
     
-    _auxShouldShowInstantOptions = NO;
-    
     // Add message input tool bar
     self.messageInputToolbar = [self initializeMessageInputToolbar];
     // Fixes an ios9 bug that causes the background of the input accessory view to be black when being presented on screen.
@@ -243,13 +241,6 @@ static CGFloat const ATLMaxScrollDistanceFromBottom = 150;
         return;
     }
     [self configureWithKeyboardNotification:notification];
-    
-    if (self.messageInputToolbar.shouldShowInstantOptions == YES) {
-        _auxShouldShowInstantOptions = YES;
-    }
-    
-    self.messageInputToolbar.shouldShowInstantOptions = NO;
-    [self.messageInputToolbar adjustMessageToolbar];
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification
@@ -258,9 +249,6 @@ static CGFloat const ATLMaxScrollDistanceFromBottom = 150;
         return;
     }
     [self configureWithKeyboardNotification:notification];
-    
-    self.messageInputToolbar.shouldShowInstantOptions = _auxShouldShowInstantOptions;
-    [self.messageInputToolbar adjustMessageToolbar];
 }
 
 - (void)messageInputToolbarDidChangeHeight:(NSNotification *)notification

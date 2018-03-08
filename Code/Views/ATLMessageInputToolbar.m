@@ -166,6 +166,26 @@ static CGFloat const ATLButtonHeight = 44.0f;
     CGSize fittedTextViewSize = [self.dummyTextView sizeThatFits:CGSizeMake(CGRectGetWidth(textViewFrame), MAXFLOAT)];
     textViewFrame.size.height = ceil(MIN(fittedTextViewSize.height, self.textViewMaxHeight));
     
+    if (self.containerViewController) {
+        CGRect windowRect = [self.containerViewController.view.superview convertRect:self.containerViewController.view.frame toView:nil];
+        
+        // TODO:
+//        int animationPosition = UIScreen.mainScreen.bounds.size.height - ATLVerticalMargin - (self.superview.frame.origin.y + self.bounds.size.height + self.frame.origin.y);
+//        if (animationPosition > 100) {
+//            animationPosition = 100;
+//        }
+//        frame.size.width = windowRect.size.width - 80.0 + 50.0 * animationPosition/100;
+//        frame.origin.x = windowRect.origin.x + 65.0 - 50.0 * animationPosition/100;
+        
+        if (self.superview.frame.origin.y + self.bounds.size.height >= UIScreen.mainScreen.bounds.size.height - ATLVerticalMargin) {
+            frame.size.width = windowRect.size.width - 80.0;
+            frame.origin.x = windowRect.origin.x + 65.0;
+        } else if (_shouldShowInstantOptions) {
+            frame.size.width = windowRect.size.width - 30.0;
+            frame.origin.x = windowRect.origin.x + 15.0;
+        }
+    }
+    
 //    frame.size.height = CGRectGetHeight(textViewFrame) + self.verticalMargin * 2 + safeAreaInsets.bottom;
     frame.size.height = CGRectGetHeight(textViewFrame);
     
@@ -174,6 +194,7 @@ static CGFloat const ATLButtonHeight = 44.0f;
         frame.origin.y = -15;
     }
     
+//    frame = [self adjustMessageToolbar:frame];
     
     frame.origin.y -= frame.size.height - CGRectGetHeight(self.frame) + safeAreaInsets.bottom / 2;
 //    frame.origin.y -= frame.size.height - CGRectGetHeight(self.frame);
@@ -232,22 +253,23 @@ static CGFloat const ATLButtonHeight = 44.0f;
 
 - (void) adjustMessageToolbar {
     // This makes the input accessory view work with UISplitViewController to manage the frame width.
-    if (self.containerViewController) {
-        __block CGRect frame = self.frame;
-        __block CGRect windowRect = [self.containerViewController.view.superview convertRect:self.containerViewController.view.frame toView:nil];
-        
-        if (_shouldShowInstantOptions) {
-            frame.size.width = windowRect.size.width - 80.0;
-            frame.origin.x = windowRect.origin.x + 65.0;
-        } else {
-            frame.size.width = windowRect.size.width - 30.0;
-            frame.origin.x = windowRect.origin.x + 15.0;
-        }
-        
-        [UIView animateWithDuration:0.2 animations:^{
-            self.frame = frame;
-        } completion:nil];
-    }
+//    if (self.containerViewController) {
+//        __block CGRect frame = self.frame;
+//        __block CGRect windowRect = [self.containerViewController.view.superview convertRect:self.containerViewController.view.frame toView:nil];
+//
+//        if (_shouldShowInstantOptions) {
+//            frame.size.width = windowRect.size.width - 80.0;
+//            frame.origin.x = windowRect.origin.x + 65.0;
+//        } else {
+//            frame.size.width = windowRect.size.width - 30.0;
+//            frame.origin.x = windowRect.origin.x + 15.0;
+//        }
+    
+//        [UIView animateWithDuration:0.2 animations:^{
+//            self.frame = frame;
+//        } completion:nil];
+//    }
+
 }
 
 #pragma mark - Public Methods
