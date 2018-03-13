@@ -449,6 +449,10 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     [self configureMoreMessagesIndicatorVisibility];
 }
 
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    [self notifyDelegateOfScrollViewDragging];
+}
+
 #pragma mark - Reusable View Configuration
 
 /**
@@ -1156,6 +1160,13 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 {
     if ([self.delegate respondsToSelector:@selector(didLoadAdditionalMessages)]) {
         [self.delegate didLoadAdditionalMessages];
+    }
+}
+
+- (void)notifyDelegateOfScrollViewDragging
+{
+    if ([self.delegate respondsToSelector:@selector(scrollViewDidBeginDragging)]) {
+        [self.delegate scrollViewDidBeginDragging];
     }
 }
 

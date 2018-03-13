@@ -50,6 +50,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)didLoadAdditionalMessages;
 
+- (void)scrollViewDidBeginDragging;
+
 /**
  @abstract Informs the delegate that an `LYRMessage` object send attempt failed.
  @param viewController The `ATLConversationViewController` in which the message failed to send.
