@@ -62,6 +62,7 @@ static CGFloat const ATLMaxScrollDistanceFromBottom = 150;
 
 - (void)baseCommonInit
 {
+    _displaysTypingIndicator = NO;
     _displaysAddressBar = NO;
     _typingParticipantIDs = [NSMutableArray new];
     _firstAppearance = YES;
@@ -85,12 +86,14 @@ static CGFloat const ATLMaxScrollDistanceFromBottom = 150;
     self.view.inputAccessoryView = self.messageInputToolbar;
     self.messageInputToolbar.containerViewController = self;
     
-    // Add typing indicator
-    self.typingIndicatorController = [[ATLTypingIndicatorViewController alloc] init];
-    [self addChildViewController:self.typingIndicatorController];
-    [self.view addSubview:self.typingIndicatorController.view];
-    [self.typingIndicatorController didMoveToParentViewController:self];
-    [self configureTypingIndicatorLayoutConstraints];
+    // Add typing indicator if needed
+    if (self.displaysTypingIndicator) {
+        self.typingIndicatorController = [[ATLTypingIndicatorViewController alloc] init];
+        [self addChildViewController:self.typingIndicatorController];
+        [self.view addSubview:self.typingIndicatorController.view];
+        [self.typingIndicatorController didMoveToParentViewController:self];
+        [self configureTypingIndicatorLayoutConstraints];
+    }
     
     // Add address bar if needed
     if (self.displaysAddressBar) {
@@ -180,10 +183,13 @@ static CGFloat const ATLMaxScrollDistanceFromBottom = 150;
 
 - (void)setTypingIndicatorInset:(CGFloat)typingIndicatorInset
 {
-    _typingIndicatorInset = typingIndicatorInset;
-    [UIView animateWithDuration:0.1 animations:^{
-        [self updateBottomCollectionViewInset];
-    }];
+    if (self.displaysTypingIndicator)
+    {
+        _typingIndicatorInset = typingIndicatorInset;
+        [UIView animateWithDuration:0.1 animations:^{
+            [self updateBottomCollectionViewInset];
+        }];
+    }
 }
 
 #pragma mark - Public Methods
@@ -263,7 +269,7 @@ static CGFloat const ATLMaxScrollDistanceFromBottom = 150;
     
     BOOL messagebarDidGrow = keyboardOnscreenHeight > self.keyboardHeight;
     self.keyboardHeight = keyboardOnscreenHeight;
-     self.typingIndicatorViewBottomConstraint.constant = -self.collectionView.scrollIndicatorInsets.bottom;
+    self.typingIndicatorViewBottomConstraint.constant = -self.collectionView.scrollIndicatorInsets.bottom;
     [self updateBottomCollectionViewInset];
     
     if ([self shouldScrollToBottom] && messagebarDidGrow) {

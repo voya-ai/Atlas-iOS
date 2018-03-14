@@ -60,7 +60,12 @@ NS_ASSUME_NONNULL_BEGIN
 ///----------------------------------------------
 
 /**
- @abstract A constant representing the current height of the typing indicator.
+ @abstract IA boolean value to determine whether or not the receiver should display an `ATLTypingIndicatorViewController`.
+ */
+@property (nonatomic) BOOL displaysTypingIndicator;
+
+/**
+ @abstract A constant representing the current height of the typing indicator. Default is no.
  */
 @property (nonatomic) CGFloat typingIndicatorInset;
 

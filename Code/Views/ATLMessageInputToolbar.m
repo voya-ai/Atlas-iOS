@@ -213,7 +213,7 @@ static CGFloat const ATLButtonHeight = 44.0f;
         CGRect windowRect = [self.containerViewController.view.superview convertRect:self.containerViewController.view.frame toView:nil];
         
         CGFloat offsetX = 0.f;
-        if (_shouldShowInstantOptions) {
+        if (_shouldShowInstantOptions && self.textInputView.text.length == 0) {
             CGFloat bottomPosY = self.superview.frame.origin.y + frame.origin.y + frame.size.height + self.bottomMargin;
             CGFloat animationPositionY = MIN(UIScreen.mainScreen.bounds.size.height - bottomPosY, 100.0);
             offsetX = 50.0 * (1.0 - pow(animationPositionY/100.0, 2.0));
@@ -254,8 +254,8 @@ static CGFloat const ATLButtonHeight = 44.0f;
 - (void)setMaxNumberOfLines:(NSUInteger)maxNumberOfLines
 {
     _maxNumberOfLines = maxNumberOfLines;
-    self.textViewMaxHeight = self.maxNumberOfLines * self.textInputView.font.lineHeight + 10;
-    self.textViewMinScrollHeight = (self.maxNumberOfLines - 1) * self.textInputView.font.lineHeight;
+    self.textViewMaxHeight = self.maxNumberOfLines * self.textInputView.font.lineHeight + 30;
+    self.textViewMinScrollHeight = self.maxNumberOfLines * self.textInputView.font.lineHeight + 25;
     [self setNeedsLayout];
 }
 
