@@ -210,7 +210,7 @@ static CGFloat const ATLButtonHeight = 44.0f;
     
     
     if (self.containerViewController) {
-        CGRect windowRect = [self.containerViewController.view.superview convertRect:self.containerViewController.view.frame toView:nil];
+        CGRect windowRect = self.containerViewController.view.bounds;
         
         CGFloat offsetX = 0.f;
         if (_shouldShowInstantOptions && self.textInputView.text.length == 0) {
