@@ -70,7 +70,9 @@ static CGFloat const ATLMaxScrollDistanceFromBottom = 150;
 
 - (void)loadView
 {
-    self.view = [ATLConversationView new];
+    [super loadView];
+    // Defined in Interface Builder
+    //self.view = [ATLConversationView new];
 }
 
 - (void)viewDidLoad
