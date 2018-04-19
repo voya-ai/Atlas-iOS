@@ -59,8 +59,6 @@ CGFloat const ATLAvatarImageTailPadding = 4.0f;
     return self;
 }
 
-
-
 - (void)lyr_baseInit
 {
     // Default UIAppearance
@@ -75,12 +73,7 @@ CGFloat const ATLAvatarImageTailPadding = 4.0f;
     _avatarView = [[ATLAvatarView alloc] init];
     _avatarView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.contentView addSubview:_avatarView];
-    
-    //    _headerLabel = [[UILabel alloc]init];
-    //    
-    //    _headerLabel.text = @"You at 23:59";
-    //    [_headerLabel sizeToFit];
-    //    [self.contentView addSubview:_headerLabel];
+
     [self configureLayoutConstraints];
 }
 
@@ -108,7 +101,7 @@ CGFloat const ATLAvatarImageTailPadding = 4.0f;
     if ([self.contentView.constraints containsObject:self.bubbleViewWidthConstraint]) {
         [self.contentView removeConstraints:@[self.bubbleViewWidthConstraint]];
     }
-    
+
     self.bubbleViewWidthConstraint.constant = bubbleWidth;
     [self.contentView addConstraint:self.bubbleViewWidthConstraint];
 }
@@ -195,11 +188,7 @@ CGFloat const ATLAvatarImageTailPadding = 4.0f;
         default:
             break;
     }
-    
     [self shouldDisplayAvatarItem:self.shouldDisplayAvatar];
-    
 }
 
 @end
-
-

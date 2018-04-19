@@ -36,7 +36,6 @@ NSString *const ATLMessageInputToolbarDidChangeHeightNotification = @"ATLMessage
 @property (nonatomic) BOOL firstAppearance;
 @property (nonatomic) CGFloat bottomMargin;
 
-
 @end
 
 @implementation ATLMessageInputToolbar
@@ -143,7 +142,7 @@ static CGFloat const ATLButtonHeight = 44.0f;
     
     leftButtonFrame.size.height = ATLButtonHeight;
     leftButtonFrame.origin.x = ATLLeftButtonHorizontalMargin + safeAreaInsets.left;
-    
+
     if (self.rightAccessoryButtonFont && (self.textInputView.text.length || !self.displaysRightAccessoryImage)) {
         rightButtonFrame.size.width = CGRectIntegral([ATLLocalizedString(@"atl.messagetoolbar.send.key", self.rightAccessoryButtonTitle, nil) boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:0 attributes:@{NSFontAttributeName: self.rightAccessoryButtonFont} context:nil]).size.width + ATLRightAccessoryButtonPadding;
     } else {
@@ -161,7 +160,7 @@ static CGFloat const ATLButtonHeight = 44.0f;
     }
     textViewFrame.origin.y = self.verticalMargin;
     textViewFrame.size.width = CGRectGetMinX(rightButtonFrame) - CGRectGetMinX(textViewFrame) - ATLRightButtonHorizontalMargin;
-    
+
     self.dummyTextView.attributedText = self.textInputView.attributedText;
     CGSize fittedTextViewSize = [self.dummyTextView sizeThatFits:CGSizeMake(CGRectGetWidth(textViewFrame), MAXFLOAT)];
     textViewFrame.size.height = ceil(MIN(fittedTextViewSize.height, self.textViewMaxHeight));
@@ -189,7 +188,7 @@ static CGFloat const ATLButtonHeight = 44.0f;
     leftButtonFrame.origin.y = frame.size.height - leftButtonFrame.size.height - self.buttonCenterY;
     rightButtonFrame.origin.y = frame.size.height - rightButtonFrame.size.height - self.buttonCenterY;
     BOOL heightChanged = CGRectGetHeight(textViewFrame) != CGRectGetHeight(self.textInputView.frame);
-    
+
     self.leftAccessoryButton.frame = leftButtonFrame;
     self.rightAccessoryButton.frame = rightButtonFrame;
     self.textInputView.frame = textViewFrame;
@@ -262,13 +261,13 @@ static CGFloat const ATLButtonHeight = 44.0f;
 - (void)insertMediaAttachment:(ATLMediaAttachment *)mediaAttachment withEndLineBreak:(BOOL)endLineBreak;
 {
     UITextView *textView = self.textInputView;
-    
+
     NSMutableAttributedString *attributedString = [textView.attributedText mutableCopy];
     NSAttributedString *lineBreak = [[NSAttributedString alloc] initWithString:@"\n" attributes:@{NSFontAttributeName: self.textInputView.font}];
     if (attributedString.length > 0 && ![textView.text hasSuffix:@"\n"]) {
         [attributedString appendAttributedString:lineBreak];
     }
-    
+
     NSMutableAttributedString *attachmentString = (mediaAttachment.mediaMIMEType == ATLMIMETypeTextPlain) ? [[NSAttributedString alloc] initWithString:mediaAttachment.textRepresentation] : [[NSAttributedString attributedStringWithAttachment:mediaAttachment] mutableCopy];
     [attributedString appendAttributedString:attachmentString];
     if (endLineBreak) {
@@ -351,7 +350,7 @@ static CGFloat const ATLButtonHeight = 44.0f;
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-    
+
     if (self.rightAccessoryButton.imageView) {
         [self configureRightAccessoryButtonState];
     }
@@ -368,7 +367,7 @@ static CGFloat const ATLButtonHeight = 44.0f;
         
         [self.rightAccessoryButton setHidden:true];
     }
-    
+
     [self setNeedsLayout];
     
     self.textInputView.scrollEnabled = self.textInputView.frame.size.height > self.textViewMinScrollHeight;
@@ -479,4 +478,3 @@ static CGFloat const ATLButtonHeight = 44.0f;
 
 
 @end
-
