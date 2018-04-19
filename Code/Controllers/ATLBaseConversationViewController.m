@@ -286,7 +286,6 @@ static CGFloat const ATLMaxScrollDistanceFromBottom = 150;
 
 - (void)configureWithKeyboardNotification:(NSNotification *)notification
 {
-    
     CGRect keyboardBeginFrame = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
     CGRect keyboardBeginFrameInView = [self.view convertRect:keyboardBeginFrame fromView:nil];
     CGRect keyboardEndFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
