@@ -1,5 +1,11 @@
 # Atlas Changelog
 
+## 1.2.0
+
+### Enhancements
+
+* Adds support for the newer versions of LayerKit (~> 4.0.0). [IOS-3413]
+
 ## 1.1.5
 
 ### Bug Fixes

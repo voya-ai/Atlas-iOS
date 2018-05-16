@@ -337,7 +337,7 @@ extern NSString *const ATLAvatarViewAccessibilityLabel;
 
     // now send the message
     LYRMessagePart *part = [LYRMessagePart messagePartWithText:@"Test Message"];
-    LYRMessageMock *message = [self.testInterface.layerClient newMessageWithParts:@[part] options:nil error:nil];
+    LYRMessageMock *message = [self.testInterface.layerClient newMessageWithParts:[NSSet setWithObject:part] options:nil error:nil];
     [conversation sendMessage:message error:nil];
 
     [delegateMock verify];
