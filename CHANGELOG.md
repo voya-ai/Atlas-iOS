@@ -1,5 +1,11 @@
 # Atlas Changelog
 
+## 1.2.1
+
+### Bug Fixes
+
+* Fixes a UI issue where messages could become hidden behind the navigation bar for new conversations. [IOS-3232]
+
 ## 1.2.0
 
 ### Enhancements

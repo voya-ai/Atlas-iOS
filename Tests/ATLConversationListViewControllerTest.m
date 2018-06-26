@@ -18,6 +18,7 @@
 //  limitations under the License.
 //
 
+#import <KIF/KIFAccessibilityEnabler.h>
 #import <XCTest/XCTest.h>
 #import <Atlas/Atlas.h>
 #import "ATLTestInterface.h"
@@ -44,6 +45,8 @@ extern NSString *const ATLAvatarViewAccessibilityLabel;
 - (void)setUp
 {
     [super setUp];
+    
+    KIFEnableAccessibility();
 
     ATLUserMock *mockUser = [ATLUserMock userWithMockUserName:ATLMockUserNameBlake];
     LYRClientMock *layerClient = [LYRClientMock layerClientMockWithAuthenticatedUserID:mockUser.userID];
