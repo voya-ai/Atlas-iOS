@@ -113,7 +113,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     _dateDisplayTimeInterval = 60*60;
     _marksMessagesAsRead = YES;
     _shouldDisplayUsernameForOneOtherParticipant = NO;
-    _shouldDisplayAvatarItemForOneOtherParticipant = NO;
+    _shouldDisplayAvatarItemForOtherParticipants = NO;
     _shouldDisplayAvatarItemForAuthenticatedUser = NO;
     _avatarItemDisplayFrequency = ATLAvatarItemDisplayFrequencySection;
     _typingParticipantIDs = [NSMutableOrderedSet new];
@@ -299,7 +299,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     // Configure avatar image display
     NSMutableSet *otherParticipantIDs = [[self.conversation.participants valueForKey:@"userID"] mutableCopy];
     if (self.layerClient.authenticatedUser) [otherParticipantIDs removeObject:self.layerClient.authenticatedUser.userID];
-    self.shouldDisplayAvatarItem = (otherParticipantIDs.count > 1) ? YES : self.shouldDisplayAvatarItemForOneOtherParticipant;
+    self.shouldDisplayAvatarItem = self.shouldDisplayAvatarItemForOtherParticipants;
     
     // Configure message bar button enablement
     BOOL shouldEnableButton = self.conversation ? YES : NO;
