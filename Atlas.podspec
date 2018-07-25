@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.requires_arc                = true
   s.source_files                = 'Code/**/*.{h,m}'
   s.public_header_files         = 'Code/**/*.h'
-  s.ios.resource_bundle         = { 'AtlasResource' => 'Resources/*.{png}' }
+  s.ios.resource_bundle         = { 'AtlasResource' => 'Resources/*.{png,caf}' }
   s.ios.frameworks              = %w{ UIKit CoreLocation MobileCoreServices }
   s.ios.deployment_target       = '8.0'
   s.dependency                  'LayerKit', '~> 4.0.2'
