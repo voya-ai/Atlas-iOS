@@ -58,16 +58,8 @@ UIMutableUserNotificationCategory *ATLDefaultUserNotificationCategory()
     replyAction.title = @"Reply";
     replyAction.activationMode = UIUserNotificationActivationModeBackground;
     replyAction.authenticationRequired = NO;
-    //[replyAction atl_setTextInputBehavior];
-    if (@available(iOS 9.0, *)) {
-        replyAction.behavior = UIUserNotificationActionBehaviorTextInput;
-    } else {
-        // Fallback on earlier versions
-    }if (@available(iOS 9.0, *)) {
-        replyAction.behavior = UIUserNotificationActionBehaviorTextInput;
-    } else {
-        // Fallback on earlier versions
-    }
+    [replyAction atl_setTextInputBehavior];
+
     UIMutableUserNotificationCategory *category = [UIMutableUserNotificationCategory new];
     category.identifier = ATLUserNotificationDefaultActionsCategoryIdentifier;
     [category setActions:@[ replyAction ] forContext:UIUserNotificationActionContextDefault];
