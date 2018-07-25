@@ -269,7 +269,7 @@ static CGFloat const ATLMaxScrollDistanceFromBottom = 150;
     
     BOOL messagebarDidGrow = keyboardOnscreenHeight > self.keyboardHeight;
     self.keyboardHeight = keyboardOnscreenHeight;
-    self.typingIndicatorViewBottomConstraint.constant = -self.collectionView.scrollIndicatorInsets.bottom;
+     self.typingIndicatorViewBottomConstraint.constant = -self.collectionView.scrollIndicatorInsets.bottom;
     [self updateBottomCollectionViewInset];
     
     if ([self shouldScrollToBottom] && messagebarDidGrow) {
