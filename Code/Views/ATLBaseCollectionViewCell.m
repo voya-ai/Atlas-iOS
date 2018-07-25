@@ -63,7 +63,7 @@ CGFloat const ATLAvatarImageTailPadding = 4.0f;
 {
     // Default UIAppearance
     _bubbleViewColor = ATLBlueColor();
-    _bubbleViewCornerRadius = 5.0f;
+    _bubbleViewCornerRadius = 17.0f;
     
     _bubbleView = [[ATLMessageBubbleView alloc] init];
     _bubbleView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -91,18 +91,18 @@ CGFloat const ATLAvatarImageTailPadding = 4.0f;
     self.bubbleView.backgroundColor = bubbleViewColor;
 }
 
-//- (void)setBubbleViewCornerRadius:(CGFloat)bubbleViewCornerRadius
-//{
-//    _bubbleViewCornerRadius = bubbleViewCornerRadius;
-//    self.bubbleView.layer.cornerRadius = bubbleViewCornerRadius;
-//}
+- (void)setBubbleViewCornerRadius:(CGFloat)bubbleViewCornerRadius
+{
+    _bubbleViewCornerRadius = bubbleViewCornerRadius;
+    self.bubbleView.layer.cornerRadius = bubbleViewCornerRadius;
+}
 
 - (void)updateBubbleWidth:(CGFloat)bubbleWidth
 {
     if ([self.contentView.constraints containsObject:self.bubbleViewWidthConstraint]) {
         [self.contentView removeConstraints:@[self.bubbleViewWidthConstraint]];
     }
-
+    
     self.bubbleViewWidthConstraint.constant = bubbleWidth;
     [self.contentView addConstraint:self.bubbleViewWidthConstraint];
 }
@@ -161,12 +161,8 @@ CGFloat const ATLAvatarImageTailPadding = 4.0f;
         [self.contentView removeConstraint:self.bubbleWithoutAvatarLeadConstraint];
     }
     
-    UIView *pll = [[UIView alloc]initWithFrame:CGRectMake(16, 0, 10, 10)];
-    pll.backgroundColor = [UIColor whiteColor];
     switch (cellType) {
         case ATLIncomingCellType:
-            
-            [self.contentView addSubview:pll];
             [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.avatarView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:ATLAvatarImageLeadPadding]];
             
             self.bubbleWithAvatarLeadConstraint = [NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.avatarView attribute:NSLayoutAttributeRight multiplier:1.0 constant:ATLAvatarImageTailPadding];
@@ -175,10 +171,6 @@ CGFloat const ATLAvatarImageTailPadding = 4.0f;
             self.bubbleWithoutAvatarLeadConstraint = [NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:ATLMessageCellHorizontalMargin];
             break;
         case ATLOutgoingCellType:
-            [pll setFrame:CGRectMake(self.contentView.frame.size.width - 10 - 16, 0, 10, 10)];
-            [pll setBackgroundColor:ATLBlueColor()];
-            [self.contentView addSubview:pll];
-            
             [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.avatarView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-ATLAvatarImageLeadPadding]];
             
             self.bubbleWithAvatarLeadConstraint = [NSLayoutConstraint constraintWithItem:self.avatarView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.bubbleView attribute: NSLayoutAttributeRight multiplier:1.0 constant:ATLAvatarImageTailPadding];

@@ -58,7 +58,7 @@ NSString *const ATLAddContactsButtonAccessibilityLabel = @"Add Contacts Button";
     _addressBarTextView = [[ATLAddressBarTextView alloc] init];
     _addressBarTextView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     _addressBarTextView.translatesAutoresizingMaskIntoConstraints = NO;
-    _addressBarTextView.autocorrectionType = UITextAutocorrectionTypeDefault;
+    _addressBarTextView.autocorrectionType = UITextAutocorrectionTypeNo;
     [_addressBarTextView sizeToFit];
     [self addSubview:_addressBarTextView];
     
