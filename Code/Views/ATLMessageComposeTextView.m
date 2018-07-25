@@ -40,12 +40,12 @@ static NSString *const ATLPlaceholderText = @"Enter your text here...";
         self.attributedText = [[NSAttributedString alloc] initWithString:@"" attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:17],
                                                                                          NSForegroundColorAttributeName : ATLGrayColor()}];
         self.textContainerInset = UIEdgeInsetsMake(15, 4, 15, 4);
-//        self.font = [UIFont systemFontOfSize:17];
         self.font = [UIFont fontWithName:@"Roboto-Regular" size:16.0];
         self.dataDetectorTypes = UIDataDetectorTypeLink;
         self.placeholder = ATLPlaceholderText;
         self.isAccessibilityElement = YES;
         self.accessibilityIdentifier = ATLPlaceholderText;
+
         self.placeholderLabel = [UILabel new];
         self.placeholderLabel.font = self.font;
         self.placeholderLabel.text = ATLLocalizedString(self.placeholder, self.placeholder, nil);;

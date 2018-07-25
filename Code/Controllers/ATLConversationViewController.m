@@ -583,17 +583,12 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     }
     LYRMessage *message = [self.conversationDataSource messageAtCollectionViewSection:section];
     LYRMessage *nextMessage = [self.conversationDataSource messageAtCollectionViewSection:section + 1];
-    if ([message.parts.firstObject.MIMEType isEqualToString: nextMessage.parts.firstObject.MIMEType]) {
-        if ([message.parts.firstObject.MIMEType isEqualToString:ATLMIMETypeTextPlain]) {
-            return YES;
-            
-        } else {
-            return NO;
-            
-        }
-    } else {
+    if (!nextMessage.receivedAt) {
         return NO;
     }
+    NSDate *date = message.receivedAt ?: [NSDate date];
+    NSTimeInterval interval = [nextMessage.receivedAt timeIntervalSinceDate:date];
+    return (interval < 60);
 }
 
 - (BOOL)shouldDisplayAvatarItemAtIndexPath:(NSIndexPath *)indexPath
@@ -626,18 +621,17 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 
 - (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didTapLeftAccessoryButton:(UIButton *)leftAccessoryButton
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName: @"ShowStructuredFlightRequest" object:nil];
-//    if (messageInputToolbar.textInputView.isFirstResponder) {
-//        [messageInputToolbar.textInputView resignFirstResponder];
-//    }
-//
-//    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
-//                                                             delegate:self
-//                                                    cancelButtonTitle:ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.cancel.key", @"Cancel", nil)
-//                                               destructiveButtonTitle:nil
-//                                                    otherButtonTitles:ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.takephoto.key", @"Take Photo/Video", nil), ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.lastphoto.key", @"Last Photo/Video", nil), ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.library.key", @"Photo/Video Library", nil), nil];
-//    [actionSheet showInView:self.view];
-//    actionSheet.tag = ATLPhotoActionSheet;
+    if (messageInputToolbar.textInputView.isFirstResponder) {
+        [messageInputToolbar.textInputView resignFirstResponder];
+    }
+    
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                             delegate:self
+                                                    cancelButtonTitle:ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.cancel.key", @"Cancel", nil)
+                                               destructiveButtonTitle:nil
+                                                    otherButtonTitles:ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.takephoto.key", @"Take Photo/Video", nil), ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.lastphoto.key", @"Last Photo/Video", nil), ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.library.key", @"Photo/Video Library", nil), nil];
+    [actionSheet showInView:self.view];
+    actionSheet.tag = ATLPhotoActionSheet;
 }
 
 - (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didTapRightAccessoryButton:(UIButton *)rightAccessoryButton
