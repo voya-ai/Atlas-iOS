@@ -108,27 +108,33 @@ NSInteger const kATLSharedCellTag = 1000;
 - (void)presentMessage:(LYRMessage *)message
 {
     self.message = message;
-    LYRMessagePart *messagePart = message.parts.firstObject;
     [self updateBubbleWidth:[[self class] cellSizeForMessage:self.message inView:nil].width];
-    if ([self messageContainsTextContent]) {
-        [self configureBubbleViewForTextContent];
-    } else if ([messagePart.MIMEType isEqualToString:ATLMIMETypeImageJPEG]) {
-        [self configureBubbleViewForImageContent];
-    }else if ([messagePart.MIMEType isEqualToString:ATLMIMETypeImagePNG]) {
-        [self configureBubbleViewForImageContent];
-    } else if ([messagePart.MIMEType isEqualToString:ATLMIMETypeImageGIF]){
-        [self configureBubbleViewForGIFContent];
-    } else if ([messagePart.MIMEType isEqualToString:ATLMIMETypeLocation]) {
-        [self configureBubbleViewForLocationContent];
-    } else if ([messagePart.MIMEType isEqualToString:ATLMIMETypeVideoMP4]) {
-        [self configureBubbleViewForVideoContent];
+    for (LYRMessagePart *messagePart in message.parts) {
+        if ([self messageContainsTextContent]) {
+            [self configureBubbleViewForTextContent];
+            break;
+        } else if ([messagePart.MIMEType isEqualToString:ATLMIMETypeImageJPEG]) {
+            [self configureBubbleViewForImageContent];
+            break;
+        }else if ([messagePart.MIMEType isEqualToString:ATLMIMETypeImagePNG]) {
+            [self configureBubbleViewForImageContent];
+            break;
+        } else if ([messagePart.MIMEType isEqualToString:ATLMIMETypeImageGIF]){
+            [self configureBubbleViewForGIFContent];
+            break;
+        } else if ([messagePart.MIMEType isEqualToString:ATLMIMETypeLocation]) {
+            [self configureBubbleViewForLocationContent];
+            break;
+        } else if ([messagePart.MIMEType isEqualToString:ATLMIMETypeVideoMP4]) {
+            [self configureBubbleViewForVideoContent];
+            break;
+        }
     }
-    
 }
 
 - (void)configureBubbleViewForTextContent
 {
-    LYRMessagePart *messagePart = self.message.parts.firstObject;
+    LYRMessagePart *messagePart = ATLMessagePartForMIMEType(self.message, ATLMIMETypeTextPlain);
     NSString *text = [[NSString alloc] initWithData:messagePart.data encoding:NSUTF8StringEncoding];
     if (text != nil) {
         [self.bubbleView updateWithAttributedText:[self attributedStringForText:text]];
@@ -311,7 +317,7 @@ NSInteger const kATLSharedCellTag = 1000;
 
 - (void)configureBubbleViewForLocationContent
 {
-    LYRMessagePart *messagePart = self.message.parts.firstObject;
+    LYRMessagePart *messagePart = ATLMessagePartForMIMEType(self.message, ATLMIMETypeLocation);
     NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:messagePart.data
                                                                options:NSJSONReadingAllowFragments
                                                                  error:nil];
@@ -389,8 +395,7 @@ NSInteger const kATLSharedCellTag = 1000;
 
 - (BOOL)messageContainsTextContent
 {
-    LYRMessagePart *messagePart = self.message.parts.firstObject;
-    return [messagePart.MIMEType isEqualToString:ATLMIMETypeTextPlain];
+    return ATLMessagePartForMIMEType(self.message, ATLMIMETypeTextPlain) != nil;
 }
 
 #pragma mark - Cell Height Calculations
@@ -410,16 +415,20 @@ NSInteger const kATLSharedCellTag = 1000;
     if ([[self sharedHeightCache] objectForKey:message.identifier]) {
         return [[[self sharedHeightCache] objectForKey:message.identifier] CGSizeValue];
     }
-    
-    LYRMessagePart *part = message.parts.firstObject;
+
     CGSize size = CGSizeZero;
-    if ([part.MIMEType isEqualToString:ATLMIMETypeTextPlain]) {
-        size = [[self class] cellSizeForTextMessage:message inView:view];
-    } else if ([part.MIMEType isEqualToString:ATLMIMETypeImageJPEG] || [part.MIMEType isEqualToString:ATLMIMETypeImagePNG] || [part.MIMEType isEqualToString:ATLMIMETypeImageGIF]|| [part.MIMEType isEqualToString:ATLMIMETypeVideoMP4]) {
-        size = [[self class] cellSizeForImageMessage:message];
-    } else if ([part.MIMEType isEqualToString:ATLMIMETypeLocation]) {
-        size.width = ATLMessageBubbleMapWidth;
-        size.height = ATLMessageBubbleMapHeight;
+    for (LYRMessagePart *part in message.parts) {
+        if ([part.MIMEType isEqualToString:ATLMIMETypeTextPlain]) {
+            size = [[self class] cellSizeForTextMessage:message inView:view];
+        } else if ([part.MIMEType isEqualToString:ATLMIMETypeImageJPEG] || [part.MIMEType isEqualToString:ATLMIMETypeImagePNG] || [part.MIMEType isEqualToString:ATLMIMETypeImageGIF]|| [part.MIMEType isEqualToString:ATLMIMETypeVideoMP4]) {
+            size = [[self class] cellSizeForImageMessage:message];
+        } else if ([part.MIMEType isEqualToString:ATLMIMETypeLocation]) {
+            size.width = ATLMessageBubbleMapWidth;
+            size.height = ATLMessageBubbleMapHeight;
+        }
+        if (!CGSizeEqualToSize(size, CGSizeZero)) {
+            break;
+        }
     }
     return size;
 }
@@ -432,7 +441,7 @@ NSInteger const kATLSharedCellTag = 1000;
         [view addSubview:cell];
     }
     
-    LYRMessagePart *part = message.parts.firstObject;
+    LYRMessagePart *part = ATLMessagePartForMIMEType(message, ATLMIMETypeTextPlain);
     NSString *text = [[NSString alloc] initWithData:part.data encoding:NSUTF8StringEncoding];
     UIFont *font = [[[self class] appearance] messageTextFont];
     if (!font) {
