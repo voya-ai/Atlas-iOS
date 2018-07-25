@@ -59,7 +59,7 @@ UIMutableUserNotificationCategory *ATLDefaultUserNotificationCategory()
     replyAction.activationMode = UIUserNotificationActivationModeBackground;
     replyAction.authenticationRequired = NO;
     [replyAction atl_setTextInputBehavior];
-
+    
     UIMutableUserNotificationCategory *category = [UIMutableUserNotificationCategory new];
     category.identifier = ATLUserNotificationDefaultActionsCategoryIdentifier;
     [category setActions:@[ replyAction ] forContext:UIUserNotificationActionContextDefault];
