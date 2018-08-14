@@ -23,6 +23,8 @@
 NS_ASSUME_NONNULL_BEGIN
 UIColor *ATLBlueColor(void);
 
+UIColor *ATLVoyaBlueColor();
+
 UIColor *ATLDarkGrayColor(void);
 
 UIColor *ATLGrayColor(void);

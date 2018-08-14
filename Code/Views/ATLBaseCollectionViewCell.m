@@ -176,7 +176,7 @@ CGFloat const ATLAvatarImageTailPadding = 4.0f;
             break;
         case ATLOutgoingCellType:
             [pll setFrame:CGRectMake(self.contentView.frame.size.width - 10 - 16, 0, 10, 10)];
-            [pll setBackgroundColor:ATLBlueColor()];
+            [pll setBackgroundColor:ATLVoyaBlueColor()];
             [self.contentView addSubview:pll];
             
             [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.avatarView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-ATLAvatarImageLeadPadding]];
