@@ -1454,7 +1454,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     NSString *authUser = self.layerClient.authenticatedUser.userID;
     
     if ([[[NSLocale preferredLanguages] objectAtIndex:0] containsString:@"de"]) {
-        NSAttributedString *voyaAgent = [messSender isEqualToString:authUser] ? [[NSAttributedString alloc] initWithString: @"Du" attributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.0 green:185.0/255.0 blue:185.0/255.0 alpha:1.0], NSFontAttributeName : [UIFont fontWithName:@"Roboto-Bold" size:12.0]}] : [[NSAttributedString alloc] initWithString: @"Voya" attributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.0 green:185.0/255.0 blue:185.0/255.0 alpha:1.0], NSFontAttributeName : [UIFont fontWithName:@"Roboto-Bold" size:12.0]}];
+        NSAttributedString *voyaAgent = [messSender isEqualToString:authUser] ? [[NSAttributedString alloc] initWithString: @"Du" attributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:40.0/255.0 green:40.0/255.0 blue:40.0/255.0 alpha:1.0], NSFontAttributeName : [UIFont fontWithName:@"Roboto-Bold" size:12.0]}] : [[NSAttributedString alloc] initWithString: @"Voya" attributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:40.0/255.0 green:40.0/255.0 blue:40.0/255.0 alpha:1.0], NSFontAttributeName : [UIFont fontWithName:@"Roboto-Bold" size:12.0]}];
         
         NSAttributedString *timeStr = [[NSAttributedString alloc] initWithString: [NSString stringWithFormat:@" um %@", startTimeString] attributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:105.0/255.0 green:110.0/255.0 blue:120.0/255.0 alpha:1.0], NSFontAttributeName : [UIFont fontWithName:@"Roboto-Regular" size:12.0]}];
         
@@ -1462,7 +1462,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
         [finalStr appendAttributedString:timeStr];
         return finalStr;
     } else {
-        NSAttributedString *voyaAgent = [messSender isEqualToString:authUser] ? [[NSAttributedString alloc] initWithString: @"You" attributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.0 green:185.0/255.0 blue:185.0/255.0 alpha:1.0], NSFontAttributeName : [UIFont fontWithName:@"Roboto-Bold" size:12.0]}] : [[NSAttributedString alloc] initWithString: @"Voya" attributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.0 green:185.0/255.0 blue:185.0/255.0 alpha:1.0], NSFontAttributeName : [UIFont fontWithName:@"Roboto-Bold" size:12.0]}];
+        NSAttributedString *voyaAgent = [messSender isEqualToString:authUser] ? [[NSAttributedString alloc] initWithString: @"You" attributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:40.0/255.0 green:40.0/255.0 blue:40.0/255.0 alpha:1.0], NSFontAttributeName : [UIFont fontWithName:@"Roboto-Bold" size:12.0]}] : [[NSAttributedString alloc] initWithString: @"Voya" attributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:40.0/255.0 green:40.0/255.0 blue:40.0/255.0 alpha:1.0], NSFontAttributeName : [UIFont fontWithName:@"Roboto-Bold" size:12.0]}];
         
         NSAttributedString *timeStr = [[NSAttributedString alloc] initWithString: [NSString stringWithFormat:@" at %@", startTimeString] attributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:105.0/255.0 green:110.0/255.0 blue:120.0/255.0 alpha:1.0], NSFontAttributeName : [UIFont fontWithName:@"Roboto-Regular" size:12.0]}];
         
