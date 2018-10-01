@@ -15,6 +15,11 @@ UIColor *ATLBlueColor()
     return [UIColor colorWithRed:0.0f/255.0f green:110.0f/255.0f blue:170.0f/255.0f alpha:1.0];
 }
 
+UIColor *ATLVoyaBlueColor()
+{
+    return [UIColor colorWithRed:0.0f/255.0f green:120.0f/255.0f blue:200.0f/255.0f alpha:1.0];
+}
+
 UIColor *ATLDarkGrayColor()
 {
     return [UIColor colorWithRed:148.0/255.0 green:148.0/255.0 blue:148.0/255.0 alpha:1.0];
